@@ -1,33 +1,36 @@
+// O ranking só recebe dados de quem fez login (Firebase Auth).
+// Quem joga sem login continua jogando normalmente: tudo fica salvo apenas no aparelho.
+
+function contaAtual() {
+    return (window.firebase && firebase.auth) ? firebase.auth().currentUser : null;
+}
+
 window.enviarPontuacaoFirebase = function (xp) {
+
+    const conta = contaAtual();
+    if (!conta) return; // sem login, sem ranking
 
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) return;
 
-    const userId = usuario.id;
-
-    const rankingRef = db.ref("ranking/" + userId);
-
-    const dados = {
+    db.ref("ranking/" + conta.uid).update({
         nome: usuario.nome,
         avatar: usuario.avatar,
         xp: xp,
         atualizado: Date.now()
-    };
-
-    rankingRef.update(dados);
-
-    atualizarLeaderboard(userId, dados);
+    });
 
 };
 
 window.sincronizarUsuarioFirebase = function () {
 
+    const conta = contaAtual();
+    if (!conta) return;
+
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) return;
 
-    const userRef = db.ref("ranking/" + usuario.id);
-
-    userRef.update({
+    db.ref("ranking/" + conta.uid).update({
         nome: usuario.nome,
         avatar: usuario.avatar,
         atualizado: Date.now()
@@ -35,69 +38,11 @@ window.sincronizarUsuarioFirebase = function () {
 
 };
 
+// A sincronização da conta (nome, avatar, XP) acontece em auth.js assim que o login é confirmado.
 window.carregarUsuarioFirebase = function () {
 
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (!usuario) return;
-
-    const userRef = db.ref("ranking/" + usuario.id);
-
-    userRef.once("value").then(snapshot => {
-
-        const dados = snapshot.val();
-
-        // usuário já existe no banco
-        if (dados) {
-
-            usuario.nome = dados.nome || usuario.nome;
-            usuario.avatar = dados.avatar || usuario.avatar;
-
-            localStorage.setItem("usuario", JSON.stringify(usuario));
-
-            renderizarUsuario();
-
-        }
-
-        // usuário não existe → cria
-        else {
-
-            userRef.set({
-                nome: usuario.nome,
-                avatar: usuario.avatar,
-                xp: 0,
-                atualizado: Date.now()
-            });
-
-        }
-
-    });
+    if (contaAtual() && typeof sincronizarConta === "function") {
+        sincronizarConta(contaAtual());
+    }
 
 };
-
-function atualizarLeaderboard(userId, dadosUsuario) {
-
-    const leaderboardRef = db.ref("leaderboard");
-
-    leaderboardRef.once("value").then(snapshot => {
-
-        let leaderboard = snapshot.val() || {};
-
-        leaderboard[userId] = dadosUsuario;
-
-        let lista = Object.entries(leaderboard);
-
-        lista.sort((a, b) => b[1].xp - a[1].xp);
-
-        lista = lista.slice(0, 10);
-
-        let novoLeaderboard = {};
-
-        lista.forEach(([id, dados]) => {
-            novoLeaderboard[id] = dados;
-        });
-
-        leaderboardRef.set(novoLeaderboard);
-
-    });
-
-}

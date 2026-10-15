@@ -20,6 +20,12 @@ window.iniciarNotificacoes = async function () {
 
         console.log("TOKEN FCM:", token);
 
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+        if (usuario && token) {
+            db.ref("tokens/" + usuario.id).set(token);
+        }
+
     } catch (erro) {
 
         console.error("Erro FCM", erro);
@@ -38,9 +44,3 @@ messaging.onMessage((payload) => {
     });
 
 });
-
-const usuario = JSON.parse(localStorage.getItem("usuario"));
-
-if (usuario) {
-    db.ref("tokens/" + usuario.id).set(token);
-}

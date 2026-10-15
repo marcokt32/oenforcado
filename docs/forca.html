@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta http-equiv="content-language" content="pt-BR">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#121212">
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8119130352737496"
+		crossorigin="anonymous"></script>
+	<title>Jogo da Forca Online Grátis | O Enforcado</title>
+	<meta name="description"
+		content="Jogue o clássico Jogo da Forca online grátis. Desafie seus conhecimentos em palavras e teste sua habilidade agora mesmo!">
+
+	<meta name="keywords" content="jogo da forca, forca online, jogo de palavras, jogo grátis, o enforcado">
+
+	<meta name="author" content="O Enforcado">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta property="og:title" content="Jogo da Forca Online - O Enforcado">
+	<meta property="og:description" content="Desafie seus conhecimentos no clássico jogo da forca online grátis.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://oenforcado.com/forca.html">
+	<meta property="og:image" content="https://oenforcado.com/imagem-preview.png">
+	<link rel="manifest" href="/manifest.json">
+	<link rel="canonical" href="https://oenforcado.com/forca.html">
+	<link rel="stylesheet" href="css/reset.css?v=1.0.2">
+	<link rel="stylesheet" href="css/style.css?v=1.0.2">
+	<link rel="stylesheet" href="css/flexbox.css?v=1.0.2">
+	<link rel="stylesheet" href="css/site-theme.css?v=1.0.0">
+	<link rel="stylesheet" href="css/forca-portal.css?v=1.3.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lobster&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+		rel="stylesheet">
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-LPB04DJLXC"></script>
+	<!-- Firebase SDK -->
+	<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-LPB04DJLXC');
+		gtag('config', 'AW-10942914304');
+	</script>
+</head>
+
+<body>
+	<header id="header" class="site-header">
+		<a class="brand" href="/" aria-label="O Enforcado — portal de jogos">
+			<img src="img/hung.png" class="logo" alt="" width="42" height="42">
+			<span>O Enforcado</span>
+		</a>
+		<nav aria-label="Navegação principal">
+			<a href="/forca.html" aria-current="page">Jogo da forca</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/termo.html">Termo</a><a href="/anagrama.html">Anagrama</a><a href="/contexto.html">Contexto</a>
+		</nav>
+		<button type="button" id="btnRankingHeader" class="btn-ranking-header" aria-label="Ranking global" title="Ranking global" onclick="abrirRanking()">🏆</button>
+		<div id="userBox">
+			<div id="userInfo">
+				<span id="userNome"></span>
+				<span id="xp"></span>
+			</div>
+			<img id="userAvatar">
+		</div>
+	</header>
+	<!-- Modal de Informações de usuário -->
+	<div id="userModal" class="userModal">
+		<h2>Perfil</h2>
+		<img id="modalAvatar" style="cursor: pointer;">
+		<label id="modalNameInfo">
+			Nome:
+			<input type="text" id="input-nome" placeholder="Seu nome" maxlength="20">
+		</label>
+		<div class="botoes-modal">
+			<button onclick="salvarUsuario()">Salvar</button>
+			<button onclick="fecharEditorUsuario()">Cancelar</button>
+			<button onclick="fecharEditorUsuario();abrirRanking()">🏆 Ranking</button>
+		</div>
+	</div>
+	<!-- Modal de seleção de avatar -->
+	<div id="modal-avatar-overlay" class="modal-avatar-overlay oculto">
+		<div id="modal-avatar-lista" class="avatar-lista oculto">
+			<div class="avatar-grid" id="avatar-grid"></div>
+			<button onclick="fecharListaAvatar()">Fechar</button>
+		</div>
+	</div>
+	<!-- Modal do ranking global-->
+	<div id="modalRanking" class="modal-ranking oculto">
+
+		<div class="ranking-box">
+
+			<h2>🏆 Ranking Global</h2>
+
+			<div id="ranking-top10"></div>
+
+			<div class="ranking-separador"></div>
+
+			<div id="ranking-meu"></div>
+
+			<div id="ranking-conta" class="auth-bloco" data-bloco-auth="ranking"></div>
+
+			<button onclick="fecharRanking()">Fechar</button>
+
+		</div>
+
+	</div>
+	<!-- Fim de jogo -->
+	<div id="gameOverScreenOverlay" class="gameOverScreenOverlay oculto">
+		<div id="gameOverScreen" class="gameOverScreen"></div>
+	</div>
+	<!-- banner de instalação -->
+	<div id="install-banner" class="install-banner oculto">
+		<span>📲 Baixe O Enforcado para jogar direto do celular ou pc!</span>
+		<button id="btn-instalar">Instalar</button>
+	</div>
+	<main id="main">
+		<section class="principal" id="principal">
+			<section class="intro">
+				<p class="eyebrow">JOGOS DE PALAVRAS</p>
+				<h1>Jogo da forca online grátis</h1>
+				<p>Descubra a palavra secreta letra por letra antes que as estrelas acabem. Use a dica, troque de categoria quando quiser e acumule pontos e combos.</p>
+			</section>
+			<section class="game-card container-principal" aria-label="Jogo da Forca">
+				<div class="titulo" id="canvas-titulo" hidden>
+					<img src="img/hung.png" class="logo-main" alt="logo do enforcado">
+					<h2 class="titulo">O ENFORCADO</h2>
+				</div>
+				<div class="contadores">
+					<span id="contador-categorias">0 categorias</span>
+					<span id="contador-palavras">0 palavras</span>
+				</div>
+				<div class="area-canvas">
+					<div class="display">
+						<div class="display-vidas"></div>
+						<h2 class="display-pontuacao"></h2>
+						<div class="combo-container">
+							<div id="barra-combo">
+								<span id="texto-combo"></span>
+							</div>
+						</div>
+					</div>
+					<div class="status-categoria">
+						<span class="status-nome"></span>
+						<div class="barra-progresso">
+							<div class="barra-preenchida"></div>
+						</div>
+						<span class="status-contador"></span>
+						<span class="timer-span">⏱️</span>
+						<div id="timer">60</div>
+					</div>
+					<h2 class="dica-palavra"></h2>
+					<div class="vidas">
+						<span class="estrela ativa">★</span>
+						<span class="estrela ativa">★</span>
+						<span class="estrela ativa">★</span>
+						<span class="estrela ativa">★</span>
+						<span class="estrela ativa">★</span>
+					</div>
+					<div id="forca" class="forca"></div>
+				</div>
+			<div class="menu-inicial forca-quick-actions">
+				<div class="botoes">
+					<a href="#categorias"><button class="botao" onclick="renderizarCategorias()">Ver categorias</button></a>
+				</div>
+			</div>
+			<div class="pop-up-perdeu">
+				<p>Você perdeu! Tente novamente.</p>
+			</div>
+			<div class="pop-up-ganhou">
+				<p>Parabéns, você acertou!!!</p>
+			</div>
+			<div class="teclado-virtual">
+				<div class="fileira" id="fileira1">
+				</div>
+				<div class="fileira" id="fileira2">
+				</div>
+				<div class="fileira" id="fileira3">
+				</div>
+			</div>
+			<div class="botoes-in-game">
+				<button class="botao-reiniciar" id="botao-reiniciar" onclick="reiniciar()">Reiniciar</button>
+				<button class="botao-proxima" id="botao-proxima" onclick="novaRodada()">Próxima</button>
+				<button class="botao-nova-categoria" id="botao-nova-categoria" onclick="mudarCategoria()">Mudar
+					Categoria</button>
+			</div>
+			</section>
+		</section>
+		<div id="cookie-banner">
+			<div class="cookie-content">
+				<p>
+					Utilizamos cookies para melhorar sua experiência e exibir anúncios personalizados.
+					Ao continuar navegando, você concorda com nossa
+					<a href="/politica.html" target="_blank">Política de Privacidade</a>.
+				</p>
+				<button id="aceitar-cookies">Aceitar</button>
+			</div>
+		</div>
+		<section class="categorias" id="categorias">
+			<div class="categorias-tittle-box">
+				<h2 class="categorias-tittle">Escolha sua categoria</h2>
+				<p class="categorias-subtittle">Selecione um tópico e comece seu desafio</p>
+			</div>
+			<div class="grid-container" id="categorias-container">
+			</div>
+			<div id="modal-misto" class="modal oculto">
+				<div class="modal-conteudo">
+
+					<h2>🔥 Modo Misto</h2>
+
+					<label class="checkbox-todas">
+						<input type="checkbox" id="check-todas">
+						Selecionar Todas
+					</label>
+
+					<div id="lista-categorias-misto"></div>
+
+					<div class="botoes-misto">
+						<button id="iniciar-misto" class="iniciar-misto">Iniciar Jogo</button>
+						<button id="fechar-misto" class="fechar-misto">Voltar</button>
+					</div>
+
+				</div>
+			</div>
+			<!-- POPUP DE SELEÇÃO DE MODO -->
+			<div id="popupModo" class="popup-overlay oculto">
+
+				<div class="popup-container">
+
+					<h2>Modo de jogo</h2>
+					<p>Escolha seu estilo de jogo</p>
+					<div class="botoes-modo">
+						<button id="btnCasual" class="btn-modo casual" value='casual'>
+							🎮 Casual
+						</button>
+						<span>Jogue sem pressão, acumule pontos.</span>
+						<button id="btnDesafio" class="btn-modo desafio" value='desafio'>
+							⏱️ Desafio
+						</button>
+						<span>Desafio com tempo, não deixe o relógio zerar</span>
+						<button id="btnVoltar" class="btn-modo voltar" value='desafio'>
+							Voltar
+						</button>
+					</div>
+
+				</div>
+
+			</div>
+		</section>
+		<section class="seo-content" id="historia-forca">
+			<h2>Como jogar o jogo da forca?</h2>
+			<ol>
+				<li>Escolha uma categoria e o modo de jogo: casual, sem pressão, ou desafio, com tempo.</li>
+				<li>Leia a dica e toque nas letras do teclado para tentar descobrir a palavra.</li>
+				<li>Cada letra errada apaga uma estrela. Quando as estrelas acabam, a rodada termina.</li>
+				<li>Acerte palavras sem errar para ganhar combos e multiplicar seus pontos.</li>
+			</ol>
+			<h2>História do Jogo da Forca</h2>
+			<p>
+				O jogo da forca, conhecido em inglês como Hangman,
+				é um dos jogos de palavras mais antigos e populares do mundo.
+				Ele surgiu provavelmente no século XIX, na Inglaterra,
+				como uma forma de aprender e praticar ortografia de maneira divertida.
+			</p>
+			<p>
+				A dinâmica básica é simples: um jogador pensa em uma palavra, e o outro
+				tenta adivinhar letra por letra. Cada erro aproxima o desenho de uma “forca” — daí o nome do jogo.
+				Apesar do aspecto “sinistro”, o objetivo original era apenas tornar o aprendizado de palavras mais
+				envolvente e desafiador.
+			</p>
+			<p>Quer outro desafio? Experimente também o <a href="/caca-palavras.html">caça-palavras</a>, o <a href="/termo.html">Termo</a>, o <a href="/anagrama.html">Anagrama</a> e o <a href="/contexto.html">Contexto</a>.</p>
+		</section>
+	</main>
+
+	<footer class="rodape">
+		<div class="container">
+			<p class="copyright">&copy; Desenvolvido por Marco Quintela - 2022</p>
+		</div>
+		<div class="termos">
+			<a href="/politica.html">Política de Privacidade</a>
+			<a href="/termos.html">Termos de Uso</a>
+		</div>
+	</footer>
+	<!-- inicialização -->
+	<script src="js/firebase-init.js"></script>
+	<script src="js/firebase-fcm.js"></script>
+	<!-- funções de ranking -->
+	<script src="js/firebase-ranking.js"></script>
+	<script src="js/banco-palavras.js"></script>
+	<script src="js/ranking-ui.js"></script>
+	<script type="text/javascript" src="js/render.js"></script>
+	<script type="text/javascript" src="js/forca.js"></script>
+	<script type="text/javascript" src="js/canvas.js"></script>
+	<script type="text/javascript" src="js/pontuacao.js"></script>
+	<script type="text/javascript" src="js/user.js"></script>
+	<script src="js/auth.js"></script>
+	<script src="js/compartilhar.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const banner = document.getElementById("cookie-banner");
+			const botao = document.getElementById("aceitar-cookies");
+
+			if (!localStorage.getItem("cookiesAceitos")) {
+				banner.style.display = "block";
+			}
+
+			botao.addEventListener("click", function () {
+				localStorage.setItem("cookiesAceitos", "true");
+				banner.style.display = "none";
+			});
+		});
+	</script>
+	<script>
+		// Ao abrir a página, começa imediatamente uma rodada casual em categoria aleatória.
+		document.addEventListener("DOMContentLoaded", function () {
+			if (typeof bancoPalavras === "undefined" || typeof iniciarJogoCategoria !== "function") return;
+			const categoriasDisponiveis = Object.keys(bancoPalavras).filter(categoria =>
+				Array.isArray(bancoPalavras[categoria]) && bancoPalavras[categoria].length > 0
+			);
+			if (!categoriasDisponiveis.length) return;
+			modoAtual = "casual";
+			const categoriaAleatoria = categoriasDisponiveis[Math.floor(Math.random() * categoriasDisponiveis.length)];
+			iniciarJogoCategoria(categoriaAleatoria);
+		});
+	</script>
+
+</body>
+
+</html>

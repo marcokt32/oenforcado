@@ -14,21 +14,24 @@ function fecharRanking(){
 
 function carregarRanking(){
 
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const topDiv = document.getElementById("ranking-top10");
+    topDiv.innerHTML = "<p class='ranking-vazio'>Carregando...</p>";
 
-    db.ref("ranking").once("value").then(snapshot =>{
+    if (typeof atualizarBlocosAuth === "function") atualizarBlocosAuth();
 
-        const dados = snapshot.val() || {};
+    db.ref("ranking").orderByChild("xp").limitToLast(10).once("value").then(snapshot =>{
 
-        let lista = Object.entries(dados);
+        const top10 = [];
 
-        lista.sort((a,b)=> b[1].xp - a[1].xp);
+        snapshot.forEach(filho => { top10.push([filho.key, filho.val()]); });
 
-        const top10 = lista.slice(0,10);
-
-        const topDiv = document.getElementById("ranking-top10");
+        top10.sort((a,b)=> (b[1].xp || 0) - (a[1].xp || 0));
 
         topDiv.innerHTML = "";
+
+        if (!top10.length) {
+            topDiv.innerHTML = "<p class='ranking-vazio'>Ninguém no ranking ainda. Seja o primeiro!</p>";
+        }
 
         top10.forEach(([id,player],index)=>{
 
@@ -36,32 +39,58 @@ function carregarRanking(){
                 <div class="ranking-linha">
                     <div class="left-ui-info">
                         <span>${index+1}º</span>
-                        <img src="${player.avatar}">
+                        <img src="${escaparHTML(player.avatar)}" alt="">
                     </div>
-                    <span>${player.nome}</span>
-                    <span>${player.xp}</span>
+                    <span>${escaparHTML(player.nome)}</span>
+                    <span>${Number(player.xp) || 0}</span>
                 </div>
             `;
 
         });
 
-        const minhaPosicao = lista.findIndex(([id])=> id === usuario.id);
+    }).catch(()=>{
 
-        if(minhaPosicao !== -1){
-
-            const player = lista[minhaPosicao][1];
-
-            document.getElementById("ranking-meu").innerHTML = `
-                <h3># Sua posição</h3>
-                <div class="ranking-linha">
-                    <span>${minhaPosicao+1}º</span>
-                    <img src="${player.avatar}">
-                    <span>${player.nome}</span>
-                    <span>${player.xp}</span>
-                </div>
-            `;
-        }
+        topDiv.innerHTML = "<p class='ranking-vazio'>Não foi possível carregar o ranking agora.</p>";
 
     });
+
+    carregarMinhaPosicao();
+
+}
+
+function carregarMinhaPosicao(){
+
+    const meuDiv = document.getElementById("ranking-meu");
+    const conta = firebase.auth().currentUser;
+
+    meuDiv.innerHTML = "";
+
+    if (!conta) return;
+
+    db.ref("ranking/" + conta.uid).once("value").then(snap =>{
+
+        const eu = snap.val();
+        if (!eu) return null;
+
+        // conta só quem tem mais XP que eu (máx. 101, para não baixar o ranking inteiro)
+        return db.ref("ranking").orderByChild("xp").startAt((eu.xp || 0) + 1).limitToFirst(101).once("value")
+            .then(acima => {
+
+                const total = acima.numChildren();
+                const posicao = total > 100 ? "100+" : (total + 1);
+
+                meuDiv.innerHTML = `
+                    <h3># Sua posição</h3>
+                    <div class="ranking-linha">
+                        <span>${posicao}º</span>
+                        <img src="${escaparHTML(eu.avatar)}" alt="">
+                        <span>${escaparHTML(eu.nome)}</span>
+                        <span>${Number(eu.xp) || 0}</span>
+                    </div>
+                `;
+
+            });
+
+    }).catch(()=>{});
 
 }

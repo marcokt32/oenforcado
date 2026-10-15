@@ -1,0 +1,133 @@
+/* Harmonização do Jogo da Forca com o portal de jogos */
+html{scroll-padding-top:90px}
+body{margin:0;background:#f6f7fb;color:#0a2540;font-family:Inter,system-ui,sans-serif}
+#header.site-header{position:sticky;top:0;z-index:1000;box-sizing:border-box;width:100%;height:auto;min-height:72px;padding:12px max(20px,calc((100% - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:18px;background:#fff;border-bottom:1px solid #dbe3ef;box-shadow:0 4px 14px #0a25400c}
+#header .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#0a2540;white-space:nowrap}
+#header .brand img{height:42px;width:42px;object-fit:contain}
+#header .brand span{font-family:Bangers,cursive;font-size:2rem;font-weight:400;letter-spacing:.025em}
+#userBox{display:flex;align-items:center;gap:10px;min-width:0}
+#userInfo{display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:#0a2540;font-size:.82rem}
+#userAvatar{width:42px;height:42px;object-fit:cover;border-radius:50%;cursor:pointer}
+main#main{width:100%;box-sizing:border-box;margin:0;padding:24px 16px 36px;background:#f6f7fb;align-items:center;justify-content:flex-start}
+#main>.principal{width:min(100%,900px);margin:0 auto;display:flex;flex-direction:column;align-items:stretch;gap:18px}
+.container-principal{width:100%;box-sizing:border-box;margin:0;padding:clamp(18px,3vw,30px);border:1px solid #dbe3ef;border-radius:22px;background:#fff;box-shadow:0 12px 35px #0a25400b}
+#canvas-titulo{justify-content:center;gap:12px;margin:0 0 12px;padding:0}
+#canvas-titulo .logo-main{height:48px;width:48px;object-fit:contain}
+#canvas-titulo h2{margin:0;font-family:Poppins,Inter,sans-serif;font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;letter-spacing:-.04em;color:#0a2540}
+.tutorial{max-width:660px;margin:0 auto 20px;color:#526176}
+.tutorial h2{margin:0 0 8px;text-align:center;font-family:Poppins,Inter,sans-serif;font-size:1.2rem}
+.tutorial p{margin:8px 0;font-family:Inter,system-ui,sans-serif;font-size:.98rem;line-height:1.65;color:#526176}
+.contadores{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.contadores span{padding:7px 12px;border:1px solid #dbe3ef;border-radius:999px;background:#f6f8fc;color:#526176;font-size:.8rem;font-weight:750}
+.area-canvas{box-sizing:border-box;width:100%;padding:clamp(14px,3vw,24px);border:1px solid #e3e9f2;border-radius:16px;background:#f8faff}
+.status-categoria{margin:10px auto 16px;max-width:560px}
+.dica-palavra{text-align:center;color:#0a2540;font-family:Poppins,Inter,sans-serif}
+.forca{margin:12px auto}
+.forca-quick-actions{width:100%;margin:0;padding:0;background:transparent}
+.forca-quick-actions .botoes{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+.forca-quick-actions a{width:auto;text-decoration:none}
+.forca-quick-actions button{width:auto;min-width:145px;height:auto;min-height:42px;padding:10px 16px;border-radius:10px;font-family:Inter,system-ui,sans-serif;font-size:.9rem;font-weight:750}
+.categorias{width:min(100%,1100px);box-sizing:border-box;margin:10px auto 0;padding:clamp(18px,3vw,28px);border:1px solid #dbe3ef;border-radius:22px;background:#fff;box-shadow:0 12px 35px #0a25400b}
+.categorias-tittle-box{text-align:center;margin-bottom:22px}
+.categorias-tittle{font-family:Poppins,Inter,sans-serif;font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.035em}
+.categorias-subtittle{color:#526176;font-size:.95rem}
+footer.rodape{box-sizing:border-box;min-height:0;height:auto;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px max(20px,calc((100% - 1100px)/2));background:#0a2540;color:#eaf1fa}
+footer.rodape .copyright{margin:0;color:#eaf1fa;font-size:.85rem}
+footer.rodape .termos{display:flex;flex-direction:row;flex-wrap:wrap;gap:16px}
+footer.rodape .termos a{color:#fff;font-size:.85rem}
+@media(max-width:600px){#header.site-header{align-items:center;padding:10px 14px;gap:8px}#header .brand img{width:36px;height:36px}#header .brand span{font-size:1.65rem}#userInfo{font-size:.72rem}#userAvatar{width:36px;height:36px}main#main{padding:16px 12px 28px}.container-principal{padding:18px 14px;border-radius:18px}#canvas-titulo .logo-main{height:38px;width:38px}#canvas-titulo h2{font-size:1.8rem}.tutorial p{font-size:.9rem}.categorias{padding:18px 12px;border-radius:18px}footer.rodape{flex-direction:column;text-align:center;padding:22px 16px}footer.rodape .termos{justify-content:center}}
+
+/* Navegação entre jogos (mesma do Termo / Caça-palavras) */
+#header nav{display:flex;align-items:center;flex-wrap:wrap;gap:18px;margin-left:auto}
+#header nav a{color:#0a2540;text-decoration:none;font-weight:650;font-size:.95rem}
+#header nav a[aria-current=page]{color:#1f6feb}
+@media(max-width:900px){#header.site-header{flex-wrap:wrap}#header nav{order:3;width:100%;margin-left:0;gap:14px;justify-content:flex-start}}
+
+/* ===== Ajustes de responsivo da forca ===== */
+html,body{height:auto;min-height:100%}
+body{overflow-x:hidden}
+.principal{min-height:0}
+.status-categoria{flex-wrap:wrap;gap:8px 12px;width:100%;box-sizing:border-box}
+.status-categoria .barra-progresso{min-width:80px}
+.linha{flex-wrap:wrap;max-width:100%}
+.botoes-in-game{flex-wrap:wrap;justify-content:center;gap:10px}
+.teclado-virtual{width:100%;box-sizing:border-box}
+.fileira{width:100%;box-sizing:border-box;gap:4px}
+@media(max-width:750px){
+  .teclado-virtual button{flex:1 1 0;min-width:0;width:auto;max-width:2.8rem;height:3.2rem;padding:0;font-size:1rem}
+  .fileira{padding:.25rem 0}
+  .letra{width:clamp(18px,6.4vw,26px);height:2.6rem}
+  .linha{gap:5px}
+  .display{flex-wrap:wrap;gap:8px}
+  .area-canvas{padding:12px 10px}
+  .estrela{font-size:1.6rem}
+  .categorias{width:100%;min-height:0}
+  .grid-container{width:100%}
+  .botoes-in-game button{flex:1 1 auto;min-width:110px}
+  #userBox{max-width:55%}
+  #userInfo{min-width:0}
+  #userNome{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:110px}
+  #header nav a{font-size:.9rem}
+}
+@media(max-width:400px){
+  #header nav{gap:10px}
+  #header nav a{font-size:.85rem}
+  .container-principal{padding:14px 10px}
+  .forca-quick-actions button{min-width:0;width:100%}
+}
+
+/* ===== Login opcional, ranking e compartilhamento ===== */
+.btn-ranking-header{width:42px;height:42px;padding:0;border:1px solid #dbe3ef;border-radius:50%;background:#f6f8fc;font-size:1.2rem;line-height:1;cursor:pointer}
+.btn-ranking-header:hover{background:#edf2f8}
+#header nav{margin-left:auto}
+.modal-ranking{z-index:10001}
+.ranking-box{box-sizing:border-box;width:min(92vw,360px);border-radius:16px}
+.ranking-vazio{margin:10px 0;font-size:.9rem;color:#526176}
+.gameOverScreen{max-height:92vh;overflow-y:auto;box-sizing:border-box}
+.gameOverScreen .fim-recorde{font-size:1rem;font-weight:800;color:#b45309}
+
+.auth-bloco{width:100%;box-sizing:border-box;margin-top:10px;padding:14px;border:1px solid #dbe3ef;border-radius:14px;background:#f8faff;text-align:center}
+.auth-chamada{margin:0 0 4px;font-family:Poppins,Inter,sans-serif;font-size:1rem;font-weight:700;color:#0a2540}
+.auth-sub{margin:0 0 10px;font-size:.85rem;color:#526176}
+.auth-ok{margin:0 0 8px;font-size:.9rem;color:#0a2540}
+.auth-botoes{display:flex;flex-direction:column;gap:8px}
+.auth-msg{min-height:1em;margin:8px 0 0;font-size:.82rem;color:#b42318}
+.btn-auth{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:42px;padding:9px 14px;border:1px solid transparent;border-radius:10px;font-family:Inter,system-ui,sans-serif;font-size:.92rem;font-weight:700;cursor:pointer}
+.btn-auth:disabled{opacity:.6;cursor:wait}
+.btn-auth .auth-ico{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-weight:800;font-size:.95rem}
+.btn-auth-google{background:#fff;color:#0a2540;border-color:#dbe3ef}
+.btn-auth-google .auth-ico{background:#4285f4;color:#fff}
+.btn-auth-facebook{background:#1877f2;color:#fff}
+.btn-auth-facebook .auth-ico{background:#fff;color:#1877f2;font-family:Georgia,serif}
+.btn-auth-ranking{background:#1f6feb;color:#fff}
+.auth-link{border:0;background:none;color:#526176;font-size:.82rem;text-decoration:underline;cursor:pointer}
+
+.share-box{width:100%;box-sizing:border-box;margin-top:6px}
+.share-titulo{margin:0 0 8px;font-family:Poppins,Inter,sans-serif;font-size:.95rem;font-weight:700;color:#0a2540}
+.share-botoes{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.btn-share{flex:1 1 auto;min-height:40px;padding:8px 12px;border:0;border-radius:10px;color:#fff;font-family:Inter,system-ui,sans-serif;font-size:.88rem;font-weight:700;cursor:pointer}
+.btn-share-nativo{flex-basis:100%;background:#1f6feb}
+.btn-share-whatsapp{background:#25d366}
+.btn-share-facebook{background:#1877f2}
+.btn-share-x{background:#111}
+.btn-share-telegram{background:#229ed9}
+.btn-share-copiar{background:#edf2f8;color:#0a2540}
+@media(max-width:600px){.btn-ranking-header{width:36px;height:36px;font-size:1.05rem}}
+
+/* ===== Padronização com os outros jogos (intro, game-card, seo-content) ===== */
+#main>.principal,.principal{background:none;min-height:0;padding:0}
+#main>.principal{width:min(100%,900px);gap:0}
+.intro{max-width:760px;margin:26px auto 26px;text-align:center}
+.intro .eyebrow{margin:0;color:#1f6feb;font-weight:800;letter-spacing:.12em;font-size:.78rem!important;text-align:center}
+.intro h1{margin:8px 0 12px;font-size:clamp(2rem,5vw,3rem);line-height:1.1;letter-spacing:-.04em;color:#0a2540}
+.intro>p:last-child{margin:0 auto;max-width:660px;color:#4c5b70;line-height:1.65;font-size:1.05rem}
+.game-card{padding:clamp(16px,3vw,28px);background:#fff;border:1px solid #dbe3ef;border-radius:20px;box-shadow:0 12px 35px #0a25400b}
+.game-card .area-canvas{padding:0;border:0;background:none}
+.game-card .teclado-virtual{margin-top:8px}
+.game-card .botoes-in-game{margin-top:12px}
+.seo-content{width:min(100%,780px);box-sizing:border-box;margin:42px auto 56px;color:#34445a;line-height:1.75;text-align:left}
+.seo-content h2{margin:28px 0 8px;color:#0a2540;font-family:Poppins,Inter,sans-serif;font-size:1.4rem;text-align:left}
+.seo-content p,.seo-content li{font-size:1rem;text-align:left;font-family:Inter,system-ui,sans-serif}
+.seo-content ol{padding-left:1.4rem}
+.seo-content a{color:#1f6feb}
+@media(max-width:600px){.intro{margin:20px auto}.game-card{padding:14px 12px;border-radius:16px}.seo-content{margin:30px auto 40px;padding:0 4px}}

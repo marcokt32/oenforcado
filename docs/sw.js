@@ -15,12 +15,32 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 🔥 IMPORTANTE: altere a versão quando fizer deploy
-const CACHE_NAME = "enforcado-v4";
+const CACHE_NAME = "enforcado-v14";
 
 const arquivos = [
   "/",
   "/index.html",
+  "/forca.html",
+  "/img/thumb-forca.svg",
+  "/img/thumb-caca-palavras.svg",
+  "/img/thumb-termo.svg",
+  "/img/thumb-anagrama.svg",
+  "/img/thumb-contexto.svg",
+  "css/portal.css",
+  "css/site-theme.css",
   "/manifest.json",
+  "/caca-palavras.html",
+  "/termo.html",
+  "/anagrama.html",
+  "/contexto.html",
+  "css/caca-palavras.css",
+  "js/caca-palavras.js",
+  "css/termo.css",
+  "js/termo.js",
+  "css/anagrama.css",
+  "js/anagrama.js",
+  "css/contexto.css",
+  "js/contexto.js",
 
   "css/reset.css",
   "css/style.css",
@@ -42,7 +62,11 @@ self.addEventListener("install", event => {
 
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(arquivos);
+      return Promise.all(arquivos.map(url =>
+        fetch(new Request(url, { redirect: "follow" }))
+          .then(res => (res.ok && !res.redirected) ? cache.put(url, res) : null)
+          .catch(() => null)
+      ));
     })
   );
 
@@ -70,6 +94,18 @@ self.addEventListener("fetch", event => {
 
   const request = event.request;
 
+  // Só tratamos GET http(s)
+  if (request.method !== "GET" || !request.url.startsWith("http")) return;
+
+  // 🧭 Navegações: rede primeiro, seguindo redirecionamentos (ex.: /forca.html -> /forca)
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request.url, { redirect: "follow", credentials: "same-origin" })
+        .catch(() => caches.match(request, { ignoreSearch: true }))
+    );
+    return;
+  }
+
   // 🔥 CSS sempre atualizado
   if (request.url.includes(".css")) {
     event.respondWith(fetch(request));
@@ -82,7 +118,7 @@ self.addEventListener("fetch", event => {
 
       const fetchPromise = fetch(request).then(networkResponse => {
 
-        if (networkResponse && networkResponse.status === 200) {
+        if (networkResponse && networkResponse.status === 200 && !networkResponse.redirected) {
           const responseClone = networkResponse.clone();
 
           caches.open(CACHE_NAME).then(cache => {

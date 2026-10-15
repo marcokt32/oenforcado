@@ -83,7 +83,8 @@ function iniciarJogo() {
     document.querySelector(".pop-up-perdeu").style.display = "none";
     document.querySelector(".pop-up-ganhou").style.display = "none";
     document.querySelectorAll('.estrela').forEach(e => e.classList.add('ativa'));
-    document.querySelector(".tutorial").style.display = "none";
+    const tutorialEl = document.querySelector(".tutorial");
+    if (tutorialEl) tutorialEl.style.display = "none";
     document.querySelector(".area-canvas").style.display = "flex";
     document.querySelector(".botoes-in-game").style.display = "flex";
     document.querySelector(".menu-inicial").style.display = "none";
@@ -103,14 +104,17 @@ function iniciarJogo() {
     document.querySelector(".dica-palavra").textContent = "💡 Dica: " + dicaAtual;
 
     desenharLinhas();
-    document.addEventListener('keydown', (e) => {
-        if (fim) return;
+    if (!window.__forcaKeydownRegistrado) {
+        window.__forcaKeydownRegistrado = true;
+        document.addEventListener('keydown', (e) => {
+            if (fim) return;
 
-        if (!/^[a-zA-Z]$/.test(e.key)) return;
+            if (!/^[a-zA-Z]$/.test(e.key)) return;
 
-        const letra = e.key.toUpperCase();
-        validarJogada(letra);
-    });
+            const letra = e.key.toUpperCase();
+            validarJogada(letra);
+        });
+    }
 }
 
 function adicionaTecladoVirtual() {
@@ -509,16 +513,22 @@ function showGameOverSreen(pontos) {
     }
     const overlay = document.getElementById('gameOverScreenOverlay');
     const screen = document.getElementById('gameOverScreen');
+    const dadosFim = { pontos: estruturaAtual.pontos, recorde: estruturaAtual.hiscore, categoria: categoriaAtual, modo: modoMisto ? 'misto' : modoAtual };
+    if (typeof montarFimDeJogoHTML === "function") {
+        screen.innerHTML = montarFimDeJogoHTML(dadosFim);
+    } else {
     screen.innerHTML = `
-    <h2>Fim de jogo 😢</h2>
-    <p>Sua pontuação: ${estruturaAtual.pontos}</p>
-
-    <button onclick="reiniciar()">Jogar novamente</button>
-    <a href="#categorias">
-        <button class="botao" onclick="renderizarCategorias()">Ver categorias</button>
-    </a>
-`;
+        <h2>Fim de jogo 😢</h2>
+        <p>Sua pontuação: ${estruturaAtual.pontos}</p>
+    
+        <button onclick="reiniciar()">Jogar novamente</button>
+        <a href="#categorias">
+            <button class="botao" onclick="renderizarCategorias()">Ver categorias</button>
+        </a>
+    `;
+    }
     overlay.classList.remove('oculto');
+    if (typeof atualizarBlocosAuth === "function") atualizarBlocosAuth();
 }
 
 function atualizarDisplayVidas() {
