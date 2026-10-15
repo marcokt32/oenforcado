@@ -1,0 +1,76 @@
+/* ===== CSS RESET MODERNO ===== */
+
+/* Remove margens, paddings e padroniza box model */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ajustes globais */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Corpo do documento */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  background-color: #ffffff;
+  color: #000000;
+  text-rendering: optimizeLegibility;
+}
+
+/* Remove estilos padrão */
+ol,
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Imagens e mídia */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Formulários */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+/* Botões */
+button {
+  cursor: pointer;
+}
+
+/* Tabelas */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Remove animações se o usuário preferir */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

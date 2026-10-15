@@ -1,0 +1,6 @@
+/* Identidade visual compartilhada do portal O Enforcado */
+:root{--brand-font:"Bangers",cursive;--body-font:"Inter",system-ui,sans-serif;--heading-font:"Poppins",sans-serif}
+body{font-family:var(--body-font)}
+.site-header .brand span,.site-footer>a{font-family:var(--brand-font);font-weight:400;letter-spacing:.025em;font-size:1.8rem}
+.site-header nav a{font-family:var(--body-font)}
+h1,h2,h3,.intro h1,.seo-content h2{font-family:var(--heading-font)}
