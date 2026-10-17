@@ -20,6 +20,6 @@ nav.corp-col{display:grid;gap:8px;align-content:start}
 .sobre-link{display:inline-flex;align-items:center;gap:8px;min-height:43px;margin:6px 0 0;padding:0 20px;border-radius:10px;background:#1f6feb;color:#fff!important;font-weight:750;text-decoration:none}
 .sobre-link:hover{background:#1559c4}
 
-/* Enquanto o aviso de cookies está na tela, abre espaço para ele não cobrir o rodapé */
-body:has(#cookie-banner:not([hidden])){padding-bottom:96px}
-@media(max-width:700px){body:has(#cookie-banner:not([hidden])){padding-bottom:170px}}
+/* Enquanto o aviso de cookies está na tela, o próprio rodapé ganha espaço embaixo (o fundo azul continua até a borda) */
+body:has(#cookie-banner:not([hidden])) .corp-footer{padding-bottom:84px}
+@media(max-width:700px){body:has(#cookie-banner:not([hidden])) .corp-footer{padding-bottom:180px}}
