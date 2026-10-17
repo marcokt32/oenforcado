@@ -8,7 +8,7 @@
 .pm-icon,.pm-avatar{display:inline-grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid var(--pm-line);border-radius:50%;background:#f6f8fc;color:var(--pm-ink);font:inherit;font-size:1.2rem;font-weight:800;line-height:1;cursor:pointer;overflow:hidden}
 .pm-icon:hover,.pm-avatar:hover{background:#edf2f8}
 .pm-avatar img{width:100%;height:100%;object-fit:cover}
-.pm-login{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 10px;border:1px solid var(--pm-line);border-radius:999px;background:#fff;color:var(--pm-ink);font:inherit;font-size:.80rem;font-weight:750;cursor:pointer;white-space:nowrap}
+.pm-login{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border:1px solid var(--pm-line);border-radius:999px;background:#fff;color:var(--pm-ink);font:inherit;font-size:.92rem;font-weight:750;cursor:pointer;white-space:nowrap}
 .pm-login:hover{background:#f6f8fc}
 .pm-login .g{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#4285f4;color:#fff;font-size:.78rem;font-weight:800}
 .pm-menu{position:absolute;top:52px;right:0;z-index:30;display:grid;gap:8px;min-width:230px;padding:14px;border:1px solid var(--pm-line);border-radius:14px;background:#fff;box-shadow:0 14px 36px #0a254022;text-align:left}
@@ -87,3 +87,7 @@ main{flex:1 0 auto}
 .seo-links{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 18px;margin:10px 0 0;padding:0;list-style:none}
 .seo-links a{font-weight:650}
 .seo-content ul:not(.seo-links){padding-left:1.4rem}
+
+/* Atalho para o próximo desafio do dia */
+.pm-next{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 18px;border-radius:10px;background:#fff3d6;color:#7a4b00!important;font-weight:750;text-align:center;text-decoration:none}
+.pm-next:hover{background:#ffe9b3}

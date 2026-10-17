@@ -167,16 +167,47 @@ function concluir({ jogo, xp, diario }) {
   return { ganho, bonus, repetido, total: d.xp, streak: d.streak.atual };
 }
 
+/* ---------- Desafio do dia: atalhos e navegação entre jogos ---------- */
+function jogoAtualId() {
+  if (document.body.dataset.jogo) return document.body.dataset.jogo;
+  const path = location.pathname.replace(/\.html$/, "");
+  const j = JOGOS.find(x => x.url.replace(".html", "") === path);
+  return j ? j.id : null;
+}
+// Abre em modo desafio do dia se pedido pela URL (?desafio=dia) ou se a pessoa já estava no desafio ao trocar de jogo
+function modoDiarioInicial(jogo) {
+  try { if (new URLSearchParams(location.search).get("desafio") === "dia") return true; } catch (e) {}
+  try { return sessionStorage.getItem("portal_diario") === "1" && !diarioConcluido(jogo); } catch (e) { return false; }
+}
+function irParaDiario() {
+  const atual = jogoAtualId();
+  const alvo = (atual && !diarioConcluido(atual)) ? JOGOS.find(j => j.id === atual)
+    : JOGOS.find(j => j.id !== atual && !diarioConcluido(j.id));
+  if (!alvo) { toast("Você já concluiu todos os desafios de hoje! 🎉"); return; }
+  try { sessionStorage.setItem("portal_diario", "1"); } catch (e) {}
+  if (alvo.id === atual) {
+    const b = document.querySelector(".pm-diario");
+    if (b && !b.classList.contains("ativo")) b.click();
+    if (b) b.scrollIntoView({ behavior: "smooth", block: "center" });
+  } else {
+    location.href = alvo.url + "?desafio=dia";
+  }
+}
+
 /* ---------- Filtros: categoria / dificuldade / desafio do dia ---------- */
 function criarBotaoDiario(jogo, onToggle) {
   const btn = document.createElement("button");
   btn.type = "button"; btn.className = "button pm-diario";
-  const ctl = { el: btn, ativo: false, refresh() {
+  const ctl = { el: btn, ativo: modoDiarioInicial(jogo), refresh() {
     const feito = diarioConcluido(jogo);
     btn.classList.toggle("ativo", ctl.ativo);
     btn.textContent = ctl.ativo ? "↩ Voltar ao jogo livre" : "📅 Desafio do dia" + (feito ? " ✅" : "");
   } };
-  btn.addEventListener("click", () => { ctl.ativo = !ctl.ativo; ctl.refresh(); onToggle(ctl.ativo); });
+  btn.addEventListener("click", () => {
+    ctl.ativo = !ctl.ativo; ctl.refresh();
+    try { sessionStorage.setItem("portal_diario", ctl.ativo ? "1" : "0"); } catch (e) {}
+    onToggle(ctl.ativo);
+  });
   ctl.refresh();
   return ctl;
 }
@@ -213,6 +244,8 @@ function toolbar(el, cfg) {
   const mudou = () => { atualizar(); onChange(ctl.estado()); };
   const diario = criarBotaoDiario(jogo, ativo => { st.diario = ativo; mudou(); });
   el.insertBefore(diario.el, info);
+  st.diario = diario.ativo;
+  atualizar();
 
   if (selCat) selCat.addEventListener("change", () => { st.categoria = selCat.value; salvarPrefs(); mudou(); });
   if (selDif) selDif.addEventListener("change", () => { st.dificuldade = selDif.value; salvarPrefs(); mudou(); });
@@ -252,7 +285,14 @@ function anexarFim(container, { jogo, texto, info }) {
     }
     if (!auth.currentUser) msg += `<br><button type="button" class="link" data-pm="login">Entre com o Google</button> para salvar seu XP e aparecer no ranking.`;
   }
-  div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
+  let proximo = "";
+  if (info && (info.bonus > 0 || info.repetido)) { // terminou um desafio do dia
+    const prox = JOGOS.find(j => j.id !== jogo && !diarioConcluido(j.id));
+    proximo = prox
+      ? `<a class="pm-next" href="${prox.url}?desafio=dia">📅 Próximo desafio do dia: ${esc(prox.nome)} →</a>`
+      : `<p class="pm-xp">🎉 Você concluiu todos os desafios de hoje!</p>`;
+  }
+  div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + proximo + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
   div.querySelector(".pm-share").addEventListener("click", e => compartilhar(jogo, texto, e.currentTarget));
   container.appendChild(div);
   if (info && !info.repetido && info.ganho > 0) toast(`+${info.ganho} XP`);
@@ -277,7 +317,8 @@ function renderAcoes() {
   const el = $("pm-acoes");
   if (!el) return;
   const u = auth.currentUser;
-  let html = `<button type="button" class="pm-icon" data-pm="ranking" aria-label="Ranking global" title="Ranking global">🏆</button>`;
+  let html = `<button type="button" class="pm-icon" data-pm="diario" aria-label="Desafio do dia" title="Desafio do dia">📅</button>` +
+    `<button type="button" class="pm-icon" data-pm="ranking" aria-label="Ranking global" title="Ranking global">🏆</button>`;
   if (!authPronto) { el.innerHTML = html; return; }
   if (u) {
     const foto = u.photoURL ? `<img src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer">` : esc((nomeConta(u)[0] || "J").toUpperCase());
@@ -348,6 +389,7 @@ document.addEventListener("click", e => {
     const acao = a.dataset.pm;
     if (acao === "login") entrar();
     else if (acao === "ranking") abrirRanking();
+    else if (acao === "diario") irParaDiario();
     else if (acao === "sair") sair();
     else if (acao === "notificacoes") alternarNotificacoes();
     else if (acao === "menu") { const m = $("pm-menu"); if (m) m.hidden = !m.hidden; }

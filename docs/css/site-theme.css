@@ -22,3 +22,5 @@ body{
 h1,h2,h3,.intro h1,.seo-content h2{
     font-family:var(--heading-font);
 }
+
+@media(max-width:520px){.brand span{display: none;}}
