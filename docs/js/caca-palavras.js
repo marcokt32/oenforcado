@@ -1,7 +1,11 @@
 (() => {
   "use strict";
+  let rand = Math.random;
 
   const temas = {
+    profissoes: ["MEDICO", "PROFESSOR", "ENGENHEIRO", "PEDREIRO", "COZINHEIRO", "MOTORISTA", "DENTISTA", "ADVOGADO", "PILOTO", "PINTOR", "ATOR", "BOMBEIRO"],
+    corpo: ["CABECA", "CORACAO", "PULMAO", "ESTOMAGO", "JOELHO", "COTOVELO", "OMBRO", "TORNOZELO", "PESCOCO", "CEREBRO", "FIGADO", "COSTELA"],
+    casa: ["SOFA", "GELADEIRA", "FOGAO", "CADEIRA", "JANELA", "PORTA", "TELEVISAO", "ARMARIO", "CAMA", "TAPETE", "ESPELHO", "LAMPADA"],
     animais: ["CACHORRO", "GATO", "CAVALO", "COELHO", "TARTARUGA", "MACACO", "GOLFINHO", "BORBOLETA", "LEAO", "TIGRE", "ZEBRA", "PATO"],
     frutas: ["BANANA", "LARANJA", "ABACAXI", "MORANGO", "MELANCIA", "MANGA", "PERA", "UVA", "GOIABA", "CEREJA", "LIMAO", "MAMAO"],
     natureza: ["FLORESTA", "MONTANHA", "OCEANO", "CACHOEIRA", "PLANETA", "ESTRELA", "NUVEM", "CHUVA", "VENTO", "ARVORE", "JARDIM", "RIACHO"],
@@ -16,6 +20,8 @@
   const vitoriaEl = document.getElementById("vitoria");
   const temaEl = document.getElementById("tema");
   const dificuldadeEl = document.getElementById("dificuldade");
+  const diarioCtl = Portal.criarBotaoDiario("caca", () => startGame());
+  document.querySelector(".game-toolbar").appendChild(diarioCtl.el);
   const novoBtn = document.getElementById("novo-jogo");
   const limparBtn = document.getElementById("limpar-selecao");
   const jogarNovamenteBtn = document.getElementById("jogar-novamente");
@@ -35,7 +41,7 @@
   function shuffle(list) {
     const copy = [...list];
     for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(rand() * (i + 1));
       [copy[i], copy[j]] = [copy[j], copy[i]];
     }
     return copy;
@@ -54,9 +60,9 @@
 
   function placeWord(word) {
     for (let attempt = 0; attempt < 350; attempt++) {
-      const [dr, dc] = directions[Math.floor(Math.random() * directions.length)];
-      const row = Math.floor(Math.random() * size);
-      const col = Math.floor(Math.random() * size);
+      const [dr, dc] = directions[Math.floor(rand() * directions.length)];
+      const row = Math.floor(rand() * size);
+      const col = Math.floor(rand() * size);
       if (!canPlace(word, row, col, dr, dc)) continue;
       const positions = [];
       for (let i = 0; i < word.length; i++) {
@@ -72,6 +78,15 @@
   }
 
   function startGame() {
+    if (diarioCtl.ativo) {
+      rand = Portal.rngDiario("caca");
+      const chaves = Object.keys(temas);
+      temaEl.value = chaves[Math.floor(rand() * chaves.length)];
+      dificuldadeEl.value = "12";
+    } else {
+      rand = Math.random;
+    }
+    temaEl.disabled = dificuldadeEl.disabled = diarioCtl.ativo;
     size = Number(dificuldadeEl.value);
     cells = Array.from({ length: size }, () => Array(size).fill(""));
     found = new Set();
@@ -94,7 +109,7 @@
 
     for (let r = 0; r < size; r++) {
       for (let c = 0; c < size; c++) {
-        if (!cells[r][c]) cells[r][c] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        if (!cells[r][c]) cells[r][c] = String.fromCharCode(65 + Math.floor(rand() * 26));
       }
     }
 
@@ -120,8 +135,18 @@
       listaEl.appendChild(li);
     });
     vitoriaEl.hidden = true;
+    vitoriaEl.querySelectorAll(".pm-extra").forEach(e => e.remove());
     updateProgress();
-    setMessage("Toque na primeira e na última letra da palavra.");
+    setMessage(diarioCtl.ativo ? "Desafio do dia! Concluir vale +50 XP." : "Toque na primeira e na última letra da palavra.");
+  }
+
+  function concluirPartida() {
+    const xp = ({ 10: 20, 12: 30, 14: 40 })[size] + words.length * 2;
+    const info = Portal.concluir({ jogo: "caca", xp, diario: diarioCtl.ativo });
+    diarioCtl.refresh();
+    const [, m, d] = Portal.hoje().split("-");
+    const titulo = diarioCtl.ativo ? `🔎 Caça-palavras · Desafio do dia ${d}/${m}` : `🔎 Caça-palavras · ${size}×${size}`;
+    Portal.anexarFim(vitoriaEl, { jogo: "caca", texto: `${titulo}\n✅ Encontrei ${words.length} palavras!\nConsegue fazer melhor?`, info });
   }
 
   function selectCell(index) {
@@ -155,6 +180,7 @@
       if (found.size === words.length) {
         vitoriaEl.hidden = false;
         setMessage("Desafio concluído!");
+        concluirPartida();
       } else {
         setMessage(`Boa! Você encontrou ${match}. Continue.`);
       }

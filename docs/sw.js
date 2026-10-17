@@ -15,42 +15,33 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 🔥 IMPORTANTE: altere a versão quando fizer deploy
-const CACHE_NAME = "enforcado-v14";
+const CACHE_NAME = "enforcado-v19";
 
 const arquivos = [
   "/",
   "/index.html",
   "/forca.html",
+  "/caca-palavras.html",
+  "/termo.html",
+  "/anagrama.html",
+  "/manifest.json",
   "/img/thumb-forca.svg",
   "/img/thumb-caca-palavras.svg",
   "/img/thumb-termo.svg",
   "/img/thumb-anagrama.svg",
-  "/img/thumb-contexto.svg",
   "css/portal.css",
   "css/site-theme.css",
-  "/manifest.json",
-  "/caca-palavras.html",
-  "/termo.html",
-  "/anagrama.html",
-  "/contexto.html",
-  "css/caca-palavras.css",
-  "js/caca-palavras.js",
+  "css/portal-shell.css",
   "css/termo.css",
-  "js/termo.js",
+  "css/forca.css",
+  "css/caca-palavras.css",
   "css/anagrama.css",
-  "js/anagrama.js",
-  "css/contexto.css",
-  "js/contexto.js",
-
-  "css/reset.css",
-  "css/style.css",
-  "css/flexbox.css",
-
-  "js/render.js",
-  "js/forca.js",
-  "js/canvas.js",
+  "js/portal.js",
   "js/banco-palavras.js",
-
+  "js/forca-jogo.js",
+  "js/termo.js",
+  "js/caca-palavras.js",
+  "js/anagrama.js",
   "icons/icon-192.png",
   "icons/icon-512.png"
 ];
@@ -96,6 +87,9 @@ self.addEventListener("fetch", event => {
 
   // Só tratamos GET http(s)
   if (request.method !== "GET" || !request.url.startsWith("http")) return;
+
+  // Só interceptamos arquivos do próprio site (Firebase, Google e gstatic passam direto)
+  if (new URL(request.url).origin !== self.location.origin) return;
 
   // 🧭 Navegações: rede primeiro, seguindo redirecionamentos (ex.: /forca.html -> /forca)
   if (request.mode === "navigate") {

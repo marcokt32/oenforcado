@@ -1,0 +1,74 @@
+/* ===== Camada compartilhada dos jogos: cabeçalho, login, ranking, filtros, compartilhar ===== */
+:root{--pm-ink:#0a2540;--pm-blue:#1f6feb;--pm-line:#dbe3ef}
+
+/* Cabeçalho único: marca | navegação | troféu + avatar/login */
+.site-header{flex-wrap:nowrap}
+.site-header nav{margin-left:auto}
+.header-actions{display:flex;align-items:center;gap:10px;position:relative}
+.pm-icon,.pm-avatar{display:inline-grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid var(--pm-line);border-radius:50%;background:#f6f8fc;color:var(--pm-ink);font:inherit;font-size:1.2rem;font-weight:800;line-height:1;cursor:pointer;overflow:hidden}
+.pm-icon:hover,.pm-avatar:hover{background:#edf2f8}
+.pm-avatar img{width:100%;height:100%;object-fit:cover}
+.pm-login{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border:1px solid var(--pm-line);border-radius:999px;background:#fff;color:var(--pm-ink);font:inherit;font-size:.92rem;font-weight:750;cursor:pointer;white-space:nowrap}
+.pm-login:hover{background:#f6f8fc}
+.pm-login .g{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#4285f4;color:#fff;font-size:.78rem;font-weight:800}
+.pm-menu{position:absolute;top:52px;right:0;z-index:30;display:grid;gap:8px;min-width:230px;padding:14px;border:1px solid var(--pm-line);border-radius:14px;background:#fff;box-shadow:0 14px 36px #0a254022;text-align:left}
+.pm-menu[hidden]{display:none}
+.pm-menu strong{font-size:1rem;color:var(--pm-ink)}
+.pm-menu span{font-size:.88rem;color:#526176}
+.pm-menu button{min-height:38px;border:0;border-radius:9px;background:#edf2f8;color:var(--pm-ink);font:inherit;font-weight:700;cursor:pointer}
+.pm-menu button:hover{background:#e2eaf4}
+@media(max-width:700px){
+  .site-header{flex-wrap:wrap;flex-direction:row;align-items:center;gap:10px 12px}
+  .brand{order:1}
+  .header-actions{order:2;margin-left:auto}
+  .site-header nav{order:3;width:100%;margin-left:0;gap:14px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+  .site-header nav a{white-space:nowrap}
+  .pm-icon,.pm-avatar{width:38px;height:38px}
+}
+
+/* Filtros (categoria / dificuldade / desafio do dia) */
+.game-toolbar{display:flex;align-items:end;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.game-toolbar label{display:grid;gap:7px;color:#4c5b70;font-size:.86rem;font-weight:700}
+.game-toolbar select{min-height:43px;min-width:155px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--pm-ink);font:inherit}
+.game-toolbar select:disabled{opacity:.55}
+.pm-diario{min-height:43px;padding:0 16px;border:0;border-radius:10px;background:#fff3d6;color:#7a4b00;font:inherit;font-weight:750;cursor:pointer}
+.pm-diario.ativo{background:#1f6feb;color:#fff}
+.pm-info{flex-basis:100%;margin:0;color:#526176;font-size:.88rem}
+.pm-info[hidden]{display:none}
+@media(max-width:600px){.game-toolbar label{flex:1 1 130px}.game-toolbar select{width:100%;min-width:0}.pm-diario{flex:1 1 100%}}
+
+/* Fim de partida: XP + compartilhar */
+.pm-extra{width:100%;display:grid;gap:10px;justify-items:center;margin-top:6px}
+.pm-xp{margin:0;color:#0a2540;font-weight:750;font-size:.95rem;text-align:center;line-height:1.5}
+.pm-xp a,.pm-xp button.link{color:#1f6feb;background:none;border:0;padding:0;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+.pm-share{min-height:43px;padding:0 20px;border:0;border-radius:10px;background:#1f6feb;color:#fff;font:inherit;font-weight:750;cursor:pointer}
+.pm-share:hover{background:#1559c4}
+
+/* Ranking */
+.pm-overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:16px;background:#0a254099}
+.pm-modal{position:relative;width:min(100%,380px);max-height:88vh;overflow:auto;padding:22px 18px 18px;border-radius:18px;background:#fff;box-shadow:0 20px 50px #0a254044;color:var(--pm-ink)}
+.pm-modal h2{margin:0 0 12px;font-size:1.3rem;text-align:center}
+.pm-fechar{position:absolute;top:10px;right:12px;border:0;background:none;font-size:1.3rem;cursor:pointer;color:#526176}
+.pm-linha{display:grid;grid-template-columns:34px 34px 1fr auto;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid #eef2f7;font-size:.95rem}
+.pm-linha img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+.pm-linha b{font-variant-numeric:tabular-nums}
+.pm-linha.eu{background:#f1f6ff;border-radius:10px}
+.pm-vazio{margin:12px 0;text-align:center;color:#526176;font-size:.92rem}
+.pm-cta{display:grid;gap:8px;justify-items:center;margin-top:14px;padding:14px;border:1px solid var(--pm-line);border-radius:14px;background:#f8faff;text-align:center}
+.pm-cta p{margin:0;font-size:.9rem;color:#4c5b70}
+.pm-sub{margin:14px 0 6px;font-size:.85rem;font-weight:800;letter-spacing:.06em;color:#526176}
+
+/* Toast */
+.pm-toast{position:fixed;left:50%;bottom:22px;z-index:120;max-width:min(92vw,420px);padding:12px 18px;border-radius:12px;background:#0a2540;color:#fff;font-size:.92rem;font-weight:650;text-align:center;transform:translateX(-50%);box-shadow:0 10px 30px #0a254055}
+
+/* Aviso de cookies (mesmo visual em todas as páginas) */
+#cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:90;padding:14px 18px;background:#0a2540;color:#eaf1fa;font-size:.88rem}
+#cookie-banner[hidden]{display:none}
+#cookie-banner .cookie-content{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;max-width:1000px;margin:0 auto}
+#cookie-banner p{margin:0;text-align:left}
+#cookie-banner a{color:#fff}
+#cookie-banner button{min-height:38px;padding:0 18px;border:0;border-radius:9px;background:#1f6feb;color:#fff;font:inherit;font-weight:750;cursor:pointer}
+
+/* Publicidade: fica no fluxo da página, entre o jogo e o texto, e some se não houver anúncio */
+.ad-slot{width:100%;min-height:100px;margin:26px auto 0;text-align:center;overflow:hidden}
+.ad-slot:has(ins[data-ad-status="unfilled"]){display:none}

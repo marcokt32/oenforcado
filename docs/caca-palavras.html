@@ -28,6 +28,10 @@
     "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}
   }
   </script>
+<link rel="stylesheet" href="css/portal-shell.css?v=1.0.1">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8119130352737496" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LPB04DJLXC"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-LPB04DJLXC');gtag('config','AW-10942914304');</script>
 </head>
 <body>
   <header class="site-header">
@@ -38,7 +42,7 @@
     <nav aria-label="Navegação principal">
       <a href="/forca.html">Jogo da forca</a>
       <a href="/caca-palavras.html" aria-current="page">Caça-palavras</a>
-      <a href="/termo.html">Termo</a><a href="/anagrama.html">Anagrama</a><a href="/contexto.html">Contexto</a>
+      <a href="/termo.html">Termo</a><a href="/anagrama.html">Anagrama</a>
     </nav>
   </header>
 
@@ -58,6 +62,9 @@
             <option value="natureza">Natureza</option>
             <option value="esportes">Esportes</option>
             <option value="portugues">Língua portuguesa</option>
+            <option value="profissoes">Profissões</option>
+            <option value="corpo">Corpo humano</option>
+            <option value="casa">Casa e objetos</option>
           </select>
         </label>
         <label for="dificuldade">Tamanho
@@ -89,6 +96,7 @@
       </div>
     </section>
 
+    <aside class="ad-slot" aria-label="Publicidade"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8119130352737496" data-ad-slot="1532529629" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>
     <section class="seo-content">
       <h2>Como jogar caça-palavras?</h2>
       <p>O objetivo do caça-palavras é localizar todas as palavras da lista escondidas entre as letras da grade. Elas podem aparecer na horizontal, na vertical ou na diagonal, inclusive no sentido inverso.</p>
@@ -103,6 +111,7 @@
       <h2>História do caça-palavras</h2>
       <p>O caça-palavras é um passatempo clássico de revistas e jornais. A versão moderna costuma ser atribuída a Norman E. Gibat, que publicou um quebra-cabeça desse tipo em 1968 em um jornal de Oklahoma, nos Estados Unidos. Desde então, o formato se espalhou pelo mundo e virou presença certa nas páginas de passatempos.</p>
       <p>Além de divertir, o jogo é muito usado em escolas para reforçar vocabulário e ortografia, pois obriga o jogador a observar cada letra com atenção.</p>
+      <h2>Desafio do dia e ranking global</h2><p>Todo dia há um desafio novo, igual para todos os jogadores. Concluí-lo vale 50 XP de bônus e mantém sua sequência de dias seguidos. O XP de todos os jogos do O Enforcado se soma, e quem entra com a conta Google aparece no ranking global (o troféu no topo da página). Jogar continua livre, sem precisar de login.</p>
       <p>Quer variar o desafio? <a href="/forca.html">Jogue também o jogo da forca online</a> e experimente também o <a href="/termo.html">Termo online</a>, outro desafio de palavras do O Enforcado.</p>
     </section>
   </main>
@@ -112,6 +121,13 @@
     <span>Jogos de palavras gratuitos para jogar online.</span>
     <div><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a></div>
   </footer>
-  <script src="js/caca-palavras.js?v=1.0.0"></script>
+<div id="cookie-banner" hidden><div class="cookie-content"><p>Utilizamos cookies para melhorar sua experiência e exibir anúncios personalizados. Ao continuar navegando, você concorda com nossa <a href="/politica.html">Política de Privacidade</a>.</p><button id="aceitar-cookies" type="button">Aceitar</button></div></div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/portal.js?v=1.0.0"></script>
+  <script src="js/caca-palavras.js?v=2.0.0"></script>
 </body>
 </html>

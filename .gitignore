@@ -1,15 +1,14 @@
 # Gradle
 .gradle/
 build/
+/app/
 
 # Android
 local.properties
 *.apk
 *.aab
+*.idsig
 
-# Generated
-/app/build/
-
-# Keystore
+# Chaves de assinatura (nunca versionar; guarde uma cópia fora do repositório)
 *.keystore
 *.jks
