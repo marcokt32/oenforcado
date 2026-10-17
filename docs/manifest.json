@@ -3,8 +3,8 @@
   "short_name": "Enforcado",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#121212",
+  "background_color": "#f6f7fb",
+  "theme_color": "#0a2540",
   "orientation": "portrait",
   "icons": [
     {
@@ -16,6 +16,32 @@
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "id": "/",
+  "lang": "pt-BR",
+  "scope": "/",
+  "description": "Jogos de palavras online e grátis: Forca, Termo, Caça-palavras e Anagrama, com desafio do dia e ranking.",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "shortcuts": [
+    {
+      "name": "Jogo da Forca",
+      "url": "/forca.html"
+    },
+    {
+      "name": "Termo",
+      "url": "/termo.html"
+    },
+    {
+      "name": "Caça-palavras",
+      "url": "/caca-palavras.html"
+    },
+    {
+      "name": "Anagrama",
+      "url": "/anagrama.html"
     }
   ]
 }
