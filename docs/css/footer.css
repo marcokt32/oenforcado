@@ -1,0 +1,25 @@
+/* Rodapé corporativo (todas as páginas) */
+.corp-footer{margin-top:auto;flex-shrink:0;background:#0a2540;color:#c9d6e6;font-size:.9rem;line-height:1.6}
+.corp-wrap{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:32px;padding:44px max(20px,calc((100% - 1000px)/2)) 32px}
+.corp-col h3{margin:0 0 4px;color:#fff;font-family:Inter,system-ui,sans-serif;font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.corp-col p{margin:10px 0 0;line-height:1.6;max-width:340px;text-align:left;font-size:.9rem}
+nav.corp-col{display:grid;gap:8px;align-content:start}
+.corp-col a{display:block;width:fit-content}
+.corp-footer a{color:#c9d6e6;text-decoration:none}
+.corp-footer a:hover,.corp-footer a:focus-visible{color:#fff;text-decoration:underline}
+.corp-logo{display:inline-block;color:#fff!important;font-family:var(--brand-font,"Bangers",cursive);font-size:1.8rem;font-weight:400;letter-spacing:.025em;text-decoration:none!important}
+.corp-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding:16px max(20px,calc((100% - 1000px)/2));border-top:1px solid #ffffff1f;font-size:.82rem;color:#9fb3cb}
+.corp-bottom a{color:#fff;font-weight:700}
+@media(max-width:700px){
+  .corp-wrap{grid-template-columns:1fr 1fr;gap:26px 20px;padding-top:34px}
+  .corp-brand{grid-column:1/-1}
+  .corp-bottom{flex-direction:column;align-items:flex-start}
+}
+
+/* Página Sobre */
+.sobre-link{display:inline-flex;align-items:center;gap:8px;min-height:43px;margin:6px 0 0;padding:0 20px;border-radius:10px;background:#1f6feb;color:#fff!important;font-weight:750;text-decoration:none}
+.sobre-link:hover{background:#1559c4}
+
+/* Enquanto o aviso de cookies está na tela, abre espaço para ele não cobrir o rodapé */
+body:has(#cookie-banner:not([hidden])){padding-bottom:96px}
+@media(max-width:700px){body:has(#cookie-banner:not([hidden])){padding-bottom:170px}}

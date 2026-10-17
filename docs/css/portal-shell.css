@@ -72,3 +72,9 @@
 /* Publicidade: fica no fluxo da página, entre o jogo e o texto, e some se não houver anúncio */
 .ad-slot{width:100%;min-height:100px;margin:26px auto 0;text-align:center;overflow:hidden}
 .ad-slot:has(ins[data-ad-status="unfilled"]){display:none}
+
+/* Rodapé sempre colado no final da tela, mesmo em páginas curtas */
+html{min-height:100%}
+body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+main{flex:1 0 auto}
+.site-footer{margin-top:auto;flex-shrink:0}

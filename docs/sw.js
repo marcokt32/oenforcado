@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 🔥 IMPORTANTE: altere a versão quando fizer deploy
-const CACHE_NAME = "enforcado-v19";
+const CACHE_NAME = "enforcado-v22";
 
 const arquivos = [
   "/",
@@ -32,6 +32,7 @@ const arquivos = [
   "css/portal.css",
   "css/site-theme.css",
   "css/portal-shell.css",
+  "css/footer.css",
   "css/termo.css",
   "css/forca.css",
   "css/caca-palavras.css",
