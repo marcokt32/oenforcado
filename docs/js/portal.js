@@ -186,7 +186,7 @@ function toolbar(el, cfg) {
   const prefs = ler().prefs[jogo] || {};
   const valido = (lista, v) => lista && lista.some(x => x.id === v);
   const st = {
-    categoria: categorias ? (valido(categorias, prefs.categoria) ? prefs.categoria : categorias[0].id) : null,
+    categoria: categorias ? (valido(categorias, cfg.categoriaInicial) ? cfg.categoriaInicial : valido(categorias, prefs.categoria) ? prefs.categoria : categorias[0].id) : null,
     dificuldade: dificuldades ? (valido(dificuldades, prefs.dificuldade) ? prefs.dificuldade : (cfg.dificuldadePadrao || dificuldades[0].id)) : null,
     diario: false
   };
@@ -264,7 +264,7 @@ function montarHeader() {
   if (!h) return;
   const atual = location.pathname.replace(/\/$/, "");
   const links = JOGOS.map(j => {
-    const ativo = atual === j.url || atual === j.url.replace(".html", "");
+    const ativo = atual === j.url || atual === j.url.replace(".html", "") || document.body.dataset.jogo === j.id;
     return `<a href="${j.url}"${ativo ? ' aria-current="page"' : ""}>${esc(j.nome)}</a>`;
   }).join("");
   h.innerHTML =

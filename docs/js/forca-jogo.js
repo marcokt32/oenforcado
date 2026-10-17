@@ -155,6 +155,6 @@ document.addEventListener("keydown", e => {
   if (/^[A-Z]$/.test(l)) tentar(l);
 });
 
-const tb = Portal.toolbar($("toolbar"), { jogo: "forca", categorias, dificuldades: DIFICULDADES, dificuldadePadrao: "medio", onChange: novo });
+const tb = Portal.toolbar($("toolbar"), { jogo: "forca", categorias, dificuldades: DIFICULDADES, dificuldadePadrao: "medio", categoriaInicial: document.body.dataset.categoria, onChange: novo });
 novo();
 })();

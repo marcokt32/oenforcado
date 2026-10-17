@@ -223,5 +223,6 @@
   temaEl.addEventListener("change", startGame);
   dificuldadeEl.addEventListener("change", startGame);
 
+  if (temas[document.body.dataset.tema]) temaEl.value = document.body.dataset.tema;
   startGame();
 })();
