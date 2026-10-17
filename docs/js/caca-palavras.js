@@ -220,9 +220,27 @@
     clearSelection();
     setMessage("Seleção limpa. Escolha a primeira letra.");
   });
-  temaEl.addEventListener("change", startGame);
+  // Cada tema com página própria leva para a URL dela; os demais voltam para /caca-palavras.html
+  const PAGINAS_TEMA = {
+    animais: "caca-palavras-de-animais", frutas: "caca-palavras-de-frutas",
+    profissoes: "caca-palavras-de-profissoes", corpo: "caca-palavras-do-corpo-humano"
+  };
+  let temaAtual = temaEl.value;
+  temaEl.addEventListener("change", () => {
+    try { localStorage.setItem("caca_tema", temaEl.value); } catch (e) {}
+    if (!diarioCtl.ativo && temaEl.value !== temaAtual) {
+      const destino = PAGINAS_TEMA[temaEl.value] || "caca-palavras";
+      const atual = location.pathname.replace(/^\/|\.html$/g, "");
+      if (destino !== atual) { location.href = "/" + destino + ".html"; return; }
+    }
+    temaAtual = temaEl.value;
+    startGame();
+  });
   dificuldadeEl.addEventListener("change", startGame);
 
-  if (temas[document.body.dataset.tema]) temaEl.value = document.body.dataset.tema;
+  let temaSalvo = null;
+  try { temaSalvo = localStorage.getItem("caca_tema"); } catch (e) {}
+  const temaInicial = document.body.dataset.tema || temaSalvo;
+  if (temas[temaInicial]) { temaEl.value = temaInicial; temaAtual = temaInicial; }
   startGame();
 })();

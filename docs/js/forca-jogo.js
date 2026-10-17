@@ -155,6 +155,24 @@ document.addEventListener("keydown", e => {
   if (/^[A-Z]$/.test(l)) tentar(l);
 });
 
-const tb = Portal.toolbar($("toolbar"), { jogo: "forca", categorias, dificuldades: DIFICULDADES, dificuldadePadrao: "medio", categoriaInicial: document.body.dataset.categoria, onChange: novo });
+// Cada categoria com página própria leva para a URL dela; as demais voltam para /forca.html
+const PAGINAS = {
+  todas: "forca", biblia: "jogo-da-forca-biblica", geografia: "jogo-da-forca-de-geografia", historia: "jogo-da-forca-de-historia",
+  portugues: "jogo-da-forca-de-portugues", matematica: "jogo-da-forca-de-matematica", cinema: "jogo-da-forca-de-filmes",
+  musica: "jogo-da-forca-de-musica", games: "jogo-da-forca-de-games", esporte: "jogo-da-forca-de-esportes"
+};
+const slugAtual = () => location.pathname.replace(/^\/|\.html$/g, "") || "index";
+let categoriaAtual = null;
+function aoMudar(e) {
+  if (!e.diario && categoriaAtual && e.categoria !== categoriaAtual) {
+    const destino = PAGINAS[e.categoria] || "forca";
+    if (destino !== slugAtual()) { location.href = "/" + destino + ".html"; return; }
+  }
+  categoriaAtual = e.categoria;
+  novo();
+}
+
+const tb = Portal.toolbar($("toolbar"), { jogo: "forca", categorias, dificuldades: DIFICULDADES, dificuldadePadrao: "medio", categoriaInicial: document.body.dataset.categoria, onChange: aoMudar });
+categoriaAtual = tb.estado().categoria;
 novo();
 })();
