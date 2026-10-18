@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta http-equiv="content-language" content="pt-BR">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a2540">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8119130352737496" crossorigin="anonymous"></script>
+  <title>Kyudoku Online Grátis 6x6 | O Enforcado</title>
+  <meta name="author" content="O Enforcado">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="description" content="Jogue Kyudoku online grátis: marque 9 números diferentes em um tabuleiro 6x6 sem passar de 9 por linha e coluna. 3 níveis e desafio do dia.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="O Enforcado">
+  <meta property="og:title" content="Kyudoku Online Grátis 6x6 | O Enforcado">
+  <meta property="og:description" content="Jogue Kyudoku online grátis: marque 9 números diferentes em um tabuleiro 6x6 sem passar de 9 por linha e coluna. 3 níveis e desafio do dia.">
+  <meta property="og:url" content="https://oenforcado.com/kyudoku.html">
+  <meta property="og:image" content="https://oenforcado.com/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kyudoku Online Grátis 6x6 | O Enforcado">
+  <meta name="twitter:description" content="Jogue Kyudoku online grátis: marque 9 números diferentes em um tabuleiro 6x6 sem passar de 9 por linha e coluna. 3 níveis e desafio do dia.">
+  <meta name="twitter:image" content="https://oenforcado.com/img/og-image.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Kyudoku Online","url":"https://oenforcado.com/kyudoku.html","description":"Jogue Kyudoku online grátis: marque 9 números diferentes em um tabuleiro 6x6 sem passar de 9 por linha e coluna. 3 níveis e desafio do dia.","applicationCategory":"GameApplication","genre":"Jogo de lógica numérica","operatingSystem":"Any","browserRequirements":"Requer JavaScript","inLanguage":"pt-BR","isAccessibleForFree":true,"image":"https://oenforcado.com/img/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"O Enforcado","url":"https://oenforcado.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://oenforcado.com/"},{"@type":"ListItem","position":2,"name":"Kyudoku","item":"https://oenforcado.com/kyudoku.html"}]}]}</script>
+  <link rel="canonical" href="https://oenforcado.com/kyudoku.html">
+  <link rel="icon" href="/img/hung.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site-theme.css?v=1.0.0">
+  <link rel="stylesheet" href="css/termo.css?v=1.0.2">
+  <link rel="stylesheet" href="css/kyudoku.css?v=1.0.0">
+  <link rel="stylesheet" href="css/portal-shell.css?v=1.0.6">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LPB04DJLXC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-LPB04DJLXC');gtag('config','AW-10942914304');</script>
+<link rel="stylesheet" href="css/footer.css?v=1.0.3">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>
+    <nav aria-label="Navegação principal">
+      <a href="/forca.html">Jogo da forca</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/termo.html">Termo</a><a href="/anagrama.html">Anagrama</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">JOGOS MATEMÁTICOS</p>
+      <h1>Kyudoku online grátis</h1>
+      <p>Marque 9 números diferentes, de 1 a 9, em um tabuleiro 6×6 sem deixar nenhuma linha ou coluna passar de 9. Escolha o nível ou jogue o desafio do dia.</p>
+    </section>
+    <section class="ky-card" aria-label="Kyudoku">
+      <div id="toolbar"></div>
+      <div class="ky-info">
+        <span class="rules-short">Modo: <strong id="nivel-atual"></strong></span>
+        <span class="rules-short">Marcadas: <strong id="contagem">0 / 9</strong></span>
+        <span class="rules-short">Tempo: <strong id="tempo">0:00</strong></span>
+      </div>
+      <div id="ky-digitos" class="ky-digitos" aria-label="Números de 1 a 9 já marcados"></div>
+      <div id="tabuleiro" class="ky-board" role="group" aria-label="Tabuleiro 6 por 6"></div>
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite">Marque 9 números diferentes, sem passar de 9 por linha e coluna.</p>
+      <div class="ky-acoes">
+        <button id="dica-btn" class="button button-secondary" type="button">💡 Revelar uma célula</button>
+        <button id="limpar" class="button button-secondary" type="button">Limpar</button>
+        <button id="novo-jogo" class="button button-secondary" type="button">Novo puzzle</button>
+      </div>
+      <div id="resultado" class="resultado" hidden>
+        <strong id="resultado-titulo"></strong><span id="resultado-detalhe"></span>
+        <button id="jogar-novamente" class="button button-primary" type="button">Próximo puzzle</button>
+      </div>
+    </section>
+    <aside class="ad-slot" aria-label="Publicidade"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8119130352737496" data-ad-slot="1532529629" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>
+    <section class="seo-content">
+      <h2>Como jogar Kyudoku?</h2>
+      <ol>
+        <li>O tabuleiro 6×6 tem números de 1 a 9, repetidos em várias casas.</li>
+        <li>Toque em 9 células para marcá-las. Os 9 números marcados precisam ser todos diferentes: do 1 ao 9, cada um uma única vez.</li>
+        <li>Em cada linha e em cada coluna, a soma dos números marcados não pode passar de 9. As somas aparecem ao lado e embaixo do tabuleiro.</li>
+        <li>Algumas células já vêm marcadas e travadas, como ponto de partida. Quando as 9 marcações respeitarem todas as regras, o puzzle está resolvido.</li>
+      </ol>
+      <h2>Dicas para resolver</h2>
+      <ul>
+        <li>O 9 precisa ficar sozinho na linha e na coluna dele: qualquer outro número marcado ali faria a soma passar de 9.</li>
+        <li>O 8 só pode dividir linha ou coluna com o 1, e o 7 só com o 1 ou o 2.</li>
+        <li>A soma dos nove números é 1 + 2 + … + 9 = 45. Como são 6 linhas com limite de 9 cada, há só 9 pontos de folga no total, então quase todas as linhas ficam cheias.</li>
+        <li>Comece pelos números altos (9, 8 e 7), que têm menos lugares possíveis, e use os baixos para completar.</li>
+        <li>Todos os puzzles têm uma única solução, então não é preciso chutar: sempre existe um caminho por eliminação.</li>
+      </ul>
+      <h2>Níveis de dificuldade</h2>
+      <p>No nível fácil, 3 células já vêm marcadas. No médio, 2. No difícil, apenas 1, e há muito mais caminhos para descartar. Cada célula revelada pelo botão de dica reduz 5 XP da partida.</p>
+      <h2>O que é o Kyudoku?</h2>
+      <p>O Kyudoku é um quebra-cabeça de lógica numérica. Ele não exige contas difíceis: só raciocínio, comparação de somas e eliminação de possibilidades. É um bom exercício para treinar atenção e cálculo mental com números pequenos.</p>
+      <h2>Desafio do dia e ranking global</h2>
+      <p>Todo dia há um desafio novo, igual para todos os jogadores. Concluí-lo vale 50 XP de bônus e mantém sua sequência de dias seguidos. O XP de todos os jogos do O Enforcado se soma, e quem entra com a conta Google aparece no ranking global (o troféu no topo da página). Jogar continua livre, sem precisar de login.</p>
+      <p>Quer outro desafio? Experimente também o <a href="/forca.html">jogo da forca</a>, o <a href="/termo.html">Termo</a>, o <a href="/caca-palavras.html">caça-palavras</a> e o <a href="/anagrama.html">Anagrama</a>.</p>
+    </section>
+  </main>
+  <footer class="corp-footer">
+    <div class="corp-wrap">
+      <div class="corp-col corp-brand">
+        <a class="corp-logo" href="/">O Enforcado</a>
+        <p>Jogos de palavras gratuitos para jogar online: forca, Termo, caça-palavras e anagrama, com desafio do dia e ranking.</p>
+      </div>
+      <nav class="corp-col" aria-label="Jogos">
+        <h3>Jogos</h3>
+        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a>
+      </nav>
+      <nav class="corp-col" aria-label="Institucional">
+        <h3>Institucional</h3>
+        <a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
+      </nav>
+    </div>
+    <div class="corp-bottom">
+      <span>© 2026 O Enforcado. Todos os direitos reservados.</span>
+      <span>Desenvolvido por <a href="https://marsdev.com.br" target="_blank" rel="noopener">MarsDev</a> - Marco Quintela</span>
+    </div>
+  </footer>
+  <div id="cookie-banner" hidden><div class="cookie-content"><p>Utilizamos cookies para melhorar sua experiência e exibir anúncios personalizados. Ao continuar navegando, você concorda com nossa <a href="/politica.html">Política de Privacidade</a>.</p><button id="aceitar-cookies" type="button">Aceitar</button></div></div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/portal.js?v=1.0.4"></script>
+  <script src="js/kyudoku.js?v=1.0.0"></script>
+<script src="js/ads-fix.js?v=1.0.0"></script>
+</body>
+</html>

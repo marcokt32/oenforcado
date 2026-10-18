@@ -91,3 +91,19 @@ main{flex:1 0 auto}
 /* Atalho para o próximo desafio do dia */
 .pm-next{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 18px;border-radius:10px;background:#fff3d6;color:#7a4b00!important;font-weight:750;text-align:center;text-decoration:none}
 .pm-next:hover{background:#ffe9b3}
+
+/* Anagrama: palavras bônus (aceitas pelo dicionário, fora da lista do desafio) */
+.ana-word.bonus{background:#fff3d6;color:#7a4b00;border-color:#f3d68a}
+
+/* Pop-up de vitória */
+.pm-win{display:grid;gap:12px;justify-items:center;padding:28px 20px 20px;text-align:center;animation:pm-pop .22s ease-out}
+.pm-win-emoji{font-size:2.8rem;line-height:1}
+.pm-win h2{margin:0;font-size:1.55rem;color:var(--pm-ink)}
+.pm-win-detalhe{margin:0;color:#526176;font-size:1rem}
+.pm-win .pm-xp{padding:10px 12px;border-radius:12px;background:#eaf7ee;color:#14532d;line-height:1.55}
+.pm-win .pm-xp .link{color:#1559c4}
+.pm-win .pm-next,.pm-win .pm-share,.pm-win-nova{width:100%;box-sizing:border-box}
+.pm-win-nova{min-height:43px;border:1px solid var(--pm-line);border-radius:10px;background:#fff;color:var(--pm-ink);font:inherit;font-weight:700;cursor:pointer}
+.pm-win-nova:hover{background:#f6f8fc}
+@keyframes pm-pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.pm-win{animation:none}}

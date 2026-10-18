@@ -7,7 +7,8 @@ const JOGOS = [
   { id: "forca", nome: "Jogo da forca", url: "/forca.html" },
   { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html" },
   { id: "termo", nome: "Termo", url: "/termo.html" },
-  { id: "anagrama", nome: "Anagrama", url: "/anagrama.html" }
+  { id: "anagrama", nome: "Anagrama", url: "/anagrama.html" },
+  { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html" }
 ];
 const KEY = "portal_v2";
 const BONUS_DIARIO = 50;
@@ -174,17 +175,22 @@ function jogoAtualId() {
   const j = JOGOS.find(x => x.url.replace(".html", "") === path);
   return j ? j.id : null;
 }
-// Abre em modo desafio do dia se pedido pela URL (?desafio=dia) ou se a pessoa já estava no desafio ao trocar de jogo
+// A primeira visão de uma página de jogo é o desafio do dia. Exceções: o desafio de hoje já foi feito neste jogo,
+// a pessoa escolheu "Voltar ao jogo livre" nesta sessão, ou é uma página de categoria/tema (que mantém o foco dela).
+// ?desafio=dia força o desafio em qualquer página.
 function modoDiarioInicial(jogo) {
   try { if (new URLSearchParams(location.search).get("desafio") === "dia") return true; } catch (e) {}
-  try { return sessionStorage.getItem("portal_diario") === "1" && !diarioConcluido(jogo); } catch (e) { return false; }
+  if (document.body.dataset.categoria || document.body.dataset.tema) return false;
+  if (diarioConcluido(jogo)) return false;
+  try { if (sessionStorage.getItem("portal_livre_" + jogo) === "1") return false; } catch (e) {}
+  return true;
 }
 function irParaDiario() {
   const atual = jogoAtualId();
   const alvo = (atual && !diarioConcluido(atual)) ? JOGOS.find(j => j.id === atual)
     : JOGOS.find(j => j.id !== atual && !diarioConcluido(j.id));
   if (!alvo) { toast("Você já concluiu todos os desafios de hoje! 🎉"); return; }
-  try { sessionStorage.setItem("portal_diario", "1"); } catch (e) {}
+  try { sessionStorage.removeItem("portal_livre_" + alvo.id); } catch (e) {}
   if (alvo.id === atual) {
     const b = document.querySelector(".pm-diario");
     if (b && !b.classList.contains("ativo")) b.click();
@@ -205,7 +211,7 @@ function criarBotaoDiario(jogo, onToggle) {
   } };
   btn.addEventListener("click", () => {
     ctl.ativo = !ctl.ativo; ctl.refresh();
-    try { sessionStorage.setItem("portal_diario", ctl.ativo ? "1" : "0"); } catch (e) {}
+    try { sessionStorage.setItem("portal_livre_" + jogo, ctl.ativo ? "0" : "1"); } catch (e) {}
     onToggle(ctl.ativo);
   });
   ctl.refresh();
@@ -272,11 +278,53 @@ async function compartilhar(jogoId, texto, btn) {
   } catch (e) { window.prompt("Copie o texto abaixo:", texto + "\n" + url); }
 }
 
+function linkDiario(jogo, acabouDiario) {
+  const link = rotulo => { const j = rotulo.jogo; return `<a class="pm-next" href="${j.url}?desafio=dia">${rotulo.texto} ${esc(j.nome)} →</a>`; };
+  if (acabouDiario) {
+    const prox = JOGOS.find(j => j.id !== jogo && !diarioConcluido(j.id));
+    return prox ? link({ jogo: prox, texto: "📅 Próximo desafio do dia:" }) : `<p class="pm-xp">🎉 Você concluiu todos os desafios de hoje!</p>`;
+  }
+  // vitória no jogo livre: incentiva o desafio que ainda falta (pode ser o do próprio jogo)
+  const pend = JOGOS.find(j => !diarioConcluido(j.id));
+  return pend ? link({ jogo: pend, texto: "📅 Desafio do dia pendente:" }) : "";
+}
+
+function fecharVitoria() { const o = $("pm-vitoria"); if (o) o.remove(); }
+
+// Pop-up de vitória: mostra o resultado (o mesmo do quadro verde) com compartilhar e o próximo desafio em destaque
+function abrirVitoria({ container, jogo, texto, msg, proximo }) {
+  fecharVitoria();
+  const t = container.querySelector("strong, h2, h3");
+  const d = Array.from(container.querySelectorAll("span, p")).find(el => !el.closest(".pm-extra") && el.textContent.trim());
+  const nova = Array.from(container.querySelectorAll("button")).find(b => !b.closest(".pm-extra"));
+  const o = document.createElement("div");
+  o.id = "pm-vitoria"; o.className = "pm-overlay";
+  o.innerHTML = montarVitoriaHTML({ titulo: t ? t.textContent : "Parabéns!", detalhe: d ? d.textContent : "", msg, proximo, nova: nova ? nova.textContent : "" });
+  document.body.appendChild(o);
+  o.addEventListener("click", e => {
+    if (e.target === o || e.target.closest(".pm-fechar")) fecharVitoria();
+    else if (e.target.closest(".pm-win-nova")) { fecharVitoria(); if (nova) nova.click(); }
+  });
+  o.querySelector(".pm-share").addEventListener("click", e => compartilhar(jogo, texto, e.currentTarget));
+  const foco = o.querySelector(".pm-next") || o.querySelector(".pm-share");
+  if (foco) foco.focus();
+}
+
+function montarVitoriaHTML({ titulo, detalhe, msg, proximo, nova }) {
+  return `<div class="pm-modal pm-win" role="dialog" aria-modal="true" aria-labelledby="pm-win-t">` +
+    `<button type="button" class="pm-fechar" aria-label="Fechar">✕</button>` +
+    `<div class="pm-win-emoji" aria-hidden="true">🎉</div><h2 id="pm-win-t">${esc(titulo)}</h2>` +
+    (detalhe ? `<p class="pm-win-detalhe">${esc(detalhe)}</p>` : "") +
+    (msg ? `<p class="pm-xp">${msg}</p>` : "") + proximo +
+    `<button type="button" class="pm-share">📤 Compartilhar</button>` +
+    (nova ? `<button type="button" class="pm-win-nova">${esc(nova)}</button>` : "") + `</div>`;
+}
+
 function anexarFim(container, { jogo, texto, info }) {
   container.querySelectorAll(".pm-extra").forEach(e => e.remove());
   const div = document.createElement("div");
   div.className = "pm-extra";
-  let msg = "";
+  let msg = "", proximo = "";
   if (info) {
     if (info.repetido) msg = "Desafio de hoje já concluído antes: sem XP desta vez.";
     else {
@@ -284,18 +332,13 @@ function anexarFim(container, { jogo, texto, info }) {
       if (info.bonus && info.streak > 0) msg += ` · 🔥 ${info.streak} ${info.streak === 1 ? "dia" : "dias"} seguidos`;
     }
     if (!auth.currentUser) msg += `<br><button type="button" class="link" data-pm="login">Entre com o Google</button> para salvar seu XP e aparecer no ranking.`;
-  }
-  let proximo = "";
-  if (info && (info.bonus > 0 || info.repetido)) { // terminou um desafio do dia
-    const prox = JOGOS.find(j => j.id !== jogo && !diarioConcluido(j.id));
-    proximo = prox
-      ? `<a class="pm-next" href="${prox.url}?desafio=dia">📅 Próximo desafio do dia: ${esc(prox.nome)} →</a>`
-      : `<p class="pm-xp">🎉 Você concluiu todos os desafios de hoje!</p>`;
+    proximo = linkDiario(jogo, info.bonus > 0 || info.repetido);
   }
   div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + proximo + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
   div.querySelector(".pm-share").addEventListener("click", e => compartilhar(jogo, texto, e.currentTarget));
   container.appendChild(div);
-  if (info && !info.repetido && info.ganho > 0) toast(`+${info.ganho} XP`);
+  // vitória: pop-up logo após o último movimento (derrotas continuam só com o quadro)
+  if (info) setTimeout(() => abrirVitoria({ container, jogo, texto, msg, proximo }), 350);
 }
 
 /* ---------- Cabeçalho (igual em todos os jogos) ---------- */
@@ -397,7 +440,7 @@ document.addEventListener("click", e => {
   }
   if (!e.target.closest(".pm-menu")) fecharMenu();
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRanking(); fecharMenu(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRanking(); fecharVitoria(); fecharMenu(); } });
 
 auth.onAuthStateChanged(async u => {
   if (u) { try { await sincronizarConta(u); } catch (e) { console.error("Erro ao sincronizar conta:", e); } }
