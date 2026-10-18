@@ -5,10 +5,11 @@
 
 const JOGOS = [
   { id: "forca", nome: "Jogo da forca", url: "/forca.html" },
-  { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html" },
-  { id: "termo", nome: "Termo", url: "/termo.html" },
   { id: "anagrama", nome: "Anagrama", url: "/anagrama.html" },
-  { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html" }
+  { id: "termo", nome: "Termo", url: "/termo.html" },
+  { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html" },
+  { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html" },
+  { id: "logicagrega", nome: "Lógica grega", url: "/logica-grega.html" }
 ];
 const KEY = "portal_v2";
 const BONUS_DIARIO = 50;
@@ -352,7 +353,8 @@ function montarHeader() {
   }).join("");
   h.innerHTML =
     `<a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>` +
-    `<nav aria-label="Navegação principal">${links}</nav><div class="header-actions" id="pm-acoes"></div>`;
+    `<nav aria-label="Navegação principal">${links}</nav><div class="header-actions" id="pm-acoes"></div>` +
+    `<button type="button" class="pm-burger" id="pm-burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="pm-drawer"><span></span><span></span><span></span></button>`;
   renderAcoes();
 }
 
@@ -373,7 +375,7 @@ function renderAcoes() {
       (notifOk ? `<button type="button" data-pm="notificacoes">${notifAtivas() ? "🔕 Desativar avisos" : "🔔 Avisar do desafio do dia"}</button>` : "") +
       `<button type="button" data-pm="sair">Sair da conta</button></div>`;
   } else {
-    html += `<button type="button" class="pm-login" data-pm="login"><span class="g">G</span> Entrar</button>`;
+    html += `<button type="button" class="pm-login" data-pm="login" aria-label="Entrar com o Google"><span class="g">G</span><span class="pm-login-txt"> Entrar</span></button>`;
   }
   el.innerHTML = html;
 }

@@ -32,6 +32,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-LPB04DJLXC');gtag('config','AW-10942914304');</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8119130352737496" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="css/footer.css?v=1.0.3">
+<link rel="stylesheet" href="css/menu.css?v=1.0.0">
 </head>
 <body>
   <header class="portal-header">
@@ -49,7 +50,7 @@
       <div class="hero-art" aria-hidden="true"><span class="float-letter letter-a">A</span><span class="float-letter letter-o">O</span><span class="float-letter letter-m">M</span><span class="float-letter letter-r">R</span><img src="img/hung.png" alt=""></div>
     </section>
     <section class="games-section" id="jogos" aria-labelledby="games-title">
-      <div class="section-heading"><div><p class="eyebrow">ESCOLHA SUA EXPERIÊNCIA</p><h2 id="games-title">Todos os jogos</h2></div><span class="game-count">05 jogos disponíveis</span></div>
+      <div class="section-heading"><div><p class="eyebrow">ESCOLHA SUA EXPERIÊNCIA</p><h2 id="games-title">Todos os jogos</h2></div><span class="game-count" id="game-count">06 jogos disponíveis</span></div>
       <div class="games-grid">
         <a class="game-card featured" href="/forca.html">
           <div class="thumb thumb-forca"><img src="img/thumb-forca.svg" alt="Ilustração de letras e estrelas para o jogo da forca" loading="lazy"></div>
@@ -71,6 +72,10 @@
           <div class="thumb"><img src="img/thumb-kyudoku.svg" alt="Tabuleiro de números do Kyudoku com células marcadas" loading="lazy"></div>
           <div class="game-card-copy"><span class="game-tag">Lógica numérica</span><h3>Kyudoku</h3><p>Marque 9 números diferentes em um tabuleiro 6×6 sem passar de 9 por linha e coluna.</p><span class="play-link">Jogar agora <b aria-hidden="true">→</b></span></div>
         </a>
+        <a class="game-card" href="/logica-grega.html">
+          <div class="thumb"><img src="img/thumb-logica-grega.svg" alt="Tabuleiro de letras gregas coloridas da Lógica grega" loading="lazy"></div>
+          <div class="game-card-copy"><span class="game-tag">Lógica</span><h3>Lógica grega</h3><p>Posicione as letras gregas sem repetir em linhas, colunas e nas duas diagonais.</p><span class="play-link">Jogar agora <b aria-hidden="true">→</b></span></div>
+        </a>
       </div>
     </section>
     <section class="portal-note"><span class="note-icon" aria-hidden="true">✦</span><div><h2>Uma pausa divertida para sua mente</h2><p>Escolha um jogo, desafie seu vocabulário e volte sempre para descobrir novas formas de jogar.</p></div></section>
@@ -83,7 +88,7 @@
       </div>
       <nav class="corp-col" aria-label="Jogos">
         <h3>Jogos</h3>
-        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a href="/kyudoku.html">Kyudoku</a>
+        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a href="/kyudoku.html">Kyudoku</a><a href="/logica-grega.html">Lógica grega</a>
       </nav>
       <nav class="corp-col" aria-label="Institucional">
         <h3>Institucional</h3>
@@ -98,5 +103,9 @@
   <div id="cookie-banner" class="cookie-banner" hidden><p>Utilizamos cookies para melhorar sua experiência e exibir anúncios personalizados. Ao continuar, você concorda com nossa <a href="/politica.html">Política de Privacidade</a>.</p><button id="aceitar-cookies" type="button">Aceitar</button></div>
   <script>const cb=document.getElementById('cookie-banner');if(!localStorage.getItem('cookiesAceitos'))cb.hidden=false;document.getElementById('aceitar-cookies').addEventListener('click',()=>{localStorage.setItem('cookiesAceitos','true');cb.hidden=true;});</script>
 <script src="js/ads-fix.js?v=1.0.0"></script>
+<script src="js/menu.js?v=1.0.1"></script>
+<script>
+(function(){var n=document.querySelectorAll("#jogos .game-card").length,el=document.getElementById("game-count");if(el&&n)el.textContent=(n<10?"0":"")+n+(n===1?" jogo disponível":" jogos disponíveis")})();
+</script>
 </body>
 </html>
