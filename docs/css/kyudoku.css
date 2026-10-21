@@ -7,7 +7,11 @@
 .ky-chip.dup{background:#b42318;border-color:#b42318;color:#fff}
 .ky-board{--ky:clamp(40px,12.5vw,62px);--kysum:clamp(36px,9.5vw,50px);display:grid;grid-template-columns:repeat(6,var(--ky)) var(--kysum);gap:6px;justify-content:center;margin:0 auto}
 .ky-cell{display:grid;place-items:center;width:var(--ky);height:var(--ky);padding:0;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#0a2540;font:inherit;font-size:clamp(1.15rem,5vw,1.5rem);font-weight:800;cursor:pointer;transition:background .12s,color .12s,border-radius .12s}
-.ky-cell:hover:not(:disabled){background:#eef3fb}
+@media(hover:hover){.ky-cell:hover:not(:disabled):not(.sel):not(.dup):not(.over):not(.mark){background:#eef3fb}}
+.ky-cell{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.ky-cell.mark{background:#c3cbd7;border-color:#aab5c4;color:transparent;box-shadow:inset 0 -4px 0 #a5afbe;animation:ky-vira .26s ease}
+@keyframes ky-vira{0%{transform:rotateX(0)}50%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
+@media(prefers-reduced-motion:reduce){.ky-cell.mark{animation:none}}
 .ky-cell.sel{border-radius:50%;border-color:#0a2540;background:#0a2540;color:#fff}
 .ky-cell.fixa{box-shadow:0 0 0 3px #1f6feb inset,0 0 0 1px #1f6feb;cursor:default}
 .ky-cell.dup{background:#b42318;border-color:#b42318}

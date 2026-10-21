@@ -13,7 +13,7 @@ const XP_BASE = { facil: 15, medio: 25, dificil: 40 };
 const NOME_NIVEL = { facil: "Fácil", medio: "Médio", dificil: "Difícil" };
 const $ = id => document.getElementById(id);
 
-let est, puzzle, nivel, grade, sel, fixas, dicas, venceu, t0, timer;
+let est, puzzle, nivel, grade, sel, marc, fixas, dicas, venceu, t0, timer;
 const celulas = [], somaL = [], somaC = [];
 
 function escolher() {
@@ -50,7 +50,10 @@ function montarTabuleiro() {
 
 function alternar(i) {
   if (venceu || fixas.has(i)) return;
-  if (sel.has(i)) sel.delete(i); else sel.add(i);
+  // Ciclo de toques: vazia -> coberta (1º toque: bloco virado, não conta nas regras) -> selecionada (2º toque) -> vazia
+  if (sel.has(i)) sel.delete(i);
+  else if (marc.has(i)) { marc.delete(i); sel.add(i); }
+  else marc.add(i);
   atualizar();
 }
 
@@ -61,12 +64,14 @@ function atualizar() {
   });
   celulas.forEach((b, i) => {
     const marcada = sel.has(i), d = grade[i], r = (i / N) | 0, c = i % N;
+    const anotada = marc.has(i) && !marcada;
     b.classList.toggle("sel", marcada);
+    b.classList.toggle("mark", anotada);
     b.classList.toggle("fixa", fixas.has(i));
     b.classList.toggle("dup", marcada && usados[d] > 1);
     b.classList.toggle("over", marcada && (rs[r] > LIMITE || cs[c] > LIMITE));
-    b.setAttribute("aria-pressed", marcada ? "true" : "false");
-    b.setAttribute("aria-label", `Linha ${r + 1}, coluna ${c + 1}, número ${d}${marcada ? ", marcado" : ""}${fixas.has(i) ? ", fixo" : ""}`);
+    b.setAttribute("aria-pressed", marcada ? "true" : anotada ? "mixed" : "false");
+    b.setAttribute("aria-label", `Linha ${r + 1}, coluna ${c + 1}, número ${d}${marcada ? ", marcado" : anotada ? ", coberto" : ""}${fixas.has(i) ? ", fixo" : ""}`);
     b.disabled = fixas.has(i);
   });
   rs.forEach((v, r) => { somaL[r].textContent = `${v}/${LIMITE}`; somaL[r].className = "ky-sum " + (v > LIMITE ? "bad" : v > 0 ? "ok" : ""); });
@@ -85,7 +90,7 @@ function atualizar() {
   else if (n > 9) $("mensagem").textContent = "Você marcou mais de 9 células. Desmarque algumas.";
   else if (Object.values(usados).some(q => q > 1)) $("mensagem").textContent = "Há números repetidos entre os marcados (em vermelho). Cada número de 1 a 9 aparece uma vez.";
   else if (rs.some(v => v > LIMITE) || cs.some(v => v > LIMITE)) $("mensagem").textContent = "Alguma linha ou coluna passou de 9. Veja as somas em vermelho.";
-  else $("mensagem").textContent = "Marque 9 números diferentes, sem passar de 9 por linha e coluna.";
+  else $("mensagem").textContent = "Toque uma vez para cobrir o número e outra vez para selecioná-lo. Selecione 9 números diferentes, sem passar de 9 por linha e coluna.";
 }
 
 function formatarTempo(seg) { return `${Math.floor(seg / 60)}:${String(seg % 60).padStart(2, "0")}`; }
@@ -112,7 +117,7 @@ function novo() {
   est = tb.estado();
   puzzle = escolher();
   grade = puzzle.g.split("").map(Number);
-  fixas = new Set(puzzle.h); sel = new Set(puzzle.h);
+  fixas = new Set(puzzle.h); sel = new Set(puzzle.h); marc = new Set();
   dicas = 0; venceu = false;
   clearInterval(timer); t0 = Date.now(); $("tempo").textContent = "0:00";
   timer = setInterval(() => { if (!venceu) $("tempo").textContent = formatarTempo(Math.round((Date.now() - t0) / 1000)); }, 1000);
@@ -127,13 +132,13 @@ $("dica-btn").addEventListener("click", () => {
   const faltam = puzzle.s.filter(i => !fixas.has(i));
   if (!faltam.length) { $("mensagem").textContent = "Todas as células certas já estão marcadas."; return; }
   const i = faltam[Math.floor(Math.random() * faltam.length)];
-  fixas.add(i); sel.add(i); dicas++;
+  fixas.add(i); sel.add(i); marc.delete(i); dicas++;
   atualizar();
   if (!venceu) $("mensagem").textContent = "Uma célula correta foi marcada e travada. Cada célula revelada reduz 5 XP.";
 });
 $("limpar").addEventListener("click", () => {
   if (venceu) return;
-  sel = new Set(fixas); atualizar();
+  sel = new Set(fixas); marc.clear(); atualizar();
 });
 $("novo-jogo").addEventListener("click", novo);
 $("jogar-novamente").addEventListener("click", novo);
