@@ -147,7 +147,7 @@ function aberturaDiaria(rng) {
 }
 
 // ===== Interface =====
-let est, nivel, b, turn, legais, prefix, ultimo, dica, dicas, jogadas, quiet, over, pensando, token = 0;
+let est, nivel, b, turn, legais, prefix, ultimo, dica, dicas, jogadas, quiet, over, pensando, animando = false, token = 0;
 const cells = [];
 
 function montar() {
@@ -201,7 +201,7 @@ function msgVez() {
 }
 
 function clicar(i) {
-  if (over || turn !== 1 || pensando) return;
+  if (over || turn !== 1 || pensando || animando) return;
   dica = null;
   if (prefix.length && filtrar().some(m => m.path[prefix.length] === i)) {
     prefix.push(i);
@@ -218,9 +218,68 @@ function clicar(i) {
   atualizar();
 }
 
+const reduzirMovimento = () => !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+// A peça desliza até o destino; em capturas ela se ergue, passa por cima da peça adversária (que some suavemente)
+// e segue o caminho salto a salto. Resolve com o elemento flutuante, removido depois que o tabuleiro é redesenhado.
+function animar(m) {
+  const t = $("tabuleiro"), sq = cells[m.path[0]], meu = token;
+  if (reduzirMovimento() || !sq || !sq.animate) return Promise.resolve(null);
+  const orig = sq.querySelector(".dm-p");
+  if (!orig) return Promise.resolve(null);
+  const mv = document.createElement("div");
+  mv.className = "dm-mover";
+  mv.style.cssText = `left:${sq.offsetLeft}px;top:${sq.offsetTop}px;width:${sq.offsetWidth}px;height:${sq.offsetHeight}px`;
+  mv.appendChild(orig.cloneNode(true));
+  t.appendChild(mv);
+  orig.style.visibility = "hidden";
+  const pos = i => [cells[i].offsetLeft - sq.offsetLeft, cells[i].offsetTop - sq.offsetTop];
+  const sombraOff = "drop-shadow(0 0 0 #0a254000)", sombraOn = "drop-shadow(0 9px 8px #0a254060)";
+  let seq = Promise.resolve(), prev = [0, 0];
+  for (let k = 0; k < m.path.length - 1; k++) {
+    const a = prev, z = pos(m.path[k + 1]), salto = m.caps.length > 0, cap = m.caps[k];
+    const dist = Math.max(Math.abs((m.path[k + 1] >> 3) - (m.path[k] >> 3)), 1);
+    const dur = Math.min(560, 200 + 70 * dist);
+    seq = seq.then(() => {
+      if (meu !== token) return;
+      if (salto && cap != null && cells[cap]) {
+        const alvo = cells[cap].querySelector(".dm-p");
+        if (alvo) setTimeout(() => {
+          if (meu === token) alvo.animate([{ opacity: 1, transform: "scale(1)" }, { opacity: 0, transform: "scale(.45)" }], { duration: 280, easing: "ease-in", fill: "forwards" });
+        }, dur * 0.4);
+      }
+      return mv.animate([
+        { transform: `translate(${a[0]}px,${a[1]}px) scale(1)`, filter: sombraOff },
+        { offset: 0.5, transform: `translate(${(a[0] + z[0]) / 2}px,${(a[1] + z[1]) / 2}px) scale(${salto ? 1.18 : 1.06})`, filter: sombraOn },
+        { transform: `translate(${z[0]}px,${z[1]}px) scale(1)`, filter: sombraOff }
+      ], { duration: dur, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" }).finished.catch(() => {});
+    });
+    prev = z;
+  }
+  return seq.then(() => mv);
+}
+
+function pop(i) {
+  const p = cells[i] && cells[i].querySelector(".dm-p");
+  if (p && p.animate) p.animate([{ transform: "scale(1.3)" }, { transform: "scale(1)" }], { duration: 300, easing: "cubic-bezier(.3,1.6,.5,1)" });
+}
+
 function jogar(m) {
+  const meu = token;
+  animando = true; prefix = []; dica = null;
+  atualizar();
+  animar(m).then(mv => {
+    if (meu !== token) return;
+    animando = false;
+    concluirJogada(m);
+    if (mv) mv.remove();
+  });
+}
+
+function concluirJogada(m) {
   const eraDama = Math.abs(b[m.path[0]]) === 2;
   b = aplicar(b, m);
+  if (!eraDama && Math.abs(b[m.path[m.path.length - 1]]) === 2) setTimeout(() => pop(m.path[m.path.length - 1]), 0);
   ultimo = [m.path[0], m.path[m.path.length - 1]];
   quiet = (m.caps.length || !eraDama) ? 0 : quiet + 1;
   if (turn === 1) jogadas++;
@@ -252,7 +311,7 @@ function pensarCPU() {
 }
 
 function fim(res) {
-  over = true; pensando = false;
+  over = true; pensando = false; animando = false;
   atualizar();
   const r = $("resultado");
   r.hidden = false;
@@ -277,14 +336,52 @@ function fim(res) {
     $("resultado-detalhe").textContent = "20 lances seguidos só com damas e sem captura.";
     $("mensagem").textContent = "Partida empatada.";
   }
+  mostrarPopup(res);
+}
+
+// Pop-up de fim de partida (mesmo visual dos outros jogos: .pm-overlay / .pm-modal / .pm-win).
+// Se o portal.js já abriu um pop-up próprio, este não é criado.
+function escPopup(e) { if (e.key === "Escape") fecharPopup(); }
+function fecharPopup() {
+  const ov = document.querySelector(".dm-popup");
+  if (!ov) return;
+  const extra = ov.querySelector(".pm-extra");
+  if (extra) $("resultado").appendChild(extra); // devolve XP/compartilhar para o quadro de resultado
+  ov.remove();
+  document.removeEventListener("keydown", escPopup);
+}
+function mostrarPopup(res) {
+  const meu = token;
+  setTimeout(() => {
+    if (meu !== token || document.querySelector(".pm-overlay .pm-win")) return;
+    const r = $("resultado"), extra = r.querySelector(".pm-extra");
+    const ov = document.createElement("div");
+    ov.className = "pm-overlay dm-popup";
+    ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-labelledby", "dm-popup-titulo");
+    ov.innerHTML = '<div class="pm-modal"><button type="button" class="pm-fechar" aria-label="Fechar">✕</button>'
+      + '<div class="pm-win"><span class="pm-win-emoji" aria-hidden="true"></span><h2 id="dm-popup-titulo"></h2><p class="pm-win-detalhe"></p>'
+      + '<button type="button" class="pm-win-nova">Jogar de novo</button></div></div>';
+    ov.querySelector(".pm-win-emoji").textContent = { win: "🏆", lose: "😅", draw: "🤝" }[res];
+    ov.querySelector("h2").textContent = $("resultado-titulo").textContent;
+    ov.querySelector(".pm-win-detalhe").textContent = $("resultado-detalhe").textContent;
+    const nova = ov.querySelector(".pm-win-nova");
+    if (extra) nova.parentNode.insertBefore(extra, nova);
+    ov.addEventListener("click", e => { if (e.target === ov) fecharPopup(); });
+    ov.querySelector(".pm-fechar").addEventListener("click", fecharPopup);
+    nova.addEventListener("click", () => { fecharPopup(); novo(); });
+    document.addEventListener("keydown", escPopup);
+    document.body.appendChild(ov);
+    nova.focus();
+  }, 450);
 }
 
 function novo() {
+  fecharPopup();
   token++;
   est = tb.estado();
   nivel = est.diario ? "medio" : est.dificuldade;
   b = est.diario ? aberturaDiaria(Portal.rngDiario("damas")) : inicial();
-  turn = 1; prefix = []; ultimo = []; dica = null; dicas = 0; jogadas = 0; quiet = 0; over = false; pensando = false;
+  turn = 1; prefix = []; ultimo = []; dica = null; dicas = 0; jogadas = 0; quiet = 0; over = false; pensando = false; animando = false;
   legais = gerar(b, 1);
   const r = $("resultado");
   r.hidden = true; r.classList.remove("perdeu");
@@ -294,7 +391,7 @@ function novo() {
 }
 
 $("dica-btn").addEventListener("click", () => {
-  if (over || turn !== 1 || pensando) return;
+  if (over || turn !== 1 || pensando || animando) return;
   const m = melhor(b, 1, 4);
   if (!m) return;
   dicas++; prefix = [];
@@ -303,7 +400,7 @@ $("dica-btn").addEventListener("click", () => {
   $("mensagem").textContent = "Dica: a peça e a casa destacadas em amarelo são um bom lance. Cada dica reduz 5 XP.";
 });
 $("desistir").addEventListener("click", () => {
-  if (over || pensando) return;
+  if (over || pensando || animando) return;
   token++; fim("lose");
 });
 $("novo-jogo").addEventListener("click", novo);
