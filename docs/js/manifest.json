@@ -1,0 +1,59 @@
+{
+  "name": "O Enforcado",
+  "short_name": "Enforcado",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#0a2540",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "id": "/",
+  "lang": "pt-BR",
+  "scope": "/",
+  "description": "Jogos de palavras e lógica online e grátis: Forca, Termo, Caça-palavras, Anagrama, Kyudoku, Lógica grega e Damas, com desafio do dia e ranking.",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "shortcuts": [
+    {
+      "name": "Jogo da Forca",
+      "url": "/forca.html"
+    },
+    {
+      "name": "Termo",
+      "url": "/termo.html"
+    },
+    {
+      "name": "Caça-palavras",
+      "url": "/caca-palavras.html"
+    },
+    {
+      "name": "Anagrama",
+      "url": "/anagrama.html"
+    },
+    {
+      "name": "Kyudoku",
+      "url": "/kyudoku.html"
+    },
+    {
+      "name": "Lógica grega",
+      "url": "/logica-grega.html"
+    },
+    {
+      "name": "Damas",
+      "url": "/damas.html"
+    }
+  ]
+}

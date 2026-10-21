@@ -21,7 +21,7 @@
   "id": "/",
   "lang": "pt-BR",
   "scope": "/",
-  "description": "Jogos de palavras online e grátis: Forca, Termo, Caça-palavras e Anagrama, com desafio do dia e ranking.",
+  "description": "Jogos de palavras e lógica online e grátis: Forca, Termo, Caça-palavras, Anagrama, Kyudoku e Lógica grega, com desafio do dia e ranking.",
   "categories": [
     "games",
     "entertainment"
@@ -42,6 +42,14 @@
     {
       "name": "Anagrama",
       "url": "/anagrama.html"
+    },
+    {
+      "name": "Kyudoku",
+      "url": "/kyudoku.html"
+    },
+    {
+      "name": "Lógica grega",
+      "url": "/logica-grega.html"
     }
   ]
 }

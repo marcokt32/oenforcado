@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta http-equiv="content-language" content="pt-BR">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a2540">
+  <script src="/js/consent.js?v=1.0.0"></script>
+  <title>Jogo de Damas Online Grátis | O Enforcado</title>
+  <meta name="author" content="O Enforcado">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="description" content="Jogue damas online grátis contra o computador, com regras brasileiras, 3 níveis de dificuldade, dicas e desafio do dia. Sem instalar nada.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="O Enforcado">
+  <meta property="og:title" content="Jogo de Damas Online Grátis | O Enforcado">
+  <meta property="og:description" content="Jogue damas online grátis contra o computador, com regras brasileiras, 3 níveis de dificuldade, dicas e desafio do dia. Sem instalar nada.">
+  <meta property="og:url" content="https://oenforcado.com/damas.html">
+  <meta property="og:image" content="https://oenforcado.com/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jogo de Damas Online Grátis | O Enforcado">
+  <meta name="twitter:description" content="Jogue damas online grátis contra o computador, com regras brasileiras, 3 níveis de dificuldade, dicas e desafio do dia. Sem instalar nada.">
+  <meta name="twitter:image" content="https://oenforcado.com/img/og-image.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Jogo de Damas Online","url":"https://oenforcado.com/damas.html","description":"Jogue damas online grátis contra o computador, com regras brasileiras, 3 níveis de dificuldade, dicas e desafio do dia. Sem instalar nada.","applicationCategory":"GameApplication","genre":"Jogo de tabuleiro","operatingSystem":"Any","browserRequirements":"Requer JavaScript","inLanguage":"pt-BR","isAccessibleForFree":true,"image":"https://oenforcado.com/img/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"O Enforcado","url":"https://oenforcado.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://oenforcado.com/"},{"@type":"ListItem","position":2,"name":"Damas","item":"https://oenforcado.com/damas.html"}]}]}</script>
+  <link rel="canonical" href="https://oenforcado.com/damas.html">
+  <link rel="icon" href="/img/hung.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site-theme.css?v=1.0.0">
+  <link rel="stylesheet" href="css/termo.css?v=1.0.2">
+  <link rel="stylesheet" href="css/damas.css?v=1.0.0">
+  <link rel="stylesheet" href="css/portal-shell.css?v=1.0.6">
+<link rel="stylesheet" href="css/footer.css?v=1.0.3">
+<link rel="stylesheet" href="css/menu.css?v=1.0.0">
+</head>
+<body data-jogo="damas">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>
+    <nav aria-label="Navegação principal">
+      <a href="/forca.html">Jogo da forca</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/termo.html">Termo</a><a href="/anagrama.html">Anagrama</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">JOGOS DE TABULEIRO</p>
+      <h1>Jogo de damas online grátis</h1>
+      <p>Enfrente o computador nas damas com regras brasileiras. Capture todas as peças do adversário ou deixe-o sem lances. Escolha o nível ou jogue o desafio do dia.</p>
+    </section>
+    <section class="dm-card" aria-label="Jogo de damas">
+      <div id="toolbar"></div>
+      <div class="dm-info">
+        <span class="rules-short">Modo: <strong id="nivel-atual"></strong></span>
+        <span class="rules-short">Peças (você × PC): <strong id="pecas">12 × 12</strong></span>
+        <span class="rules-short">Lances: <strong id="jogadas">0</strong></span>
+      </div>
+      <div id="tabuleiro" class="dm-board" role="group" aria-label="Tabuleiro de damas"></div>
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite">Sua vez: toque numa peça sua e depois na casa de destino.</p>
+      <div class="dm-acoes">
+        <button id="dica-btn" class="button button-secondary" type="button">💡 Dica de lance</button>
+        <button id="desistir" class="button button-secondary" type="button">Desistir</button>
+        <button id="novo-jogo" class="button button-secondary" type="button">Nova partida</button>
+      </div>
+      <div id="resultado" class="resultado" hidden>
+        <strong id="resultado-titulo"></strong><span id="resultado-detalhe"></span>
+        <button id="jogar-novamente" class="button button-primary" type="button">Jogar de novo</button>
+      </div>
+    </section>
+    <aside class="ad-slot" aria-label="Publicidade"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8119130352737496" data-ad-slot="1532529629" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>
+    <section class="seo-content">
+      <h2>Como jogar damas?</h2>
+      <ol>
+        <li>Você joga com as peças claras, na parte de baixo do tabuleiro, e começa a partida. O computador joga com as peças escuras.</li>
+        <li>Toque numa peça sua para ver as casas de destino (marcadas com um ponto) e toque na casa escolhida. As peças comuns andam uma casa na diagonal, sempre para frente.</li>
+        <li>Para capturar, pule sobre uma peça adversária que esteja na diagonal, com a casa logo depois dela vazia. Peças comuns capturam para frente e para trás.</li>
+        <li>A captura é obrigatória. Se houver mais de uma opção, você deve escolher a que captura o maior número de peças. Em capturas em sequência, toque em cada casa do caminho.</li>
+        <li>Ao terminar um lance na última fileira, a peça vira dama, marcada com uma coroa. A dama anda e captura quantas casas quiser na diagonal.</li>
+        <li>Vence quem capturar todas as peças do adversário ou deixá-lo sem lances possíveis. Se 20 lances de cada lado passarem só com damas e sem capturas, a partida empata.</li>
+      </ol>
+      <h2>Dicas para vencer</h2>
+      <ul>
+        <li>Mantenha as peças da fileira de trás o máximo possível: elas impedem que o adversário vire dama.</li>
+        <li>Domine o centro do tabuleiro, onde suas peças têm mais opções de lance e captura.</li>
+        <li>Antes de cada lance, pense na resposta do adversário: como a captura é obrigatória, dá para forçar o computador a capturar e preparar uma captura dupla.</li>
+        <li>Avance em grupo. Peças isoladas são fáceis de capturar.</li>
+        <li>Fique de olho nas damas: uma dama vale muito mais que uma peça comum e muda o rumo da partida.</li>
+      </ul>
+      <h2>Níveis de dificuldade</h2>
+      <p>No nível fácil o computador joga de forma simples e comete erros. No médio ele calcula alguns lances à frente. No difícil ele analisa muito mais jogadas e é um adversário de verdade. Cada dica pedida reduz 5 XP da partida.</p>
+      <h2>Desafio do dia e ranking global</h2>
+      <p>Todo dia há uma abertura nova, igual para todos os jogadores. Vencê-lo vale 50 XP de bônus e mantém sua sequência de dias seguidos. O XP de todos os jogos do O Enforcado se soma, e quem entra com a conta Google aparece no ranking global (o troféu no topo da página). Jogar continua livre, sem precisar de login.</p>
+      <p>Quer outro desafio? Experimente também a <a href="/logica-grega.html">Lógica grega</a>, o <a href="/kyudoku.html">Kyudoku</a>, o <a href="/forca.html">jogo da forca</a>, o <a href="/termo.html">Termo</a>, o <a href="/caca-palavras.html">caça-palavras</a> e o <a href="/anagrama.html">Anagrama</a>.</p>
+    </section>
+  </main>
+  <footer class="corp-footer">
+    <div class="corp-wrap">
+      <div class="corp-col corp-brand">
+        <a class="corp-logo" href="/">O Enforcado</a>
+        <p>Jogos de palavras e de lógica gratuitos para jogar online: forca, Termo, caça-palavras, anagrama, Kyudoku, Lógica grega e Damas, com desafio do dia e ranking.</p>
+      </div>
+      <nav class="corp-col" aria-label="Jogos">
+        <h3>Jogos</h3>
+        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a href="/kyudoku.html">Kyudoku</a><a href="/logica-grega.html">Lógica grega</a><a href="/damas.html">Damas</a>
+      </nav>
+      <nav class="corp-col" aria-label="Institucional">
+        <h3>Institucional</h3>
+        <a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
+      </nav>
+    </div>
+    <div class="corp-bottom">
+      <span>© 2026 O Enforcado. Todos os direitos reservados.</span>
+      <span>Desenvolvido por <a href="https://marsdev.com.br" target="_blank" rel="noopener">MarsDev</a> - Marco Quintela</span>
+    </div>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/portal.js?v=1.0.6"></script>
+  <script src="js/damas.js?v=1.0.0"></script>
+<script src="js/ads-fix.js?v=1.0.0"></script>
+<script src="js/menu.js?v=1.0.1"></script>
+</body>
+</html>

@@ -13,7 +13,8 @@ const CATEGORIAS = [
   ] },
   { id: "logica", nome: "Lógica", icone: "🧩", jogos: [
     { nome: "Kyudoku", url: "/kyudoku.html", id: "kyudoku" },
-    { nome: "Lógica grega", url: "/logica-grega.html", id: "logicagrega" }
+    { nome: "Lógica grega", url: "/logica-grega.html", id: "logicagrega" },
+    { nome: "Damas", url: "/damas.html", id: "damas" }
   ] }
 ];
 

@@ -452,14 +452,8 @@ auth.onAuthStateChanged(async u => {
   if ($("pm-ranking")) abrirRanking();
 });
 
-/* ---------- Aviso de cookies e service worker ---------- */
-function iniciarCookies() {
-  const b = $("cookie-banner"), ok = $("aceitar-cookies");
-  if (!b || !ok) return;
-  b.hidden = !!localStorage.getItem("cookiesAceitos");
-  ok.addEventListener("click", () => { localStorage.setItem("cookiesAceitos", "true"); b.hidden = true; });
-}
-function iniciar() { montarHeader(); iniciarCookies(); iniciarNotificacoes(); }
+/* ---------- Início e service worker (o aviso de cookies fica em js/consent.js) ---------- */
+function iniciar() { montarHeader(); iniciarNotificacoes(); }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar); else iniciar();
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
 
