@@ -105,8 +105,9 @@ async function registrarToken(u, pedirPermissao) {
   if (Notification.permission !== "granted") return false;
   const registro = await navigator.serviceWorker.ready;
   const token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registro });
-  if (!token) return false;
-  await db.ref("tokens/" + u.uid).set(token);
+  if (!token || /[.$#\[\]\/]/.test(token)) return false;
+  // Um token por aparelho: tokens/{uid}/{token}, para que vários aparelhos da mesma conta recebam os avisos
+  await db.ref("tokens/" + u.uid + "/" + token).set(Date.now());
   localStorage.setItem(FLAG_NOTIF, "1");
   return true;
 }
@@ -116,8 +117,10 @@ async function alternarNotificacoes() {
   if (!u) { toast("Entre com o Google para ativar os avisos."); return; }
   try {
     if (notifAtivas()) {
+      let token = null;
+      try { token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready }); } catch (e) {}
       try { await firebase.messaging().deleteToken(); } catch (e) {}
-      await db.ref("tokens/" + u.uid).remove();
+      if (token) await db.ref("tokens/" + u.uid + "/" + token).remove(); // só este aparelho
       localStorage.removeItem(FLAG_NOTIF);
       toast("Avisos desativados.");
     } else if (await registrarToken(u, true)) {
