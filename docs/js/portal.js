@@ -453,6 +453,19 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRanking(); fecharVitoria(); fecharMenu(); } });
 
+// Depois do login, troca o convite do pop-up de vitória por uma confirmação
+function confirmarLoginNaVitoria() {
+  const ctas = document.querySelectorAll(".pm-login-cta");
+  if (!ctas.length) return;
+  const xp = ler().xp;
+  ctas.forEach(c => {
+    c.classList.add("ok");
+    c.innerHTML = `<p class="pm-login-cta-t">✅ XP salvo na sua conta!</p>` +
+      `<p class="pm-login-cta-d">Seus ${xp} XP já estão no ranking. Bora subir de posição?</p>` +
+      `<button type="button" class="pm-login-cta-btn" data-pm="ranking">🏆 Ver ranking</button>`;
+  });
+}
+
 auth.onAuthStateChanged(async u => {
   if (u) { try { await sincronizarConta(u); } catch (e) { console.error("Erro ao sincronizar conta:", e); } }
   authPronto = true;
@@ -469,16 +482,3 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
 
 window.Portal = { toolbar, criarBotaoDiario, concluir, anexarFim, compartilhar, rngDiario, diarioConcluido, hoje, toast, abrirRanking };
 })();
-
-// Depois do login, troca o convite do pop-up de vitória por uma confirmação
-function confirmarLoginNaVitoria() {
-  const ctas = document.querySelectorAll(".pm-login-cta");
-  if (!ctas.length) return;
-  const xp = ler().xp;
-  ctas.forEach(c => {
-    c.classList.add("ok");
-    c.innerHTML = `<p class="pm-login-cta-t">✅ XP salvo na sua conta!</p>` +
-      `<p class="pm-login-cta-d">Seus ${xp} XP já estão no ranking. Bora subir de posição?</p>` +
-      `<button type="button" class="pm-login-cta-btn" data-pm="ranking">🏆 Ver ranking</button>`;
-  });
-}
