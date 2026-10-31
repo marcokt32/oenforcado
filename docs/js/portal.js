@@ -290,17 +290,26 @@ function linkDiario(jogo, acabouDiario) {
   return pend ? link({ jogo: pend, texto: "📅 Desafio do dia pendente:" }) : "";
 }
 
+function montarLoginCTA(info) {
+  const xp = info && info.total > 0 ? info.total : 0;
+  return `<div class="pm-login-cta">` +
+    `<p class="pm-login-cta-t">🏆 Seus ${xp} XP estão só neste aparelho</p>` +
+    `<p class="pm-login-cta-d">Entre com o Google para guardar seu XP, aparecer no ranking e continuar de onde parou em qualquer dispositivo.</p>` +
+    `<button type="button" class="pm-login-cta-btn" data-pm="login"><span class="g">G</span> Entrar com Google e salvar meu XP</button>` +
+    `<small class="pm-login-cta-s">Grátis e sem criar senha.</small></div>`;
+}
+
 function fecharVitoria() { const o = $("pm-vitoria"); if (o) o.remove(); }
 
 // Pop-up de vitória: mostra o resultado (o mesmo do quadro verde) com compartilhar e o próximo desafio em destaque
-function abrirVitoria({ container, jogo, texto, msg, proximo }) {
+function abrirVitoria({ container, jogo, texto, msg, cta, proximo }) {
   fecharVitoria();
   const t = container.querySelector("strong, h2, h3");
   const d = Array.from(container.querySelectorAll("span, p")).find(el => !el.closest(".pm-extra") && el.textContent.trim());
   const nova = Array.from(container.querySelectorAll("button")).find(b => !b.closest(".pm-extra"));
   const o = document.createElement("div");
   o.id = "pm-vitoria"; o.className = "pm-overlay";
-  o.innerHTML = montarVitoriaHTML({ titulo: t ? t.textContent : "Parabéns!", detalhe: d ? d.textContent : "", msg, proximo, nova: nova ? nova.textContent : "" });
+  o.innerHTML = montarVitoriaHTML({ titulo: t ? t.textContent : "Parabéns!", detalhe: d ? d.textContent : "", msg, cta, proximo, nova: nova ? nova.textContent : "" });
   document.body.appendChild(o);
   o.addEventListener("click", e => {
     if (e.target === o || e.target.closest(".pm-fechar")) fecharVitoria();
@@ -311,12 +320,12 @@ function abrirVitoria({ container, jogo, texto, msg, proximo }) {
   if (foco) foco.focus();
 }
 
-function montarVitoriaHTML({ titulo, detalhe, msg, proximo, nova }) {
+function montarVitoriaHTML({ titulo, detalhe, msg, cta, proximo, nova }) {
   return `<div class="pm-modal pm-win" role="dialog" aria-modal="true" aria-labelledby="pm-win-t">` +
     `<button type="button" class="pm-fechar" aria-label="Fechar">✕</button>` +
     `<div class="pm-win-emoji" aria-hidden="true">🎉</div><h2 id="pm-win-t">${esc(titulo)}</h2>` +
     (detalhe ? `<p class="pm-win-detalhe">${esc(detalhe)}</p>` : "") +
-    (msg ? `<p class="pm-xp">${msg}</p>` : "") + proximo +
+    (msg ? `<p class="pm-xp">${msg}</p>` : "") + (cta || "") + proximo +
     `<button type="button" class="pm-share">📤 Compartilhar</button>` +
     (nova ? `<button type="button" class="pm-win-nova">${esc(nova)}</button>` : "") + `</div>`;
 }
@@ -325,21 +334,21 @@ function anexarFim(container, { jogo, texto, info }) {
   container.querySelectorAll(".pm-extra").forEach(e => e.remove());
   const div = document.createElement("div");
   div.className = "pm-extra";
-  let msg = "", proximo = "";
+  let msg = "", proximo = "", cta = "";
   if (info) {
     if (info.repetido) msg = "Desafio de hoje já concluído antes: sem XP desta vez.";
     else {
       msg = `+${info.ganho} XP` + (info.bonus ? ` (inclui +${info.bonus} do desafio do dia)` : "") + ` · Total: ${info.total} XP`;
       if (info.bonus && info.streak > 0) msg += ` · 🔥 ${info.streak} ${info.streak === 1 ? "dia" : "dias"} seguidos`;
     }
-    if (!auth.currentUser) msg += `<br><button type="button" class="link" data-pm="login">Entre com o Google</button> para salvar seu XP e aparecer no ranking.`;
+    if (!auth.currentUser) cta = montarLoginCTA(info);
     proximo = linkDiario(jogo, info.bonus > 0 || info.repetido);
   }
-  div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + proximo + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
+  div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + cta + proximo + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
   div.querySelector(".pm-share").addEventListener("click", e => compartilhar(jogo, texto, e.currentTarget));
   container.appendChild(div);
   // vitória: pop-up logo após o último movimento (derrotas continuam só com o quadro)
-  if (info) setTimeout(() => abrirVitoria({ container, jogo, texto, msg, proximo }), 350);
+  if (info) setTimeout(() => abrirVitoria({ container, jogo, texto, msg, cta, proximo }), 350);
 }
 
 /* ---------- Cabeçalho (igual em todos os jogos) ---------- */
@@ -447,6 +456,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRank
 auth.onAuthStateChanged(async u => {
   if (u) { try { await sincronizarConta(u); } catch (e) { console.error("Erro ao sincronizar conta:", e); } }
   authPronto = true;
+  if (u) confirmarLoginNaVitoria();
   if (u && notifAtivas()) registrarToken(u, false).catch(() => {});
   renderAcoes();
   if ($("pm-ranking")) abrirRanking();
@@ -459,3 +469,16 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
 
 window.Portal = { toolbar, criarBotaoDiario, concluir, anexarFim, compartilhar, rngDiario, diarioConcluido, hoje, toast, abrirRanking };
 })();
+
+// Depois do login, troca o convite do pop-up de vitória por uma confirmação
+function confirmarLoginNaVitoria() {
+  const ctas = document.querySelectorAll(".pm-login-cta");
+  if (!ctas.length) return;
+  const xp = ler().xp;
+  ctas.forEach(c => {
+    c.classList.add("ok");
+    c.innerHTML = `<p class="pm-login-cta-t">✅ XP salvo na sua conta!</p>` +
+      `<p class="pm-login-cta-d">Seus ${xp} XP já estão no ranking. Bora subir de posição?</p>` +
+      `<button type="button" class="pm-login-cta-btn" data-pm="ranking">🏆 Ver ranking</button>`;
+  });
+}
