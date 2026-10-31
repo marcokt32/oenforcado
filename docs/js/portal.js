@@ -68,6 +68,16 @@ async function entrar() {
 }
 
 async function sair() {
+  const u = auth.currentUser;
+  // Ao sair, este aparelho deixa de receber os avisos da conta (o token é removido antes do signOut, que exige login)
+  if (u && localStorage.getItem(FLAG_NOTIF) === "1" && "Notification" in window && Notification.permission === "granted") {
+    try {
+      const token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready });
+      if (token) await db.ref("tokens/" + u.uid + "/" + token).remove();
+      await firebase.messaging().deleteToken();
+    } catch (e) { console.error("Erro ao remover o token ao sair:", e); }
+  }
+  localStorage.removeItem(FLAG_NOTIF);
   await auth.signOut();
   const d = ler(); d.xp = 0; d.jogos = {}; salvar(d); // o XP fica guardado na conta
   fecharMenu(); renderAcoes();
