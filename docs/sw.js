@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 🔥 IMPORTANTE: altere a versão quando fizer deploy
-const CACHE_NAME = "enforcado-v36";
+const CACHE_NAME = "enforcado-v37";
 
 const arquivos = [
   "/",
@@ -146,27 +146,8 @@ self.addEventListener("fetch", event => {
 });
 
 // 🔔 PUSH (FCM)
-self.addEventListener("push", function (event) {
-
-  if (!event.data) return;
-
-  const dados = event.data.json();
-
-  const titulo = dados.notification?.title || "O Enforcado";
-  const opcoes = {
-    body: dados.notification?.body,
-    icon: "/icons/icon-192.png",
-    badge: "/icons/icon-192.png",
-    data: {
-      url: "/"
-    }
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(titulo, opcoes)
-  );
-
-});
+// O aviso em segundo plano é exibido pelo próprio SDK do Firebase (firebase.messaging() acima).
+// Não adicione um listener "push" aqui com showNotification: isso duplica cada notificação.
 
 // 👆 CLICK NOTIFICAÇÃO
 self.addEventListener("notificationclick", function (event) {
