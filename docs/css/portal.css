@@ -4,3 +4,8 @@
 body{min-height:100vh;min-height:100dvh}
 main{flex:1 0 auto}
 .portal-footer{margin-top:auto;flex-shrink:0}
+
+/* Cabeçalho da página inicial: login e "Escolher jogo" juntos, à direita do logo */
+.portal-header .brand{order:0}
+.portal-header .header-cta{margin-left:auto}
+.portal-header .header-actions{order:0;margin-left:0}
