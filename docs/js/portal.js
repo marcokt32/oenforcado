@@ -50,6 +50,12 @@ let authPronto = false;
 const nomeConta = u => ((u.displayName || "Jogador").split(" ")[0] || "Jogador").slice(0, 20);
 const avatarConta = u => "img/avatars/avatar" + ((hash(u.uid) % 6) + 1) + ".png";
 
+// Perfil público (nome e avatar do ranking): vale o que a pessoa escolheu; sem escolha, o padrão (1º nome do Google + avatar do site)
+function perfilAtual(u) {
+  const p = ler().perfil;
+  return { nome: (p && p.nome) || nomeConta(u), avatar: (p && p.avatar) || avatarConta(u) };
+}
+
 async function entrar() {
   const provedor = new firebase.auth.GoogleAuthProvider();
   try {
@@ -79,7 +85,7 @@ async function sair() {
   }
   localStorage.removeItem(FLAG_NOTIF);
   await auth.signOut();
-  const d = ler(); d.xp = 0; d.jogos = {}; salvar(d); // o XP fica guardado na conta
+  const d = ler(); d.xp = 0; d.jogos = {}; d.perfil = null; salvar(d); // o XP e o perfil ficam guardados na conta
   fecharMenu(); renderAcoes();
   toast("Você saiu da conta.");
 }
@@ -89,15 +95,20 @@ async function sincronizarConta(u) {
   const remoto = (await ref.once("value")).val();
   const d = ler();
   const xp = Math.max(d.xp, (remoto && remoto.xp) || 0);
-  d.xp = xp; salvar(d);
-  const dados = { nome: nomeConta(u), avatar: avatarConta(u), xp, atualizado: firebase.database.ServerValue.TIMESTAMP };
+  d.xp = xp;
+  // o perfil salvo na conta tem prioridade sobre o padrão do Google
+  d.perfil = remoto && remoto.nome && remoto.avatar ? { nome: remoto.nome, avatar: remoto.avatar } : null;
+  salvar(d);
+  const perfil = perfilAtual(u);
+  const dados = { nome: perfil.nome, avatar: perfil.avatar, xp, atualizado: firebase.database.ServerValue.TIMESTAMP };
   if (!remoto || remoto.xp !== xp || remoto.nome !== dados.nome || remoto.avatar !== dados.avatar) await ref.update(dados);
 }
 
 function enviarXP(xp) {
   const u = auth.currentUser;
   if (!u) return;
-  db.ref("ranking/" + u.uid).update({ nome: nomeConta(u), avatar: avatarConta(u), xp, atualizado: firebase.database.ServerValue.TIMESTAMP }).catch(() => {});
+  const perfil = perfilAtual(u);
+  db.ref("ranking/" + u.uid).update({ nome: perfil.nome, avatar: perfil.avatar, xp, atualizado: firebase.database.ServerValue.TIMESTAMP }).catch(() => {});
 }
 
 /* ---------- Avisos (notificações push) — opcional, só para quem está logado ---------- */
@@ -424,7 +435,7 @@ function abrirRanking() {
     snap.forEach(c => { lista.push({ id: c.key, ...c.val() }); });
     lista.sort((a, b) => (b.xp || 0) - (a.xp || 0));
     $("pm-top").innerHTML = lista.length ? lista.map((p, i) =>
-      `<div class="pm-linha${u && p.id === u.uid ? " eu" : ""}"><span>${i + 1}º</span><img src="${esc(p.avatar)}" alt=""><span>${esc(p.nome)}</span><b>${Number(p.xp) || 0}</b></div>`).join("")
+      `<div class="pm-linha${u && p.id === u.uid ? " eu" : ""}"><span>${i + 1}º</span><img src="${esc(p.avatar)}" alt="" referrerpolicy="no-referrer"><span>${esc(p.nome)}</span><b>${Number(p.xp) || 0}</b></div>`).join("")
       : `<p class="pm-vazio">Ninguém no ranking ainda. Seja o primeiro!</p>`;
   }).catch(() => { $("pm-top").innerHTML = `<p class="pm-vazio">Não foi possível carregar o ranking agora.</p>`; });
 
@@ -433,7 +444,7 @@ function abrirRanking() {
       const eu = s.val(); if (!eu) return;
       return db.ref("ranking").orderByChild("xp").startAt((eu.xp || 0) + 1).limitToFirst(101).once("value").then(acima => {
         const n = acima.numChildren();
-        $("pm-eu").innerHTML = `<p class="pm-sub">SUA POSIÇÃO</p><div class="pm-linha eu"><span>${n > 100 ? "100+" : n + 1}º</span><img src="${esc(eu.avatar)}" alt=""><span>${esc(eu.nome)}</span><b>${Number(eu.xp) || 0}</b></div>`;
+        $("pm-eu").innerHTML = `<p class="pm-sub">SUA POSIÇÃO</p><div class="pm-linha eu"><span>${n > 100 ? "100+" : n + 1}º</span><img src="${esc(eu.avatar)}" alt="" referrerpolicy="no-referrer"><span>${esc(eu.nome)}</span><b>${Number(eu.xp) || 0}</b></div>`;
       });
     }).catch(() => {});
   }
