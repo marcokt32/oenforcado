@@ -399,12 +399,14 @@ function renderAcoes() {
     `<button type="button" class="pm-icon" data-pm="ranking" aria-label="Ranking global" title="Ranking global">🏆</button>`;
   if (!authPronto) { el.innerHTML = html; return; }
   if (u) {
-    const foto = u.photoURL ? `<img src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer">` : esc((nomeConta(u)[0] || "J").toUpperCase());
+    const perfil = perfilAtual(u);
+    const foto = `<img src="${esc(perfil.avatar)}" alt="" referrerpolicy="no-referrer">`;
     const d = ler();
     html += `<button type="button" class="pm-avatar" data-pm="menu" aria-label="Minha conta" aria-haspopup="true">${foto}</button>` +
-      `<div class="pm-menu" id="pm-menu" hidden><strong>${esc(u.displayName || "Jogador")}</strong>` +
+      `<div class="pm-menu" id="pm-menu" hidden><strong>${esc(perfil.nome)}</strong>` +
       `<span>⭐ ${d.xp} XP no total</span><span>🔥 Sequência: ${d.streak.atual} ${d.streak.atual === 1 ? "dia" : "dias"}</span>` +
       `<button type="button" data-pm="ranking">🏆 Ver ranking</button>` +
+      `<button type="button" data-pm="perfil">✏️ Editar perfil</button>` +
       (notifOk ? `<button type="button" data-pm="notificacoes">${notifAtivas() ? "🔕 Desativar avisos" : "🔔 Avisar do desafio do dia"}</button>` : "") +
       `<button type="button" data-pm="sair">Sair da conta</button></div>`;
   } else {
@@ -450,6 +452,71 @@ function abrirRanking() {
   }
 }
 
+/* ---------- Perfil (nome e avatar do ranking) ---------- */
+const AVATARES = [1, 2, 3, 4, 5, 6].map(n => "img/avatars/avatar" + n + ".png");
+const FOTO_GOOGLE_OK = /^https:\/\/lh[0-9]+\.googleusercontent\.com\/[A-Za-z0-9_.\/=+%-]{1,400}$/;
+let avatarEscolhido = "";
+
+function fecharPerfil() { const o = $("pm-perfil"); if (o) o.remove(); }
+
+function atualizarAvisoPerfil() {
+  const o = $("pm-perfil"); if (!o) return;
+  o.querySelectorAll(".pm-av").forEach(b => b.classList.toggle("sel", b.dataset.av === avatarEscolhido));
+  $("pm-perfil-aviso").hidden = !FOTO_GOOGLE_OK.test(avatarEscolhido);
+}
+
+function abrirPerfil() {
+  const u = auth.currentUser;
+  if (!u) return;
+  fecharMenu(); fecharPerfil();
+  const atual = perfilAtual(u);
+  avatarEscolhido = atual.avatar;
+  const fotoGoogle = u.photoURL && FOTO_GOOGLE_OK.test(u.photoURL) ? u.photoURL : "";
+  const opcoes = AVATARES.map((src, i) => `<button type="button" class="pm-av" data-av="${esc(src)}" aria-label="Avatar ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("") +
+    (fotoGoogle ? `<button type="button" class="pm-av" data-av="${esc(fotoGoogle)}" aria-label="Minha foto do Google"><img src="${esc(fotoGoogle)}" alt="" referrerpolicy="no-referrer"></button>` : "");
+  const o = document.createElement("div");
+  o.id = "pm-perfil"; o.className = "pm-overlay";
+  o.innerHTML = `<div class="pm-modal" role="dialog" aria-modal="true" aria-label="Editar perfil"><button type="button" class="pm-fechar" aria-label="Fechar">✕</button>` +
+    `<h2>✏️ Editar perfil</h2>` +
+    `<label class="pm-perfil-campo">Nome no ranking<input id="pm-perfil-nome" type="text" maxlength="20" autocomplete="nickname" value="${esc(atual.nome)}"><button type="button" class="pm-perfil-link" data-acao="nome-google">Usar meu nome do Google</button></label>` +
+    `<p class="pm-sub">AVATAR</p><div class="pm-perfil-avs">${opcoes}</div>` +
+    `<p class="pm-perfil-aviso" id="pm-perfil-aviso" hidden>📷 Sua foto do Google ficará visível para todos no ranking público.</p>` +
+    `<div class="pm-perfil-acoes"><button type="button" class="pm-perfil-cancelar" data-acao="cancelar">Cancelar</button><button type="button" class="pm-perfil-salvar" data-acao="salvar">Salvar</button></div></div>`;
+  document.body.appendChild(o);
+  atualizarAvisoPerfil();
+  o.addEventListener("click", e => {
+    if (e.target === o || e.target.closest(".pm-fechar")) { fecharPerfil(); return; }
+    const av = e.target.closest(".pm-av");
+    if (av) { avatarEscolhido = av.dataset.av; atualizarAvisoPerfil(); return; }
+    const acao = e.target.closest("[data-acao]");
+    if (!acao) return;
+    if (acao.dataset.acao === "nome-google") $("pm-perfil-nome").value = nomeConta(u);
+    else if (acao.dataset.acao === "cancelar") fecharPerfil();
+    else if (acao.dataset.acao === "salvar") salvarPerfil(acao);
+  });
+  $("pm-perfil-nome").focus();
+}
+
+async function salvarPerfil(botao) {
+  const u = auth.currentUser;
+  if (!u) return;
+  const nome = ($("pm-perfil-nome").value || "").replace(/\s+/g, " ").trim().slice(0, 20);
+  if (!nome) { toast("Escreva um nome para aparecer no ranking."); $("pm-perfil-nome").focus(); return; }
+  const avatar = avatarEscolhido;
+  botao.disabled = true;
+  try {
+    // atualizado entra em toda gravação do ranking (horário do servidor)
+    await db.ref("ranking/" + u.uid).update({ nome, avatar, atualizado: firebase.database.ServerValue.TIMESTAMP });
+    const d = ler(); d.perfil = { nome, avatar }; salvar(d);
+    fecharPerfil(); renderAcoes();
+    toast("Perfil atualizado!");
+  } catch (e) {
+    console.error("Erro ao salvar perfil:", e);
+    botao.disabled = false;
+    toast("Não foi possível salvar o perfil agora. Tente de novo.");
+  }
+}
+
 /* ---------- Toast ---------- */
 let toastTimer;
 function toast(texto, ms = 3500) {
@@ -467,6 +534,7 @@ document.addEventListener("click", e => {
     const acao = a.dataset.pm;
     if (acao === "login") entrar();
     else if (acao === "ranking") abrirRanking();
+    else if (acao === "perfil") abrirPerfil();
     else if (acao === "diario") irParaDiario();
     else if (acao === "sair") sair();
     else if (acao === "notificacoes") alternarNotificacoes();
@@ -475,7 +543,7 @@ document.addEventListener("click", e => {
   }
   if (!e.target.closest(".pm-menu")) fecharMenu();
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRanking(); fecharVitoria(); fecharMenu(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRanking(); fecharPerfil(); fecharVitoria(); fecharMenu(); } });
 
 // Depois do login, troca o convite do pop-up de vitória por uma confirmação
 function confirmarLoginNaVitoria() {

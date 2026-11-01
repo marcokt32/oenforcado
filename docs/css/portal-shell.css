@@ -143,3 +143,24 @@ main{flex:1 0 auto}
 .pm-login-cta.ok .pm-login-cta-t{color:#14532d}
 .pm-login-cta.ok .pm-login-cta-d{color:#2f6b45}
 .pm-login-cta.ok .pm-login-cta-btn{animation:none;background:#16a34a;box-shadow:none}
+
+/* Editar perfil */
+.pm-perfil-campo{display:grid;gap:6px;margin:0 0 14px;color:#4c5b70;font-size:.88rem;font-weight:700}
+.pm-perfil-campo input{min-height:44px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px;color:var(--pm-ink);font:inherit;font-size:1rem}
+.pm-perfil-campo input:focus{outline:3px solid #1f6feb2a;border-color:#1f6feb}
+.pm-perfil-link{justify-self:start;padding:0;border:0;background:none;color:#1f6feb;font:inherit;font-size:.85rem;font-weight:700;text-decoration:underline;cursor:pointer}
+.pm-perfil-avs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 12px}
+.pm-av{aspect-ratio:1;padding:0;border:3px solid transparent;border-radius:50%;background:#f6f8fc;overflow:hidden;cursor:pointer}
+.pm-av img{display:block;width:100%;height:100%;object-fit:cover}
+.pm-av:hover{border-color:#b9c9e2}
+.pm-av.sel{border-color:#1f6feb;box-shadow:0 0 0 3px #1f6feb33}
+.pm-av:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.pm-perfil-aviso{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#fff8e6;color:#7a4b00;font-size:.85rem;line-height:1.45}
+.pm-perfil-aviso[hidden]{display:none}
+.pm-perfil-acoes{display:flex;gap:10px}
+.pm-perfil-acoes button{flex:1;min-height:44px;border-radius:10px;font:inherit;font-weight:750;cursor:pointer}
+.pm-perfil-salvar{border:0;background:#1f6feb;color:#fff}
+.pm-perfil-salvar:hover{background:#1559c4}
+.pm-perfil-salvar:disabled{opacity:.6;cursor:default}
+.pm-perfil-cancelar{border:1px solid var(--pm-line);background:#fff;color:var(--pm-ink)}
+.pm-perfil-cancelar:hover{background:#f6f8fc}
