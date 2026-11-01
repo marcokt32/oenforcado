@@ -90,14 +90,14 @@ async function sincronizarConta(u) {
   const d = ler();
   const xp = Math.max(d.xp, (remoto && remoto.xp) || 0);
   d.xp = xp; salvar(d);
-  const dados = { nome: nomeConta(u), avatar: avatarConta(u), xp, atualizado: Date.now() };
+  const dados = { nome: nomeConta(u), avatar: avatarConta(u), xp, atualizado: firebase.database.ServerValue.TIMESTAMP };
   if (!remoto || remoto.xp !== xp || remoto.nome !== dados.nome || remoto.avatar !== dados.avatar) await ref.update(dados);
 }
 
 function enviarXP(xp) {
   const u = auth.currentUser;
   if (!u) return;
-  db.ref("ranking/" + u.uid).update({ nome: nomeConta(u), avatar: avatarConta(u), xp, atualizado: Date.now() }).catch(() => {});
+  db.ref("ranking/" + u.uid).update({ nome: nomeConta(u), avatar: avatarConta(u), xp, atualizado: firebase.database.ServerValue.TIMESTAMP }).catch(() => {});
 }
 
 /* ---------- Avisos (notificações push) — opcional, só para quem está logado ---------- */
