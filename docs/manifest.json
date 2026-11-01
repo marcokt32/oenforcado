@@ -21,7 +21,7 @@
   "id": "/",
   "lang": "pt-BR",
   "scope": "/",
-  "description": "Jogos de palavras e lógica online e grátis: Forca, Termo, Caça-palavras, Anagrama, Kyudoku e Lógica grega, com desafio do dia e ranking.",
+  "description": "Jogos de palavras, lógica e puzzle online e grátis: Forca, Termo, Caça-palavras, Anagrama, Kyudoku, Lógica grega, Jogo da memória e Quebra-cabeça deslizante, com desafio do dia e ranking.",
   "categories": [
     "games",
     "entertainment"
@@ -50,6 +50,14 @@
     {
       "name": "Lógica grega",
       "url": "/logica-grega.html"
+    },
+    {
+      "name": "Jogo da memória",
+      "url": "/memoria.html"
+    },
+    {
+      "name": "Quebra-cabeça deslizante",
+      "url": "/deslizante.html"
     }
   ]
 }

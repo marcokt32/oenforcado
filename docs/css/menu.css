@@ -43,3 +43,44 @@ html.pm-menu-aberto{overflow:hidden}
   .pm-login{padding:0 10px}
 }
 @media(prefers-reduced-motion:reduce){.pm-drawer,.pm-drawer-overlay,.pm-burger span,.pm-chevron{transition:none}}
+
+/* ===== Dropdown de categorias (cabeçalho no computador, acima de 860px) ===== */
+.site-header nav .pm-dd{position:relative}
+.pm-dd-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:40px;padding:0 14px;
+  border:0;border-radius:999px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,#fff 0,#f1f5fb 55%,#e0e8f3 100%);
+  color:#0a2540;font:inherit;font-size:.95rem;font-weight:700;cursor:pointer;
+  box-shadow:0 3px 0 #c3d0e2,0 7px 12px rgba(10,37,64,.10),inset 0 2px 1px rgba(255,255,255,.7),inset 0 -3px 5px rgba(10,37,64,.08);
+  transition:transform .12s ease,box-shadow .12s ease
+}
+.pm-dd-btn:hover{transform:translateY(-1px)}
+.pm-dd-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #c3d0e2,inset 0 2px 3px rgba(10,37,64,.16)}
+.pm-dd-btn:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.pm-dd.atual .pm-dd-btn{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.5) 0,rgba(255,255,255,.16) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,#f2f7ff 0,#dfeaff 55%,#c9dcfa 100%);
+  color:#1559c4;
+  box-shadow:0 3px 0 #a9c3ea,0 7px 12px rgba(31,111,235,.18),inset 0 2px 1px rgba(255,255,255,.8),inset 0 -3px 5px rgba(31,111,235,.10)
+}
+.pm-dd-seta{font-size:.78rem;color:#526176;transition:transform .2s}
+.pm-dd.aberto .pm-dd-seta{transform:rotate(180deg)}
+
+.pm-dd-menu{
+  display:none;position:absolute;top:calc(100% + 10px);left:0;z-index:40;
+  min-width:210px;margin:0;padding:8px;list-style:none;
+  background:#fff;border:1px solid #dbe3ef;border-radius:16px;
+  box-shadow:0 16px 34px rgba(10,37,64,.16),0 4px 0 #dbe3ef,inset 0 2px 0 #fff
+}
+.pm-dd-menu::before{content:"";position:absolute;left:0;right:0;top:-12px;height:12px} /* ponte: o menu não fecha ao descer o mouse */
+.pm-dd.aberto .pm-dd-menu{display:block}
+@media(hover:hover){.pm-dd:hover .pm-dd-menu{display:block}}
+.site-header nav .pm-dd-menu a{display:block;padding:10px 14px;border-radius:10px;white-space:nowrap}
+.site-header nav .pm-dd-menu a:hover{background:#eef3fb}
+.site-header nav .pm-dd-menu a[aria-current="page"]{background:#eef3fb;color:#1f6feb;font-weight:800}
+
+@media(prefers-reduced-motion:reduce){.pm-dd-btn,.pm-dd-seta{transition:none}}

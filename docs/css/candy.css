@@ -1,0 +1,494 @@
+/* ===== Visual "candy" do portal O Enforcado =====
+   Carregue DEPOIS de portal.css:
+   <link rel="stylesheet" href="css/candy.css?v=1.0.0">
+   Ajuste a intensidade pelas variáveis abaixo. */
+
+:root{
+  --candy-gloss:rgba(255,255,255,.62);      /* brilho da faixa superior */
+  --candy-light:rgba(255,255,255,.85);      /* luz na borda de cima */
+  --candy-shade:rgba(10,37,64,.16);         /* sombra interna de baixo */
+  --candy-glow:rgba(31,111,235,.20);        /* sombra externa colorida */
+  --candy-float:17px;                        /* distância da flutuação */
+}
+
+/* ---------- Miniaturas dos jogos: pastilha de bala com relevo ---------- */
+.game-card .thumb{
+  position:relative;
+  margin:10px 10px 0;
+  border-radius:20px;
+  isolation:isolate;
+  box-shadow:
+    0 8px 16px var(--candy-glow),
+    0 2px 0 rgba(10,37,64,.07);
+}
+
+/* faixa de reflexo, como luz batendo na parte de cima da bala */
+.game-card .thumb::before{
+  content:"";
+  position:absolute;
+  z-index:2;
+  top:4px;left:5%;right:5%;
+  height:46%;
+  border-radius:16px 16px 60% 60% / 16px 16px 100% 100%;
+  background:linear-gradient(180deg,var(--candy-gloss) 0%,rgba(255,255,255,.14) 70%,rgba(255,255,255,0) 100%);
+  pointer-events:none;
+}
+
+/* bisel: luz em cima, sombra embaixo, ponto de brilho no canto */
+.game-card .thumb::after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  inset:0;
+  border-radius:inherit;
+  background:radial-gradient(circle at 11% 16%,#fff 0 3px,rgba(255,255,255,.55) 4px,rgba(255,255,255,0) 11px);
+  box-shadow:
+    inset 0 3px 5px var(--candy-light),
+    inset 0 -9px 14px var(--candy-shade),
+    inset 0 0 0 2px rgba(255,255,255,.5);
+  pointer-events:none;
+}
+
+.game-card .thumb img{border-radius:inherit}
+
+/* o brilho acompanha o hover: a bala "sobe" e a luz fica mais viva */
+.game-card .thumb::before{transition:opacity .25s,transform .25s}
+.game-card:hover .thumb::before{transform:translateY(2px);opacity:.9}
+.game-card:hover .thumb{box-shadow:0 12px 22px rgba(31,111,235,.28),0 2px 0 rgba(10,37,64,.07)}
+
+@media(max-width:560px){
+  .game-card .thumb{margin:10px 0 10px 10px;border-radius:16px}
+  .game-card .thumb::before{border-radius:12px 12px 60% 60% / 12px 12px 100% 100%}
+}
+
+/* ---------- Letras do banner: balas flutuando perto da logo ---------- */
+.float-letter{
+  overflow:hidden;
+  border-color:rgba(255,255,255,.9);
+  box-shadow:
+    0 8px 14px rgba(10,37,64,.14),
+    inset 0 3px 4px rgba(255,255,255,.9),
+    inset 0 -6px 8px rgba(10,37,64,.13);
+  /* usa a propriedade "translate" para não anular o rotate de cada letra */
+  animation:candy-float 6s ease-in-out infinite;
+}
+.float-letter::before{
+  content:"";
+  position:absolute;
+  top:3px;left:12%;right:12%;
+  height:45%;
+  border-radius:10px 10px 60% 60% / 10px 10px 100% 100%;
+  background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0));
+  pointer-events:none;
+}
+
+/* ritmos diferentes para parecer natural, sem sincronizar */
+.letter-a{animation-duration:6.2s;animation-delay:-.4s}
+.letter-o{animation-duration:7.4s;animation-delay:-2.6s}
+.letter-m{animation-duration:6.8s;animation-delay:-4.1s}
+.letter-r{animation-duration:5.6s;animation-delay:-1.3s}
+
+@keyframes candy-float{
+  0%,100%{translate:0 0}
+  50%{translate:0 calc(var(--candy-float) * -1)}
+}
+
+/* a bolha atrás da logo ganha o mesmo reflexo, bem suave */
+.hero-art:before{
+  background:radial-gradient(circle at 30% 24%,rgba(255,255,255,.95) 0,rgba(255,255,255,.5) 22%,rgba(255,255,255,.3) 60%);
+  box-shadow:inset 0 6px 12px #ffffffcc,inset 0 -14px 24px rgba(31,111,235,.12),0 14px 30px rgba(31,111,235,.12);
+}
+
+@media(max-width:560px){:root{--candy-float:5px}}
+
+@media(prefers-reduced-motion:reduce){
+  .float-letter{animation:none}
+  .game-card .thumb::before{transition:none}
+}
+
+
+/* ===== Botões candy =====
+   Base em duas camadas: reflexo na metade de cima + degradê da cor.
+   A "borda" grossa de baixo é uma sombra sólida (não muda o layout)
+   e some quando o botão é pressionado. */
+
+/* azul (ações principais) */
+.button-primary,.hero-button,.pm-share,.pm-perfil-salvar,.pm-login-cta-btn,.pm-diario.ativo{
+  --c1:#5c9dff;--c2:#2f7bf2;--c3:#1a5fd1;--edge:#0f449e;--glow:rgba(31,111,235,.38);--tx:#fff;
+}
+/* claro (ações secundárias) */
+.button-secondary,.pm-win-nova,.pm-perfil-cancelar,.pm-login,.pm-icon,.pm-avatar{
+  --c1:#ffffff;--c2:#f1f5fb;--c3:#e0e8f3;--edge:#c3d0e2;--glow:rgba(10,37,64,.14);--tx:#0a2540;
+}
+/* amarelo (desafio do dia) */
+.pm-diario,.pm-next{
+  --c1:#fffaea;--c2:#ffedb8;--c3:#ffdf8e;--edge:#e6bf62;--glow:rgba(214,160,30,.30);--tx:#7a4b00;
+}
+/* azul-claro (chamada do cabeçalho) */
+.header-cta{
+  --c1:#f6faff;--c2:#e4eefc;--c3:#cfe0f8;--edge:#a9c3ea;--glow:rgba(31,111,235,.20);--tx:#174b93;
+}
+
+.button-primary,.hero-button,.pm-share,.pm-perfil-salvar,.pm-login-cta-btn,.pm-diario.ativo,
+.button-secondary,.pm-win-nova,.pm-perfil-cancelar,.pm-login,.pm-icon,.pm-avatar,
+.pm-diario,.pm-next,.header-cta{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,var(--c1) 0,var(--c2) 55%,var(--c3) 100%);
+  color:var(--tx);
+  border:0;
+  box-shadow:
+    0 4px 0 var(--edge),
+    0 9px 16px var(--glow),
+    inset 0 2px 1px rgba(255,255,255,.7),
+    inset 0 -3px 6px rgba(10,37,64,.10);
+  transition:transform .12s ease,box-shadow .12s ease,filter .15s ease;
+}
+
+/* texto claro sobre azul ganha um leve relevo */
+.button-primary,.hero-button,.pm-share,.pm-perfil-salvar,.pm-login-cta-btn,.pm-diario.ativo{
+  text-shadow:0 1px 1px rgba(10,37,64,.32);
+}
+
+.button-primary:hover,.hero-button:hover,.pm-share:hover,.pm-perfil-salvar:hover,.pm-login-cta-btn:hover,
+.button-secondary:hover,.pm-win-nova:hover,.pm-perfil-cancelar:hover,.pm-login:hover,.pm-icon:hover,.pm-avatar:hover,
+.pm-diario:hover,.pm-next:hover,.header-cta:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.04) saturate(1.05);
+  box-shadow:
+    0 5px 0 var(--edge),
+    0 12px 20px var(--glow),
+    inset 0 2px 1px rgba(255,255,255,.75),
+    inset 0 -3px 6px rgba(10,37,64,.10);
+}
+
+/* o hover antigo trocava a cor de fundo; aqui a cor vem do degradê */
+.button-primary:hover,.pm-share:hover,.pm-perfil-salvar:hover,.pm-login-cta-btn:hover,
+.button-secondary:hover,.pm-win-nova:hover,.pm-perfil-cancelar:hover,.pm-login:hover,
+.pm-icon:hover,.pm-avatar:hover,.pm-next:hover{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,var(--c1) 0,var(--c2) 55%,var(--c3) 100%);
+}
+
+/* apertar: a "bala" afunda sobre a própria borda */
+.button-primary:active,.hero-button:active,.pm-share:active,.pm-perfil-salvar:active,.pm-login-cta-btn:active,.pm-diario.ativo:active,
+.button-secondary:active,.pm-win-nova:active,.pm-perfil-cancelar:active,.pm-login:active,.pm-icon:active,.pm-avatar:active,
+.pm-diario:active,.pm-next:active,.header-cta:active{
+  transform:translateY(3px);
+  filter:none;
+  box-shadow:
+    0 1px 0 var(--edge),
+    0 3px 6px var(--glow),
+    inset 0 2px 3px rgba(10,37,64,.16);
+}
+
+/* botão do login no fim da partida: o pulso mantém a borda 3D */
+.pm-login-cta-btn{animation:candy-pulse 2.2s ease-in-out infinite}
+.pm-login-cta-btn:hover{animation:none}
+.pm-login-cta.ok .pm-login-cta-btn{
+  --c1:#4fd27f;--c2:#22b25c;--c3:#16914a;--edge:#0d6b35;--glow:rgba(22,163,74,.35);
+  animation:none;
+}
+@keyframes candy-pulse{
+  0%,100%{box-shadow:0 4px 0 var(--edge),0 9px 16px var(--glow),inset 0 2px 1px rgba(255,255,255,.7),inset 0 -3px 6px rgba(10,37,64,.10),0 0 0 0 rgba(31,111,235,.35)}
+  50%{box-shadow:0 4px 0 var(--edge),0 9px 16px var(--glow),inset 0 2px 1px rgba(255,255,255,.7),inset 0 -3px 6px rgba(10,37,64,.10),0 0 0 9px rgba(31,111,235,0)}
+}
+
+/* desativado: perde cor e relevo */
+.button:disabled,.pm-perfil-salvar:disabled{
+  filter:grayscale(.6) opacity(.65);
+  transform:none;
+  box-shadow:0 2px 0 var(--edge),inset 0 2px 1px rgba(255,255,255,.5);
+}
+
+.button-primary:focus-visible,.hero-button:focus-visible,.pm-share:focus-visible,.button-secondary:focus-visible,
+.pm-diario:focus-visible,.pm-login:focus-visible,.pm-next:focus-visible,.header-cta:focus-visible{
+  outline:3px solid #93c5fd;outline-offset:3px;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .button-primary,.hero-button,.pm-share,.button-secondary,.pm-diario,.pm-next,.header-cta,.pm-login,.pm-icon,.pm-avatar{transition:none}
+  .pm-login-cta-btn{animation:none}
+}
+
+
+/* ===== Menu sanduíche (celular) e botões do menu lateral ===== */
+.pm-burger,.pm-drawer-rank,.pm-drawer-x{--c1:#ffffff;--c2:#f1f5fb;--c3:#e0e8f3;--edge:#c3d0e2;--glow:rgba(10,37,64,.14);--tx:#0a2540}
+.pm-drawer-diario{--c1:#fffaea;--c2:#ffedb8;--c3:#ffdf8e;--edge:#e6bf62;--glow:rgba(214,160,30,.30);--tx:#7a4b00}
+
+.pm-burger,.pm-drawer-rank,.pm-drawer-x,.pm-drawer-diario{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,var(--c1) 0,var(--c2) 55%,var(--c3) 100%);
+  color:var(--tx);
+  border:0;
+  box-shadow:0 4px 0 var(--edge),0 9px 16px var(--glow),inset 0 2px 1px rgba(255,255,255,.7),inset 0 -3px 6px rgba(10,37,64,.10);
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.pm-burger:active,.pm-drawer-rank:active,.pm-drawer-x:active,.pm-drawer-diario:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 var(--edge),0 3px 6px var(--glow),inset 0 2px 3px rgba(10,37,64,.16);
+}
+/* o "X" do menu fica um pouco mais discreto */
+.pm-drawer-x{box-shadow:0 3px 0 var(--edge),inset 0 2px 1px rgba(255,255,255,.7)}
+/* as barrinhas do sanduíche pedem folga para a borda de baixo */
+.pm-burger{margin-bottom:4px}
+@media(prefers-reduced-motion:reduce){.pm-burger,.pm-drawer-rank,.pm-drawer-x,.pm-drawer-diario{transition:none}}
+
+
+/* =====================================================================
+   JOGOS: Termo, Forca, Anagrama, Caça-palavras, Kyudoku, Lógica grega
+   O reflexo é um pseudo-elemento ATRÁS do texto (z-index:-1 dentro de
+   um contexto isolado). Assim ele funciona sobre qualquer cor de estado
+   (certa, existe, erro, selecionada...) sem sobrescrever os fundos.
+   ===================================================================== */
+
+/* ---------- reflexo universal das peças ---------- */
+.termo-celula,.tecla,.ky-cell,.ky-chip,.lg-chip,.lg-cell,.ana-letter,.ctx-rank,.ctx-sample{
+  position:relative;
+  isolation:isolate;
+}
+.termo-celula::before,.tecla::before,.ky-cell::before,.ky-chip::before,.lg-chip::before,
+.lg-cell::before,.ana-letter::before,.ctx-rank::before,.ctx-sample::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:6%;right:6%;top:4%;
+  height:42%;
+  border-radius:inherit;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.06));
+  pointer-events:none;
+}
+
+/* ---------- cartões dos jogos: bandeja com luz na borda ---------- */
+.termo-card,.forca-card,.anagrama-card,.contexto-card,.ky-card,.lg-card{
+  box-shadow:
+    0 14px 30px rgba(10,37,64,.08),
+    0 4px 0 #dbe3ef,
+    inset 0 2px 0 rgba(255,255,255,.95);
+}
+
+/* ---------- Termo ---------- */
+.termo-celula{
+  box-shadow:inset 0 -3px 0 rgba(10,37,64,.06),inset 0 2px 0 #fff;
+}
+.termo-celula.preenchida{box-shadow:inset 0 -3px 0 rgba(10,37,64,.10),0 2px 0 rgba(10,37,64,.10)}
+.termo-celula.revelada{
+  box-shadow:
+    0 3px 0 rgba(0,0,0,.22),
+    inset 0 2px 1px rgba(255,255,255,.45),
+    inset 0 -4px 6px rgba(0,0,0,.18);
+}
+
+/* ---------- Teclado (Termo e Forca) ---------- */
+.tecla{
+  box-shadow:
+    0 3px 0 #aeb3b9,
+    0 6px 8px rgba(10,37,64,.10),
+    inset 0 2px 1px rgba(255,255,255,.7),
+    inset 0 -3px 4px rgba(10,37,64,.08);
+  transition:transform .1s ease,box-shadow .1s ease;
+}
+.tecla.certa,.tecla.existe,.tecla.erro{
+  box-shadow:
+    0 3px 0 rgba(0,0,0,.28),
+    0 6px 8px rgba(10,37,64,.12),
+    inset 0 2px 1px rgba(255,255,255,.4),
+    inset 0 -3px 4px rgba(0,0,0,.16);
+}
+.tecla:active:not(:disabled){
+  transform:translateY(3px);
+  box-shadow:0 0 0 rgba(0,0,0,0),inset 0 2px 3px rgba(10,37,64,.2);
+}
+.tecla:disabled{box-shadow:0 1px 0 rgba(10,37,64,.15),inset 0 2px 1px rgba(255,255,255,.4)}
+
+/* ---------- Anagrama ---------- */
+.ana-letter{
+  background:linear-gradient(180deg,#f3f8ff 0,#eaf1fc 55%,#d9e6fa 100%);
+  box-shadow:
+    0 4px 0 #b9cdee,
+    0 9px 12px rgba(31,111,235,.16),
+    inset 0 2px 1px #fff,
+    inset 0 -3px 5px rgba(31,111,235,.12);
+  transition:transform .1s ease,box-shadow .1s ease;
+}
+.ana-letter:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 #b9cdee,inset 0 2px 3px rgba(31,111,235,.22);
+}
+.ana-stats>div{
+  background:linear-gradient(180deg,#fafcff 0,#f2f6fc 55%,#e6eef9 100%);
+  box-shadow:0 3px 0 #d6e0ef,inset 0 2px 1px #fff;
+}
+.ana-progress{box-shadow:inset 0 2px 4px rgba(10,37,64,.12)}
+.ana-progress span{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.5) 0,rgba(255,255,255,.12) 50%,rgba(255,255,255,0) 52%),
+    linear-gradient(180deg,#5c9dff,#1f6feb 60%,#1a5fd1);
+  box-shadow:0 0 8px rgba(31,111,235,.4);
+}
+.ana-word{
+  background:linear-gradient(180deg,#f2fcf6 0,#e1f5ea 100%);
+  box-shadow:0 2px 0 #b9e3c9,inset 0 2px 1px #fff;
+}
+.ana-word.bonus{background:linear-gradient(180deg,#fff9e8 0,#ffedb8 100%);box-shadow:0 2px 0 #eccb78,inset 0 2px 1px #fff}
+
+/* ---------- Caça-palavras (casas pequenas: relevo leve) ---------- */
+.grade{box-shadow:inset 0 3px 6px rgba(10,37,64,.10)}
+.letra-celula{box-shadow:0 2px 0 #cbd8ea,inset 0 2px 0 rgba(255,255,255,.9)}
+.letra-celula.selecionada{box-shadow:0 2px 0 #7fb0f5,inset 0 2px 0 rgba(255,255,255,.55)}
+.letra-celula.encontrada{box-shadow:0 2px 0 #62cf8c,inset 0 2px 0 rgba(255,255,255,.55)}
+.lista-palavras li{box-shadow:0 2px 0 #d3deec,inset 0 2px 1px rgba(255,255,255,.9)}
+.lista-palavras li.encontrada{box-shadow:0 2px 0 #b5e4c9,inset 0 2px 1px rgba(255,255,255,.8)}
+
+/* ---------- Kyudoku ---------- */
+.ky-cell{
+  box-shadow:
+    0 3px 0 #c3cfdf,
+    0 6px 8px rgba(10,37,64,.08),
+    inset 0 2px 1px #fff,
+    inset 0 -3px 4px rgba(10,37,64,.07);
+}
+.ky-cell.sel{box-shadow:0 4px 0 #04101e,0 8px 12px rgba(10,37,64,.28),inset 0 2px 1px rgba(255,255,255,.3),inset 0 -4px 6px rgba(0,0,0,.35)}
+.ky-cell.dup{box-shadow:0 3px 0 #7d1a11,0 6px 8px rgba(180,35,24,.3),inset 0 2px 1px rgba(255,255,255,.35),inset 0 -3px 5px rgba(0,0,0,.25)}
+.ky-cell.over:not(.dup){box-shadow:0 3px 0 #7a2808,0 6px 8px rgba(194,65,12,.3),inset 0 2px 1px rgba(255,255,255,.35),inset 0 -3px 5px rgba(0,0,0,.25)}
+.ky-cell.fixa{box-shadow:0 0 0 3px #1f6feb inset,0 0 0 1px #1f6feb,0 3px 0 #1559c4,0 6px 8px rgba(31,111,235,.25)}
+.ky-chip{box-shadow:0 2px 0 #b5c1d1,inset 0 2px 1px #fff}
+.ky-chip.on{box-shadow:0 2px 0 #04101e,inset 0 2px 1px rgba(255,255,255,.3),inset 0 -3px 4px rgba(0,0,0,.3)}
+.ky-chip.dup{box-shadow:0 2px 0 #7d1a11,inset 0 2px 1px rgba(255,255,255,.35),inset 0 -3px 4px rgba(0,0,0,.25)}
+
+/* ---------- Lógica grega ---------- */
+.lg-chip{
+  box-shadow:
+    0 4px 0 rgba(10,37,64,.28),
+    0 8px 12px rgba(10,37,64,.14),
+    inset 0 2px 1px rgba(255,255,255,.5),
+    inset 0 -4px 6px rgba(0,0,0,.18);
+  transition:transform .12s,box-shadow .12s;
+}
+.lg-chip.ativa{
+  box-shadow:0 0 0 3px #fff,0 0 0 6px #0a2540,0 10px 14px rgba(10,37,64,.25),inset 0 2px 1px rgba(255,255,255,.5),inset 0 -4px 6px rgba(0,0,0,.18);
+}
+.lg-cell{
+  box-shadow:
+    0 3px 0 rgba(10,37,64,.16),
+    inset 0 2px 1px rgba(255,255,255,.75),
+    inset 0 -3px 5px rgba(10,37,64,.12);
+}
+.lg-cell.dado{box-shadow:0 0 0 3px #0a2540 inset,0 3px 0 rgba(10,37,64,.28)}
+.lg-cell.erro{box-shadow:0 0 0 2px #fff inset,0 3px 0 rgba(153,27,27,.45)}
+
+/* ---------- Contexto ---------- */
+.ctx-rank,.ctx-sample{box-shadow:0 2px 0 rgba(0,0,0,.25),inset 0 2px 1px rgba(255,255,255,.4),inset 0 -3px 4px rgba(0,0,0,.15)}
+.ctx-item{box-shadow:0 2px 0 #dbe3ef,inset 0 2px 0 #fff}
+
+/* ---------- Campos: afundados, como entalhe na bandeja ---------- */
+.game-toolbar select,.ana-form input,.ctx-form input,.pm-perfil-campo input{
+  box-shadow:inset 0 2px 4px rgba(10,37,64,.10),0 1px 0 #fff;
+}
+
+/* ---------- Resultado e pop-up de vitória ---------- */
+.resultado,.vitoria,.ana-fim,.ctx-result{
+  box-shadow:0 4px 0 rgba(10,37,64,.10),inset 0 2px 1px rgba(255,255,255,.8);
+}
+.pm-modal{box-shadow:0 20px 50px #0a254044,0 5px 0 #dbe3ef,inset 0 2px 0 #fff}
+.pm-win .pm-xp{box-shadow:0 3px 0 #c4e5d0,inset 0 2px 1px rgba(255,255,255,.8)}
+
+@media(prefers-reduced-motion:reduce){
+  .tecla,.ana-letter,.lg-chip{transition:none}
+}
+
+
+/* =====================================================================
+   LOGO candy: a imagem vira uma pastilha que preenche a caixa toda
+   - a img é esticada (object-fit:cover) e ganha canto arredondado
+   - a caixa leva borda branca, borda sólida embaixo, sombra e glow
+   - o reflexo (gloss) é um pseudo-elemento do pai, por cima da img
+   ===================================================================== */
+:root{
+  --logo-radius:26%;          /* arredondamento da pastilha */
+  --logo-border:#fff;         /* borda clara da caixa */
+  --logo-edge:#a9c3ea;        /* borda sólida de baixo (efeito 3D) */
+  --logo-glow:rgba(31,111,235,.34);
+  --logo-gloss:rgba(255,255,255,.52);
+}
+
+/* ---------- cabeçalho (todas as páginas) ---------- */
+.brand{--logo-size:42px;position:relative}
+.portal-header .brand{--logo-size:46px}
+
+.brand img{
+  width:var(--logo-size);height:var(--logo-size);
+  object-fit:cover;                      /* estica a img até as bordas da caixa */
+  border:2px solid var(--logo-border);
+  border-radius:var(--logo-radius);
+  filter:none;
+  box-shadow:
+    0 3px 0 var(--logo-edge),
+    0 8px 14px var(--logo-glow),
+    0 0 0 1px rgba(10,37,64,.05);
+  transition:transform .12s ease;
+}
+.brand::before{
+  content:"";
+  position:absolute;
+  left:0;top:50%;
+  width:var(--logo-size);height:var(--logo-size);
+  margin-top:calc(var(--logo-size) / -2);
+  border-radius:var(--logo-radius);
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 17%,#fff 0 2px,rgba(255,255,255,.5) 3px,rgba(255,255,255,0) 8px),
+    linear-gradient(180deg,var(--logo-gloss) 0,rgba(255,255,255,.12) 44%,rgba(255,255,255,0) 46%);
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,.9),
+    inset 0 -5px 8px rgba(10,37,64,.20);
+  transition:transform .12s ease;
+}
+.brand:hover img,.brand:hover::before{transform:translateY(-1px)}
+.brand:active img,.brand:active::before{transform:translateY(2px)}
+
+/* nome "O Enforcado" ao lado da logo */
+.brand span{
+  text-shadow:0 1px 0 #fff,0 3px 0 var(--logo-edge),0 6px 8px var(--logo-glow);
+}
+
+/* ---------- banner da home ---------- */
+.hero-art{--hero-logo:clamp(120px,18vw,205px)}
+.hero-art img{
+  width:var(--hero-logo);height:var(--hero-logo);
+  object-fit:cover;
+  border:4px solid var(--logo-border);
+  border-radius:var(--logo-radius);
+  filter:none;
+  box-shadow:
+    0 7px 0 var(--logo-edge),
+    0 20px 30px var(--logo-glow),
+    0 0 0 1px rgba(10,37,64,.05);
+}
+.hero-art::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  top:50%;left:50%;
+  width:var(--hero-logo);height:var(--hero-logo);
+  transform:translate(-50%,-50%);
+  border-radius:var(--logo-radius);
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 19% 16%,#fff 0 4px,rgba(255,255,255,.55) 6px,rgba(255,255,255,0) 16px),
+    linear-gradient(180deg,var(--logo-gloss) 0,rgba(255,255,255,.12) 44%,rgba(255,255,255,0) 46%);
+  box-shadow:
+    inset 0 3px 3px rgba(255,255,255,.9),
+    inset 0 -10px 16px rgba(10,37,64,.20);
+}
+
+@media(max-width:560px){
+  .brand{--logo-size:40px}
+  .portal-header .brand{--logo-size:40px}
+  .hero-art{--hero-logo:130px}
+}
+@media(prefers-reduced-motion:reduce){
+  .brand img,.brand::before{transition:none}
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta http-equiv="content-language" content="pt-BR">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a2540">
+  <script src="/js/consent.js?v=1.0.0"></script>
+  <title>Jogo da Memória Online Grátis | O Enforcado</title>
+  <meta name="author" content="O Enforcado">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="description" content="Jogue o jogo da memória online grátis: vire as cartas, encontre todos os pares e treine a concentração. 3 níveis, de 6 a 18 pares, e desafio do dia.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="O Enforcado">
+  <meta property="og:title" content="Jogo da Memória Online Grátis | O Enforcado">
+  <meta property="og:description" content="Jogue o jogo da memória online grátis: vire as cartas, encontre todos os pares e treine a concentração. 3 níveis, de 6 a 18 pares, e desafio do dia.">
+  <meta property="og:url" content="https://oenforcado.com/memoria.html">
+  <meta property="og:image" content="https://oenforcado.com/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jogo da Memória Online Grátis | O Enforcado">
+  <meta name="twitter:description" content="Jogue o jogo da memória online grátis: vire as cartas, encontre todos os pares e treine a concentração. 3 níveis, de 6 a 18 pares, e desafio do dia.">
+  <meta name="twitter:image" content="https://oenforcado.com/img/og-image.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Jogo da Memória Online","url":"https://oenforcado.com/memoria.html","description":"Jogue o jogo da memória online grátis: vire as cartas, encontre todos os pares e treine a concentração. 3 níveis, de 6 a 18 pares, e desafio do dia.","applicationCategory":"GameApplication","genre":"Jogo de puzzle","operatingSystem":"Any","browserRequirements":"Requer JavaScript","inLanguage":"pt-BR","isAccessibleForFree":true,"image":"https://oenforcado.com/img/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"O Enforcado","url":"https://oenforcado.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://oenforcado.com/"},{"@type":"ListItem","position":2,"name":"Jogo da memória","item":"https://oenforcado.com/memoria.html"}]}]}</script>
+  <link rel="canonical" href="https://oenforcado.com/memoria.html">
+  <link rel="icon" href="/img/hung.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site-theme.css?v=1.0.0">
+  <link rel="stylesheet" href="css/termo.css?v=1.0.2">
+  <link rel="stylesheet" href="css/memoria.css?v=1.0.0">
+  <link rel="stylesheet" href="css/portal-shell.css?v=1.0.8">
+  <link rel="stylesheet" href="css/footer.css?v=1.0.3">
+  <link rel="stylesheet" href="css/menu.css?v=1.0.1">
+  <link rel="stylesheet" href="css/candy.css?v=1.0.0">
+</head>
+<body data-jogo="memoria">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>
+    <nav aria-label="Navegação principal">
+      <a href="/forca.html">Jogo da forca</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/termo.html">Termo</a><a href="/anagrama.html">Anagrama</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">JOGOS DE PUZZLE</p>
+      <h1>Jogo da memória online grátis</h1>
+      <p>Vire duas cartas por vez e encontre todos os pares iguais, com o menor número de jogadas. Escolha o nível ou jogue o desafio do dia.</p>
+    </section>
+    <section class="mem-box" aria-label="Jogo da memória">
+      <div id="toolbar"></div>
+      <div class="mem-info">
+        <span class="rules-short">Modo: <strong id="nivel-atual"></strong></span>
+        <span class="rules-short">Pares: <strong id="pares">0 / 0</strong></span>
+        <span class="rules-short">Jogadas: <strong id="jogadas">0</strong></span>
+        <span class="rules-short">Tempo: <strong id="tempo">0:00</strong></span>
+      </div>
+      <div id="tabuleiro" class="mem-board" role="group" aria-label="Cartas do jogo da memória"></div>
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite">Toque numa carta para começar.</p>
+      <div class="mem-acoes">
+        <button id="novo-jogo" class="button button-secondary" type="button">Novo jogo</button>
+      </div>
+      <div id="resultado" class="resultado" hidden>
+        <strong id="resultado-titulo"></strong><span id="resultado-detalhe"></span>
+        <button id="jogar-novamente" class="button button-primary" type="button">Jogar novamente</button>
+      </div>
+    </section>
+    <aside class="ad-slot" aria-label="Publicidade"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8119130352737496" data-ad-slot="1532529629" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>
+    <section class="seo-content">
+      <h2>Como jogar o jogo da memória?</h2>
+      <ol>
+        <li>Todas as cartas começam viradas para baixo. Toque numa carta para virá-la e depois toque noutra.</li>
+        <li>Se as duas cartas forem iguais, elas formam um par e ficam viradas, em verde.</li>
+        <li>Se forem diferentes, elas desvirem depois de um instante. Memorize o que viu e a posição de cada símbolo.</li>
+        <li>O jogo termina quando todos os pares forem encontrados. Quanto menos jogadas, melhor o resultado.</li>
+      </ol>
+      <h2>Dicas para jogar melhor</h2>
+      <ul>
+        <li>Nas primeiras jogadas não há como acertar por lógica. Aproveite para revelar cartas novas e mapear o tabuleiro.</li>
+        <li>Vire sempre uma carta que você ainda não conhece. Repetir uma carta já vista só vale quando você sabe onde está o par dela.</li>
+        <li>Associe a posição ao símbolo, como “a maçã está no canto de cima, à direita”. Isso ajuda a fixar na memória.</li>
+        <li>Se virou uma carta cujo par você já viu, vá direto nele: é o par garantido.</li>
+        <li>Jogar com calma e sem pressa rende mais pares do que clicar rápido.</li>
+      </ul>
+      <h2>Níveis</h2>
+      <p>O nível fácil tem 12 cartas (6 pares). O médio tem 24 cartas (12 pares) e o difícil tem 36 cartas (18 pares). O XP da partida vale 15 no fácil, 30 no médio e 45 no difícil. A cada duas jogadas além do mínimo possível, você perde 1 XP, até um mínimo de 5 XP por partida.</p>
+      <h2>Desafio do dia e ranking global</h2>
+      <p>Todo dia há um desafio novo, igual para todos os jogadores: o mesmo tabuleiro, com as mesmas cartas nas mesmas posições. Concluí-lo vale 50 XP de bônus e mantém sua sequência de dias seguidos. O XP de todos os jogos do O Enforcado se soma, e quem entra com a conta Google aparece no ranking global (o troféu no topo da página). Jogar continua livre, sem precisar de login.</p>
+      <p>Quer outro desafio? Experimente também o <a href="/kyudoku.html">Kyudoku</a>, a <a href="/logica-grega.html">Lógica grega</a>, o <a href="/termo.html">Termo</a>, o <a href="/forca.html">jogo da forca</a>, o <a href="/caca-palavras.html">caça-palavras</a> e o <a href="/anagrama.html">Anagrama</a>.</p>
+    </section>
+  </main>
+  <footer class="corp-footer">
+    <div class="corp-wrap">
+      <div class="corp-col corp-brand">
+        <a class="corp-logo" href="/">O Enforcado</a>
+        <p>Jogos de palavras e de lógica gratuitos para jogar online: forca, Termo, caça-palavras, anagrama, Kyudoku, Lógica grega, Jogo da memória e Quebra-cabeça deslizante, com desafio do dia e ranking.</p>
+      </div>
+      <nav class="corp-col" aria-label="Jogos">
+        <h3>Jogos</h3>
+        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a href="/kyudoku.html">Kyudoku</a><a href="/logica-grega.html">Lógica grega</a><a href="/memoria.html">Jogo da memória</a><a href="/deslizante.html">Quebra-cabeça deslizante</a>
+      </nav>
+      <nav class="corp-col" aria-label="Institucional">
+        <h3>Institucional</h3>
+        <a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
+      </nav>
+    </div>
+    <div class="corp-bottom">
+      <span>© 2026 O Enforcado. Todos os direitos reservados.</span>
+      <span>Desenvolvido por <a href="https://marsdev.com.br" target="_blank" rel="noopener">MarsDev</a> - Marco Quintela</span>
+    </div>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/portal.js?v=1.0.11"></script>
+  <script src="js/memoria.js?v=1.0.0"></script>
+  <script src="js/ads-fix.js?v=1.0.0"></script>
+  <script src="js/menu.js?v=1.0.3"></script>
+</body>
+</html>

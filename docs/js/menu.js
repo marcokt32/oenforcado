@@ -1,6 +1,6 @@
 // Menu "sanduíche" para telas pequenas, com os jogos agrupados por categoria.
-// Para adicionar um jogo ou categoria (ex.: Palavras cruzadas, Lógica grega), edite CATEGORIAS abaixo
-// (e a lista JOGOS em js/portal.js, usada pelo menu do desktop).
+// Para adicionar um jogo ou categoria, edite CATEGORIAS abaixo
+// (e JOGOS/CATEGORIAS em js/portal.js, usados pelo dropdown do desktop).
 (() => {
 "use strict";
 
@@ -13,8 +13,11 @@ const CATEGORIAS = [
   ] },
   { id: "logica", nome: "Lógica", icone: "🧩", jogos: [
     { nome: "Kyudoku", url: "/kyudoku.html", id: "kyudoku" },
-    { nome: "Lógica grega", url: "/logica-grega.html", id: "logicagrega" },
-    { nome: "Damas", url: "/damas.html", id: "damas" }
+    { nome: "Lógica grega", url: "/logica-grega.html", id: "logicagrega" }
+  ] },
+  { id: "puzzle", nome: "Puzzle", icone: "🃏", jogos: [
+    { nome: "Jogo da memória", url: "/memoria.html", id: "memoria" },
+    { nome: "Quebra-cabeça deslizante", url: "/deslizante.html", id: "deslizante" }
   ] }
 ];
 
