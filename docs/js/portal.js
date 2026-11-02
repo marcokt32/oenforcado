@@ -3,21 +3,13 @@
 (() => {
 "use strict";
 
-// "cat" liga cada jogo a uma categoria do menu (mantenha igual a CATEGORIAS em js/menu.js, usado no celular)
 const JOGOS = [
-  { id: "forca", nome: "Jogo da forca", url: "/forca.html", cat: "palavras" },
-  { id: "anagrama", nome: "Anagrama", url: "/anagrama.html", cat: "palavras" },
-  { id: "termo", nome: "Termo", url: "/termo.html", cat: "palavras" },
-  { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html", cat: "palavras" },
-  { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html", cat: "logica" },
-  { id: "logicagrega", nome: "Lógica grega", url: "/logica-grega.html", cat: "logica" },
-  { id: "memoria", nome: "Jogo da memória", url: "/memoria.html", cat: "puzzle" },
-  { id: "deslizante", nome: "Quebra-cabeça deslizante", url: "/deslizante.html", cat: "puzzle" }
-];
-const CATEGORIAS = [
-  { id: "palavras", nome: "Palavras", icone: "🔤" },
-  { id: "logica", nome: "Lógica", icone: "🧩" },
-  { id: "puzzle", nome: "Puzzle", icone: "🃏" }
+  { id: "forca", nome: "Jogo da forca", url: "/forca.html" },
+  { id: "anagrama", nome: "Anagrama", url: "/anagrama.html" },
+  { id: "termo", nome: "Termo", url: "/termo.html" },
+  { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html" },
+  { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html" },
+  { id: "logicagrega", nome: "Lógica grega", url: "/logica-grega.html" }
 ];
 const KEY = "portal_v2";
 const BONUS_DIARIO = 50;
@@ -69,6 +61,7 @@ async function entrar() {
   try {
     await auth.signInWithPopup(provedor);
     if (typeof gtag === "function") gtag("event", "login", { method: "google" });
+    if (typeof clarity === "function") clarity("event", "login_google");
   } catch (e) {
     if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
     if (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment") {
@@ -198,6 +191,11 @@ function concluir({ jogo, xp, diario }) {
   salvar(d);
   enviarXP(d.xp);
   if (typeof gtag === "function") gtag("event", "level_end", { level_name: jogo, success: true, daily: !!diario });
+  if (typeof clarity === "function") {
+    clarity("set", "jogo", jogo);
+    clarity("set", "modo", diario ? "diario" : "livre");
+    clarity("event", "partida_concluida");
+  }
   return { ganho, bonus, repetido, total: d.xp, streak: d.streak.atual };
 }
 
@@ -300,6 +298,7 @@ function toolbar(el, cfg) {
 async function compartilhar(jogoId, texto, btn) {
   const jogo = JOGOS.find(j => j.id === jogoId) || JOGOS[0];
   const url = SITE + jogo.url + "?utm_source=compartilhar";
+  if (typeof clarity === "function") clarity("event", "compartilhar");
   if (typeof gtag === "function") gtag("event", "share", { method: navigator.share ? "nativo" : "copiar", content_type: "game_result", item_id: jogoId });
   if (navigator.share) {
     try { await navigator.share({ title: "O Enforcado", text: texto, url }); return; }
@@ -388,15 +387,9 @@ function montarHeader() {
   const h = document.querySelector(".site-header");
   if (!h) return;
   const atual = location.pathname.replace(/\/$/, "");
-  const ehAtual = j => atual === j.url || atual === j.url.replace(".html", "") || document.body.dataset.jogo === j.id;
-  const links = CATEGORIAS.map(c => {
-    const jogos = JOGOS.filter(j => j.cat === c.id);
-    if (!jogos.length) return "";
-    return `<div class="pm-dd${jogos.some(ehAtual) ? " atual" : ""}">` +
-      `<button type="button" class="pm-dd-btn" aria-expanded="false" aria-haspopup="true" aria-controls="pm-dd-${c.id}"><span>${c.icone} ${esc(c.nome)}</span><span class="pm-dd-seta" aria-hidden="true">▾</span></button>` +
-      `<ul class="pm-dd-menu" id="pm-dd-${c.id}">` +
-      jogos.map(j => `<li><a href="${j.url}"${ehAtual(j) ? ' aria-current="page"' : ""}>${esc(j.nome)}</a></li>`).join("") +
-      `</ul></div>`;
+  const links = JOGOS.map(j => {
+    const ativo = atual === j.url || atual === j.url.replace(".html", "") || document.body.dataset.jogo === j.id;
+    return `<a href="${j.url}"${ativo ? ' aria-current="page"' : ""}>${esc(j.nome)}</a>`;
   }).join("");
   h.innerHTML =
     `<a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>` +
@@ -492,7 +485,7 @@ function abrirPerfil() {
   o.id = "pm-perfil"; o.className = "pm-overlay";
   o.innerHTML = `<div class="pm-modal" role="dialog" aria-modal="true" aria-label="Editar perfil"><button type="button" class="pm-fechar" aria-label="Fechar">✕</button>` +
     `<h2>✏️ Editar perfil</h2>` +
-    `<label class="pm-perfil-campo">Nome no ranking<input id="pm-perfil-nome" type="text" maxlength="20" autocomplete="nickname" value="${esc(atual.nome)}"><button type="button" class="pm-perfil-link" data-acao="nome-google">Usar meu nome do Google</button></label>` +
+    `<label class="pm-perfil-campo">Nome no ranking<input id="pm-perfil-nome" data-clarity-mask="True" type="text" maxlength="20" autocomplete="nickname" value="${esc(atual.nome)}"><button type="button" class="pm-perfil-link" data-acao="nome-google">Usar meu nome do Google</button></label>` +
     `<p class="pm-sub">AVATAR</p><div class="pm-perfil-avs">${opcoes}</div>` +
     `<p class="pm-perfil-aviso" id="pm-perfil-aviso" hidden>📷 Sua foto do Google ficará visível para todos no ranking público.</p>` +
     `<div class="pm-perfil-acoes"><button type="button" class="pm-perfil-cancelar" data-acao="cancelar">Cancelar</button><button type="button" class="pm-perfil-salvar" data-acao="salvar">Salvar</button></div></div>`;
@@ -541,26 +534,8 @@ function toast(texto, ms = 3500) {
   toastTimer = setTimeout(() => { t.hidden = true; }, ms);
 }
 
-/* ---------- Dropdown de categorias (cabeçalho no computador) ---------- */
-function fecharDropdowns(exceto) {
-  document.querySelectorAll(".pm-dd.aberto").forEach(d => {
-    if (d === exceto) return;
-    d.classList.remove("aberto");
-    const b = d.querySelector(".pm-dd-btn"); if (b) b.setAttribute("aria-expanded", "false");
-  });
-}
-function alternarDropdown(d) {
-  const abrir = !d.classList.contains("aberto");
-  fecharDropdowns(abrir ? d : null);
-  d.classList.toggle("aberto", abrir);
-  d.querySelector(".pm-dd-btn").setAttribute("aria-expanded", abrir ? "true" : "false");
-}
-
 /* ---------- Eventos globais ---------- */
 document.addEventListener("click", e => {
-  const dd = e.target.closest(".pm-dd-btn");
-  if (dd) { alternarDropdown(dd.closest(".pm-dd")); return; }
-  if (!e.target.closest(".pm-dd")) fecharDropdowns();
   const a = e.target.closest("[data-pm]");
   if (a) {
     const acao = a.dataset.pm;
@@ -575,12 +550,7 @@ document.addEventListener("click", e => {
   }
   if (!e.target.closest(".pm-menu")) fecharMenu();
 });
-document.addEventListener("keydown", e => {
-  if (e.key !== "Escape") return;
-  const dd = document.querySelector(".pm-dd.aberto");
-  if (dd) { const b = dd.querySelector(".pm-dd-btn"); fecharDropdowns(); if (b) b.focus(); }
-  fecharRanking(); fecharPerfil(); fecharVitoria(); fecharMenu();
-});
+document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharRanking(); fecharPerfil(); fecharVitoria(); fecharMenu(); } });
 
 // Depois do login, troca o convite do pop-up de vitória por uma confirmação
 function confirmarLoginNaVitoria() {

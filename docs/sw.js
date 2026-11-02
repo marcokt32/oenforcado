@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 🔥 IMPORTANTE: altere a versão quando fizer deploy
-const CACHE_NAME = "enforcado-v44";
+const CACHE_NAME = "enforcado-v40";
 
 const arquivos = [
   "/",
@@ -26,8 +26,6 @@ const arquivos = [
   "/anagrama.html",
   "/kyudoku.html",
   "/logica-grega.html",
-  "/memoria.html",
-  "/deslizante.html",
   "/damas.html",
   "/manifest.json",
   "/img/thumb-forca.svg",
@@ -36,8 +34,6 @@ const arquivos = [
   "/img/thumb-anagrama.svg",
   "/img/thumb-kyudoku.svg",
   "/img/thumb-logica-grega.svg",
-  "/img/thumb-memoria.svg",
-  "/img/thumb-deslizante.svg",
   "/img/thumb-damas.svg",
   "css/portal.css",
   "css/site-theme.css",
@@ -50,10 +46,6 @@ const arquivos = [
   "css/anagrama.css",
   "css/kyudoku.css",
   "css/logica-grega.css",
-  "css/memoria.css",
-  "css/deslizante.css",
-  "css/candy.css",
-  "css/tema.css",
   "css/damas.css",
   "js/portal.js",
   "js/menu.js",
@@ -65,9 +57,6 @@ const arquivos = [
   "js/anagrama.js",
   "js/kyudoku.js",
   "js/logica-grega.js",
-  "js/memoria.js",
-  "js/tema.js",
-  "js/deslizante.js",
   "js/damas.js",
   "icons/icon-192.png",
   "icons/icon-512.png"

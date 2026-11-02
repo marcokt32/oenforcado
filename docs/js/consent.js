@@ -14,6 +14,7 @@
 
   var CONFIG = {
     GA_ID: "G-LPB04DJLXC",
+    CLARITY_ID: "z7cn06m17v",
     ADS_ID: "AW-10942914304",
     ADSENSE_CLIENT: "ca-pub-8119130352737496",
 
@@ -33,7 +34,7 @@
 
   var w = window, d = document;
   var memoria = null;
-  var carregado = { gtag: false, ga: false, ads: false, adsense: false };
+  var carregado = { gtag: false, ga: false, ads: false, adsense: false, clarity: false };
   var ultimoFoco = null;
 
   /* ---------- Consent Mode: padrao negado (antes de qualquer tag) ---------- */
@@ -94,6 +95,22 @@
     if (p && !carregado.ads) { carregado.ads = true; gtag("config", CONFIG.ADS_ID); }
   }
 
+  function carregarClarity(a, p) {
+    if (!a || !CONFIG.CLARITY_ID) { return; }
+    if (!carregado.clarity) {
+      carregado.clarity = true;
+      (function (c, l, n, r, i) {
+        c[n] = c[n] || function () { (c[n].q = c[n].q || []).push(arguments); };
+        var t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+        var y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+      })(w, d, "clarity", "script", CONFIG.CLARITY_ID);
+    }
+    w.clarity("consentv2", {
+      ad_Storage: p ? "granted" : "denied",
+      analytics_Storage: "granted"
+    });
+  }
+
   function aplicar(a, p) {
     gtag("consent", "update", {
       analytics_storage: a ? "granted" : "denied",
@@ -102,6 +119,7 @@
       ad_personalization: p ? "granted" : "denied"
     });
     carregarGtag(a, p);
+    carregarClarity(a, p);
     if (p || CONFIG.ANUNCIOS_SEM_CONSENTIMENTO) { carregarAdsense(); }
   }
 
@@ -113,7 +131,7 @@
     var nomes = d.cookie ? d.cookie.split(";") : [];
     for (var i = 0; i < nomes.length; i++) {
       var nome = nomes[i].split("=")[0].replace(/^\s+/, "");
-      if (/^(_ga|_gid|_gat|_gcl_|_gac_|__gads|__gpi|_fbp)/.test(nome)) {
+      if (/^(_ga|_gid|_gat|_gcl_|_gac_|__gads|__gpi|_fbp|_clck|_clsk|CLID|ANONCHK|SM|MR|MUID)/.test(nome)) {
         for (var j = 0; j < dominios.length; j++) {
           d.cookie = nome + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/" +
             (dominios[j] ? "; domain=" + dominios[j] : "");
@@ -123,7 +141,7 @@
   }
 
   function definir(a, p) {
-    var reduziu = (carregado.ga && !a) || (carregado.ads && !p) ||
+    var reduziu = (carregado.ga && !a) || (carregado.clarity && !a) || (carregado.ads && !p) ||
       (carregado.adsense && !p && !CONFIG.ANUNCIOS_SEM_CONSENTIMENTO);
     gravarBruto(JSON.stringify({ v: CONFIG.VERSAO, a: !!a, p: !!p, t: Date.now() }));
     try { w.localStorage.removeItem("cookiesAceitos"); } catch (e) { /* formato antigo */ }
@@ -255,7 +273,7 @@
       ]),
       el("span", { "class": "cc-fixo", text: "Sempre ativos" })
     ]);
-    var sa = linhaSwitch("cc-analytics", "Estatísticas", "Google Analytics: nos ajuda a entender quais jogos são mais usados e a melhorar o site.");
+    var sa = linhaSwitch("cc-analytics", "Estatísticas", "Google Analytics e Microsoft Clarity: nos ajudam a entender quais jogos são mais usados, como as pessoas navegam e a melhorar o site.");
     var sp = linhaSwitch("cc-publicidade", "Publicidade", "Google AdSense e Google Ads: exibem anúncios e medem seu desempenho, inclusive com base em visitas anteriores.");
     chkA = sa.input; chkP = sp.input;
 
