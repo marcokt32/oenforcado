@@ -1,0 +1,299 @@
+/* ===== Temas de datas comemorativas =====
+   Carregue DEPOIS do candy.css. Cada tema vive em html[data-tema="id"] (definido por js/tema.js).
+   As cores de estado dos jogos (certo, errado, existe...) NÃO mudam: o tema só veste o "casco" do site. */
+
+/* ---------- botão de ligar/desligar (vale para qualquer tema) ---------- */
+.tema-botao{
+  position:fixed;left:14px;bottom:14px;z-index:70;
+  display:grid;place-items:center;width:44px;height:44px;padding:0;
+  border:0;border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 50%),linear-gradient(180deg,#fff 0,#f1f5fb 55%,#e0e8f3 100%);
+  box-shadow:0 3px 0 #c3d0e2,0 7px 12px rgba(10,37,64,.14),inset 0 2px 1px rgba(255,255,255,.7);
+  font-size:1.3rem;line-height:1;cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.tema-botao:hover{transform:translateY(-1px)}
+.tema-botao:active{transform:translateY(2px);box-shadow:0 1px 0 #c3d0e2,inset 0 2px 3px rgba(10,37,64,.16)}
+.tema-botao:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.tema-botao[aria-pressed="false"]{filter:grayscale(1);opacity:.65}
+@media print{.tema-botao,.tema-neve{display:none}}
+
+/* =====================================================================
+   NATAL
+   ===================================================================== */
+html[data-tema="natal"]{
+  --blue:#d6283e;                      /* links, destaques e menu atual */
+  --candy-glow:rgba(214,40,62,.22);    /* sombra das miniaturas */
+  --logo-edge:#efa9b2;                 /* borda da logo */
+  --logo-glow:rgba(214,40,62,.30);
+}
+html[data-tema="natal"] body{background:#f0f6fb}
+
+/* botões principais: vermelho bala */
+html[data-tema="natal"] :is(.button-primary,.hero-button,.pm-share,.pm-perfil-salvar,.pm-login-cta-btn,.pm-diario.ativo){
+  --c1:#ff7d8d;--c2:#ea3149;--c3:#c3162d;--edge:#8a0d1f;--glow:rgba(214,40,62,.40);--tx:#fff;
+}
+/* desafio do dia: verde bala */
+html[data-tema="natal"] :is(.pm-diario:not(.ativo),.pm-next,.pm-drawer-diario){
+  --c1:#86e6aa;--c2:#34c071;--c3:#1b9650;--edge:#0f6b36;--glow:rgba(22,150,80,.36);--tx:#fff;
+  text-shadow:0 1px 1px rgba(0,50,25,.38);
+}
+html[data-tema="natal"] .pm-next{color:#fff!important}
+/* chamada do cabeçalho: rosa suave */
+html[data-tema="natal"] .header-cta{--c1:#fff7f7;--c2:#ffe4e7;--c3:#ffd0d6;--edge:#efa3ad;--glow:rgba(214,40,62,.18);--tx:#a3182b}
+html[data-tema="natal"] .login-cta,html[data-tema="natal"] .pm-login-cta{border-color:#f3b8c0;background:#fff4f5}
+
+/* cabeçalho: listra de bengala doce + pisca-pisca */
+html[data-tema="natal"] :is(.site-header,.portal-header){
+  border-bottom:4px solid transparent;
+  border-image:repeating-linear-gradient(135deg,#e5283f 0 10px,#fff 10px 20px) 1;
+}
+html[data-tema="natal"] :is(.site-header,.portal-header)::after{
+  content:"";
+  position:absolute;left:0;right:0;top:calc(100% + 4px);
+  height:18px;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(circle at 11px 8px,#ff4d63 0 4px,rgba(255,77,99,.35) 5px,rgba(255,77,99,0) 10px) 0px 0/160px 18px repeat-x,
+    radial-gradient(circle at 11px 8px,#ffc83d 0 4px,rgba(255,200,61,.35) 5px,rgba(255,200,61,0) 10px) 40px 0/160px 18px repeat-x,
+    radial-gradient(circle at 11px 8px,#35c56f 0 4px,rgba(53,197,111,.35) 5px,rgba(53,197,111,0) 10px) 80px 0/160px 18px repeat-x,
+    radial-gradient(circle at 11px 8px,#4aa8ff 0 4px,rgba(74,168,255,.35) 5px,rgba(74,168,255,0) 10px) 120px 0/160px 18px repeat-x,
+    linear-gradient(#1c6b46,#1c6b46) 0 2px/100% 2px no-repeat;
+  animation:tema-piscar 2.4s ease-in-out infinite alternate;
+}
+@keyframes tema-piscar{from{filter:brightness(.92)}to{filter:brightness(1.3) saturate(1.2)}}
+
+/* gorro de Papai Noel na logo do cabeçalho */
+html[data-tema="natal"] .brand::after{
+  content:"";
+  position:absolute;z-index:2;pointer-events:none;
+  left:-5px;top:calc(50% - var(--logo-size) * .5 - var(--logo-size) * .3);
+  width:calc(var(--logo-size) * .8);height:calc(var(--logo-size) * .64);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 80'%3E%3Cpath d='M10 64 C12 24 44 4 74 12 C84 15 90 22 92 30 C78 26 70 36 72 64 Z' fill='%23e5283f'/%3E%3Cpath d='M10 64 C12 24 44 4 74 12 C60 18 30 28 22 64 Z' fill='%23ff7d8d' opacity='.5'/%3E%3Crect x='4' y='56' width='76' height='20' rx='10' fill='%23fff' stroke='%23d9e4f0' stroke-width='2'/%3E%3Ccircle cx='90' cy='27' r='10' fill='%23fff' stroke='%23d9e4f0' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat;
+  transform:rotate(-14deg);
+  filter:drop-shadow(0 2px 2px rgba(10,37,64,.25));
+}
+/* ...e na logo grande do banner (o elemento é criado pelo js/tema.js) */
+.tema-chapeu{display:none}
+html[data-tema="natal"] .tema-chapeu{
+  display:block;position:absolute;z-index:3;pointer-events:none;
+  left:calc(50% - var(--hero-logo) / 2 - 10px);
+  top:calc(50% - var(--hero-logo) / 2 - var(--hero-logo) * .27);
+  width:calc(var(--hero-logo) * .72);height:calc(var(--hero-logo) * .58);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 80'%3E%3Cpath d='M10 64 C12 24 44 4 74 12 C84 15 90 22 92 30 C78 26 70 36 72 64 Z' fill='%23e5283f'/%3E%3Cpath d='M10 64 C12 24 44 4 74 12 C60 18 30 28 22 64 Z' fill='%23ff7d8d' opacity='.5'/%3E%3Crect x='4' y='56' width='76' height='20' rx='10' fill='%23fff' stroke='%23d9e4f0' stroke-width='2'/%3E%3Ccircle cx='90' cy='27' r='10' fill='%23fff' stroke='%23d9e4f0' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat;
+  transform:rotate(-14deg);
+  filter:drop-shadow(0 4px 4px rgba(10,37,64,.28));
+}
+
+/* banner e detalhes da página inicial */
+html[data-tema="natal"] .hero{
+  background:linear-gradient(120deg,#fff5f5 0%,#ffe1e5 55%,#e3f6ea 100%);
+  border-color:#f1c3ca;
+}
+html[data-tema="natal"] .hero h1 span{color:#d6283e}
+html[data-tema="natal"] .hero-art:before{
+  box-shadow:inset 0 6px 12px #ffffffcc,inset 0 -14px 24px rgba(214,40,62,.12),0 14px 30px rgba(214,40,62,.12);
+}
+html[data-tema="natal"] .letter-a{background:#ffd9de;color:#b01228}
+html[data-tema="natal"] .letter-o{background:#d6f4e1;color:#167a43}
+html[data-tema="natal"] .letter-m{background:#fff0c2;color:#8a5a00}
+html[data-tema="natal"] .letter-r{background:#ffe4e8;color:#a3182b}
+html[data-tema="natal"] .game-tag{background:#fde8ea;color:#a3182b}
+html[data-tema="natal"] .play-link{color:#d6283e}
+html[data-tema="natal"] .game-card:hover{border-color:#efb3bb}
+html[data-tema="natal"] .portal-note{border-color:#cdeedb;background:#eefaf2}
+html[data-tema="natal"] .note-icon{background:#d3f1df;color:#167a43}
+
+/* menu do cabeçalho (computador) */
+html[data-tema="natal"] .pm-dd.atual .pm-dd-btn{
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0,rgba(255,255,255,.16) 48%,rgba(255,255,255,0) 50%),linear-gradient(180deg,#fff5f6 0,#ffe1e5 55%,#ffcdd4 100%);
+  color:#a3182b;
+  box-shadow:0 3px 0 #efa3ad,0 7px 12px rgba(214,40,62,.18),inset 0 2px 1px rgba(255,255,255,.8),inset 0 -3px 5px rgba(214,40,62,.10);
+}
+html[data-tema="natal"] .site-header nav .pm-dd-menu a[aria-current="page"]{background:#ffeef0;color:#d6283e}
+
+/* rodapé: verde-floresta com neve pingando no topo */
+html[data-tema="natal"] .corp-footer{position:relative;background:#0d3b2b}
+html[data-tema="natal"] .corp-footer::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:12px;pointer-events:none;
+  background:radial-gradient(circle at 10px 0,#fff 0 9px,rgba(255,255,255,0) 10px) 0 0/20px 12px repeat-x;
+}
+html[data-tema="natal"] .corp-bottom{border-top-color:#ffffff26}
+
+/* jogo da memória: cartas viram presentes */
+html[data-tema="natal"] .mem-costas{
+  background:linear-gradient(180deg,#ff7d8d 0,#ea3149 55%,#c3162d 100%);
+  box-shadow:0 4px 0 #8a0d1f,0 8px 10px rgba(214,40,62,.30),inset 0 2px 1px rgba(255,255,255,.65),inset 0 -4px 6px rgba(0,0,0,.18);
+  font-size:0;
+}
+html[data-tema="natal"] .mem-costas::after{content:"🎁";font-size:calc(var(--mc) * .46);line-height:1}
+
+/* neve caindo (criada pelo js/tema.js) */
+.tema-neve{position:fixed;inset:0;z-index:60;overflow:hidden;pointer-events:none}
+.tema-neve i{
+  position:absolute;top:-12px;left:var(--x);
+  width:var(--s);height:var(--s);border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff 0 35%,#cfe6ff 100%);
+  box-shadow:0 0 5px rgba(140,190,240,.75);
+  opacity:.9;
+  animation:tema-cair var(--d) linear var(--a) infinite;
+}
+body[data-jogo] .tema-neve{opacity:.6}
+@keyframes tema-cair{
+  0%{transform:translate3d(0,-5vh,0)}
+  50%{transform:translate3d(var(--w),55vh,0)}
+  100%{transform:translate3d(calc(var(--w) * -.5),108vh,0)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-tema="natal"] :is(.site-header,.portal-header)::after{animation:none}
+  .tema-neve{display:none}
+  .tema-botao{transition:none}
+}
+
+
+/* =====================================================================
+   ANO NOVO
+   ===================================================================== */
+html[data-tema="anonovo"]{
+  --blue:#7b4de0;
+  --candy-glow:rgba(245,166,0,.26);
+  --logo-edge:#f2d27a;
+  --logo-glow:rgba(245,166,0,.36);
+}
+html[data-tema="anonovo"] body{background:#f6f3fb}
+
+/* botões principais: dourado champanhe (texto escuro) */
+html[data-tema="anonovo"] :is(.button-primary,.hero-button,.pm-share,.pm-perfil-salvar,.pm-login-cta-btn,.pm-diario.ativo){
+  --c1:#ffeaa0;--c2:#ffc83d;--c3:#f0a500;--edge:#b87400;--glow:rgba(245,166,0,.42);--tx:#4a2f00;
+  text-shadow:0 1px 0 rgba(255,255,255,.65);
+}
+/* desafio do dia: violeta bala */
+html[data-tema="anonovo"] :is(.pm-diario:not(.ativo),.pm-next,.pm-drawer-diario){
+  --c1:#c7a8ff;--c2:#8d5cf0;--c3:#6a3bd1;--edge:#442299;--glow:rgba(123,77,224,.38);--tx:#fff;
+  text-shadow:0 1px 1px rgba(40,10,100,.4);
+}
+html[data-tema="anonovo"] .pm-next{color:#fff!important}
+html[data-tema="anonovo"] .header-cta{--c1:#fffbea;--c2:#fff0bf;--c3:#ffe28c;--edge:#e6bf62;--glow:rgba(245,166,0,.2);--tx:#7a4b00}
+html[data-tema="anonovo"] .pm-login-cta{border-color:#e6cf8a;background:#fffbea}
+
+/* cabeçalho: faixa ouro e prata + bandeirinhas de festa */
+html[data-tema="anonovo"] :is(.site-header,.portal-header){
+  border-bottom:4px solid transparent;
+  border-image:repeating-linear-gradient(90deg,#ffc83d 0 16px,#fff1b8 16px 22px,#cfd8e8 22px 38px,#fff1b8 38px 44px) 1;
+}
+html[data-tema="anonovo"] :is(.site-header,.portal-header)::after{
+  content:"";
+  position:absolute;left:-4px;right:-4px;top:calc(100% + 4px);
+  height:24px;z-index:1;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='24' viewBox='0 0 140 24'%3E%3Cpath d='M0 2 Q14 7 28 2' fill='none' stroke='%238a96ab' stroke-width='1.5'/%3E%3Cpolygon points='3,3.4 25,3.4 14,22' fill='%23ffc83d'/%3E%3Cpolygon points='3,3.4 14,3.4 14,22' fill='%23fff' opacity='.3'/%3E%3Cpath d='M28 2 Q42 7 56 2' fill='none' stroke='%238a96ab' stroke-width='1.5'/%3E%3Cpolygon points='31,3.4 53,3.4 42,22' fill='%23ff5fa2'/%3E%3Cpolygon points='31,3.4 42,3.4 42,22' fill='%23fff' opacity='.3'/%3E%3Cpath d='M56 2 Q70 7 84 2' fill='none' stroke='%238a96ab' stroke-width='1.5'/%3E%3Cpolygon points='59,3.4 81,3.4 70,22' fill='%234aa8ff'/%3E%3Cpolygon points='59,3.4 70,3.4 70,22' fill='%23fff' opacity='.3'/%3E%3Cpath d='M84 2 Q98 7 112 2' fill='none' stroke='%238a96ab' stroke-width='1.5'/%3E%3Cpolygon points='87,3.4 109,3.4 98,22' fill='%239b6bff'/%3E%3Cpolygon points='87,3.4 98,3.4 98,22' fill='%23fff' opacity='.3'/%3E%3Cpath d='M112 2 Q126 7 140 2' fill='none' stroke='%238a96ab' stroke-width='1.5'/%3E%3Cpolygon points='115,3.4 137,3.4 126,22' fill='%23d9e1ee'/%3E%3Cpolygon points='115,3.4 126,3.4 126,22' fill='%23fff' opacity='.3'/%3E%3C/svg%3E") 0 0/140px 24px repeat-x;
+  animation:tema-balanco 3.2s ease-in-out infinite alternate;
+}
+@keyframes tema-balanco{from{transform:translateX(-3px)}to{transform:translateX(3px)}}
+
+/* chapéu de festa na logo do cabeçalho e do banner */
+html[data-tema="anonovo"] .brand::after{
+  content:"";
+  position:absolute;z-index:2;pointer-events:none;
+  left:calc(var(--logo-size) * .12);top:calc(50% - var(--logo-size) * .5 - var(--logo-size) * .32);
+  width:calc(var(--logo-size) * .74);height:calc(var(--logo-size) * .6);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 80'%3E%3Cpath d='M50 6 L82 74 Q50 82 18 74 Z' fill='%238d5cf0'/%3E%3Cpath d='M50 6 L34 40 L50 76 L18 74 Z' fill='%23fff' opacity='.16'/%3E%3Cpolygon points='36.8,34 63.2,34 68.8,44 31.2,44' fill='%23ffc83d'/%3E%3Cpolygon points='26.5,56 73.5,56 77.3,64 22.7,64' fill='%23ff5fa2'/%3E%3Cpath d='M18 74 Q50 84 82 74 Q50 69 18 74Z' fill='%23ffc83d'/%3E%3Ccircle cx='50' cy='7' r='7' fill='%23fff' stroke='%23e3d9ff' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat;
+  transform:rotate(12deg);
+  filter:drop-shadow(0 2px 2px rgba(10,37,64,.25));
+}
+html[data-tema="anonovo"] .tema-chapeu{
+  display:block;position:absolute;z-index:3;pointer-events:none;
+  left:calc(50% - var(--hero-logo) / 2 + var(--hero-logo) * .16);
+  top:calc(50% - var(--hero-logo) / 2 - var(--hero-logo) * .27);
+  width:calc(var(--hero-logo) * .66);height:calc(var(--hero-logo) * .53);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 80'%3E%3Cpath d='M50 6 L82 74 Q50 82 18 74 Z' fill='%238d5cf0'/%3E%3Cpath d='M50 6 L34 40 L50 76 L18 74 Z' fill='%23fff' opacity='.16'/%3E%3Cpolygon points='36.8,34 63.2,34 68.8,44 31.2,44' fill='%23ffc83d'/%3E%3Cpolygon points='26.5,56 73.5,56 77.3,64 22.7,64' fill='%23ff5fa2'/%3E%3Cpath d='M18 74 Q50 84 82 74 Q50 69 18 74Z' fill='%23ffc83d'/%3E%3Ccircle cx='50' cy='7' r='7' fill='%23fff' stroke='%23e3d9ff' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat;
+  transform:rotate(12deg);
+  filter:drop-shadow(0 4px 4px rgba(10,37,64,.28));
+}
+/* selo dourado com o ano (criado pelo js/tema.js) */
+.tema-ano{display:none}
+html[data-tema="anonovo"] .tema-ano{
+  display:block;position:absolute;z-index:3;pointer-events:none;
+  left:50%;bottom:calc(50% - var(--hero-logo) / 2 - 12px);
+  padding:5px 16px;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.45) 0,rgba(255,255,255,.12) 48%,rgba(255,255,255,0) 50%),linear-gradient(180deg,#ffeaa0 0,#ffc83d 55%,#f0a500 100%);
+  box-shadow:0 4px 0 #b87400,0 8px 12px rgba(245,166,0,.4),inset 0 2px 1px rgba(255,255,255,.8);
+  color:#4a2f00;font-family:var(--heading-font,Poppins,sans-serif);font-size:clamp(.95rem,2.2vw,1.35rem);font-weight:800;letter-spacing:.04em;line-height:1.2;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
+  transform:translateX(-50%) rotate(-4deg);
+}
+
+/* banner e detalhes da página inicial */
+html[data-tema="anonovo"] .hero{
+  background:linear-gradient(120deg,#fffaea 0%,#ffefc2 52%,#ebe5ff 100%);
+  border-color:#ecd9a0;
+}
+html[data-tema="anonovo"] .hero h1 span{color:#a85f00}
+html[data-tema="anonovo"] .hero-art:before{
+  box-shadow:inset 0 6px 12px #ffffffcc,inset 0 -14px 24px rgba(245,166,0,.16),0 14px 30px rgba(245,166,0,.16);
+}
+html[data-tema="anonovo"] .letter-a{background:#ffefba;color:#8a5a00}
+html[data-tema="anonovo"] .letter-o{background:#e6dcff;color:#5b2fc4}
+html[data-tema="anonovo"] .letter-m{background:#ffdcec;color:#a3174f}
+html[data-tema="anonovo"] .letter-r{background:#d9ecff;color:#1d5fb0}
+html[data-tema="anonovo"] .game-tag{background:#fff3cf;color:#8a5a00}
+html[data-tema="anonovo"] .play-link{color:#7b4de0}
+html[data-tema="anonovo"] .game-card:hover{border-color:#e6cf8a}
+html[data-tema="anonovo"] .portal-note{border-color:#ddd2fa;background:#f1ecff}
+html[data-tema="anonovo"] .note-icon{background:#e0d6ff;color:#6a3bd1}
+
+/* menu do cabeçalho (computador) */
+html[data-tema="anonovo"] .pm-dd.atual .pm-dd-btn{
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0,rgba(255,255,255,.16) 48%,rgba(255,255,255,0) 50%),linear-gradient(180deg,#fffbea 0,#ffefbd 55%,#ffe28c 100%);
+  color:#7a4b00;
+  box-shadow:0 3px 0 #e6bf62,0 7px 12px rgba(245,166,0,.2),inset 0 2px 1px rgba(255,255,255,.8),inset 0 -3px 5px rgba(245,166,0,.12);
+}
+html[data-tema="anonovo"] .site-header nav .pm-dd-menu a[aria-current="page"]{background:#fff3cf;color:#8a5a00}
+
+/* rodapé: azul-meia-noite com confete dourado e rosa no topo */
+html[data-tema="anonovo"] .corp-footer{position:relative;background:linear-gradient(180deg,#16255a 0,#0a1633 100%)}
+html[data-tema="anonovo"] .corp-footer::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:12px;pointer-events:none;
+  background:
+    radial-gradient(circle at 6px 6px,#ffc83d 0 3px,rgba(255,200,61,0) 4px) 0 0/26px 12px repeat-x,
+    radial-gradient(circle at 6px 6px,#ff5fa2 0 3px,rgba(255,95,162,0) 4px) 13px 0/26px 12px repeat-x;
+}
+html[data-tema="anonovo"] .corp-bottom{border-top-color:#ffffff26}
+
+/* jogo da memória: cartas viram surpresas */
+html[data-tema="anonovo"] .mem-costas{
+  background:linear-gradient(180deg,#c7a8ff 0,#8d5cf0 55%,#6a3bd1 100%);
+  box-shadow:0 4px 0 #442299,0 8px 10px rgba(123,77,224,.32),inset 0 2px 1px rgba(255,255,255,.65),inset 0 -4px 6px rgba(0,0,0,.18);
+  font-size:0;
+}
+html[data-tema="anonovo"] .mem-costas::after{content:"🎉";font-size:calc(var(--mc) * .46);line-height:1}
+
+/* confete caindo (criado pelo js/tema.js) */
+.tema-confete,.tema-fogos{position:fixed;inset:0;z-index:60;overflow:hidden;pointer-events:none}
+.tema-confete i{
+  position:absolute;top:-16px;left:var(--x);
+  width:var(--w);height:var(--h);border-radius:2px;
+  background:var(--c);box-shadow:0 0 0 1px rgba(10,37,64,.08);
+  opacity:.9;
+  animation:tema-confete var(--d) linear var(--a) infinite;
+}
+body[data-jogo] .tema-confete{opacity:.6}
+@keyframes tema-confete{
+  0%{transform:translate3d(0,-5vh,0) rotate(0) rotateX(0)}
+  100%{transform:translate3d(var(--dx),108vh,0) rotate(540deg) rotateX(720deg)}
+}
+/* fogos de artifício */
+.tema-fogo{position:absolute;width:0;height:0}
+.tema-fogo i{
+  position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;
+  background:var(--c);box-shadow:0 0 8px var(--c);
+  animation:tema-fogo 1.2s ease-out forwards;
+}
+@keyframes tema-fogo{
+  0%{transform:rotate(var(--a)) translateX(0) scale(1);opacity:1}
+  70%{opacity:1}
+  100%{transform:rotate(var(--a)) translateX(72px) scale(.4);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-tema="anonovo"] :is(.site-header,.portal-header)::after{animation:none}
+  .tema-confete,.tema-fogos{display:none}
+}
