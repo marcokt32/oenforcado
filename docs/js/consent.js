@@ -92,7 +92,8 @@
       gtag("js", new Date());
     }
     if (a && !carregado.ga) { carregado.ga = true; gtag("config", CONFIG.GA_ID); }
-    if (p && !carregado.ads) { carregado.ads = true; gtag("config", CONFIG.ADS_ID); }
+    // A tag do Google Ads (AW-) não é mais configurada aqui: ela arrastava o destino "portfolio marco" e enviava
+    // uma cópia dos page_view do jogo para a propriedade G-H9WVT78905. As conversões vêm do GA4 (level_end).
   }
 
   function carregarClarity(a, p) {
@@ -172,7 +173,6 @@
     injetarScript("https://www.googletagmanager.com/gtag/js?id=" + CONFIG.GA_ID, false);
     gtag("js", new Date());
     gtag("config", CONFIG.GA_ID);
-    gtag("config", CONFIG.ADS_ID);
     carregarAdsense();
   }
 
