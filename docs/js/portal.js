@@ -240,7 +240,8 @@
   }
 
   /* ---------- Filtros: categoria / dificuldade / desafio do dia ---------- */
-  function criarBotaoDiario(jogo, onToggle) {
+  const diariosAtivos = {}; // controle do botão do desafio do dia de cada jogo (id do jogo -> controle)
+  function criarBotaoDiario(jogo, onToggle, aoSair) {
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "button pm-diario";
     const ctl = {
@@ -250,6 +251,14 @@
         btn.textContent = ctl.ativo ? "↩ Voltar ao jogo livre" : "📅 Desafio do dia" + (feito ? " ✅" : "");
       }
     };
+    // Sai do desafio do dia sem começar outra partida: o jogo só vai sortear a próxima quando a pessoa pedir
+    ctl.sair = () => {
+      if (!ctl.ativo) return;
+      ctl.ativo = false; ctl.refresh();
+      try { sessionStorage.setItem("portal_livre_" + jogo, "1"); } catch (e) { }
+      if (aoSair) aoSair();
+    };
+    diariosAtivos[jogo] = ctl;
     btn.addEventListener("click", () => {
       ctl.ativo = !ctl.ativo; ctl.refresh();
       try { sessionStorage.setItem("portal_livre_" + jogo, ctl.ativo ? "0" : "1"); } catch (e) { }
@@ -289,7 +298,7 @@
       }
     };
     const mudou = () => { atualizar(); onChange(ctl.estado()); };
-    const diario = criarBotaoDiario(jogo, ativo => { st.diario = ativo; mudou(); });
+    const diario = criarBotaoDiario(jogo, ativo => { st.diario = ativo; mudou(); }, () => { st.diario = false; atualizar(); });
     el.insertBefore(diario.el, info);
     st.diario = diario.ativo;
     atualizar();
@@ -388,6 +397,8 @@
     div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + cta + proximo + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
     div.querySelector(".pm-share").addEventListener("click", e => compartilhar(jogo, texto, e.currentTarget));
     container.appendChild(div);
+    // concluiu o desafio do dia: o próximo "jogar novamente" já é jogo livre (derrota não conclui, então o desafio continua)
+    if (info && diariosAtivos[jogo]) diariosAtivos[jogo].sair();
     // vitória: pop-up logo após o último movimento (derrotas continuam só com o quadro)
     if (info) setTimeout(() => abrirVitoria({ container, jogo, texto, msg, cta, proximo }), 350);
   }
