@@ -1,5 +1,9 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
+// Atualizado em 07/11/2026 (v1.0.13)
+//  - v1.0.11: limite de dicas por partida (MAX_DICAS / Portal.maxDicas)
+//  - v1.0.12: desafio do dia concluído não pode ser jogado de novo; pop-up com "modo livre" ou "próximo desafio"
+//  - v1.0.13: corrige ReferenceError na toolbar (diario usado antes de ser criado); remove código morto (diariosAtivos)
 (() => {
   "use strict";
 
@@ -21,6 +25,9 @@
   ];
   const KEY = "portal_v2";
   const BONUS_DIARIO = 50;
+  // Atualizado em 07/11/2026 (v1.0.11): limite de dicas por partida, um valor por jogo.
+  // Jogo que não está na tabela não tem dicas. A forca já limita a 1 dica por palavra no próprio jogo.
+  const MAX_DICAS = { caca: 3, forca: 1 };
   const SITE = "https://oenforcado.com";
 
   const $ = id => document.getElementById(id);
@@ -216,11 +223,16 @@
   }
   // A primeira visão de uma página de jogo é o desafio do dia. Exceções: o desafio de hoje já foi feito neste jogo,
   // a pessoa escolheu "Voltar ao jogo livre" nesta sessão, ou é uma página de categoria/tema (que mantém o foco dela).
-  // ?desafio=dia força o desafio em qualquer página.
+  // ?desafio=dia força o desafio em qualquer página, exceto se já foi concluído hoje.
+  // Atualizado em 07/11/2026 (v1.0.12)
   function modoDiarioInicial(jogo) {
+    // Desafio já concluído hoje: nunca abre em modo diário, nem com ?desafio=dia (nesse caso mostra o aviso)
+    if (diarioConcluido(jogo)) {
+      try { if (new URLSearchParams(location.search).get("desafio") === "dia") setTimeout(() => abrirDiarioConcluido(jogo), 400); } catch (e) { }
+      return false;
+    }
     try { if (new URLSearchParams(location.search).get("desafio") === "dia") return true; } catch (e) { }
     if (document.body.dataset.categoria || document.body.dataset.tema) return false;
-    if (diarioConcluido(jogo)) return false;
     try { if (sessionStorage.getItem("portal_livre_" + jogo) === "1") return false; } catch (e) { }
     return true;
   }
@@ -239,27 +251,30 @@
     }
   }
 
-  /* ---------- Filtros: categoria / dificuldade / desafio do dia ---------- */
-  const diariosAtivos = {}; // controle do botão do desafio do dia de cada jogo (id do jogo -> controle)
-  function criarBotaoDiario(jogo, onToggle, aoSair) {
+  /* ---------- Desafio do dia: botão, bloqueio após concluir e aviso (v1.0.12, 07/11/2026) ---------- */
+  const controlesDiario = {}; // id do jogo -> controle do botão do desafio do dia
+
+  function criarBotaoDiario(jogo, onToggle) {
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "button pm-diario";
     const ctl = {
-      el: btn, ativo: modoDiarioInicial(jogo), refresh() {
+      el: btn, ativo: modoDiarioInicial(jogo), aoSincronizar: null, refresh() {
         const feito = diarioConcluido(jogo);
         btn.classList.toggle("ativo", ctl.ativo);
         btn.textContent = ctl.ativo ? "↩ Voltar ao jogo livre" : "📅 Desafio do dia" + (feito ? " ✅" : "");
+      },
+      // Sai do modo diário sem reiniciar o jogo (chamado ao concluir o desafio)
+      encerrar() {
+        ctl.ativo = false;
+        try { sessionStorage.setItem("portal_livre_" + jogo, "1"); } catch (e) { }
+        ctl.refresh();
+        if (ctl.aoSincronizar) ctl.aoSincronizar(false);
       }
     };
-    // Sai do desafio do dia sem começar outra partida: o jogo só vai sortear a próxima quando a pessoa pedir
-    ctl.sair = () => {
-      if (!ctl.ativo) return;
-      ctl.ativo = false; ctl.refresh();
-      try { sessionStorage.setItem("portal_livre_" + jogo, "1"); } catch (e) { }
-      if (aoSair) aoSair();
-    };
-    diariosAtivos[jogo] = ctl;
+    controlesDiario[jogo] = ctl;
     btn.addEventListener("click", () => {
+      // Desafio de hoje já concluído: não deixa jogar de novo, mostra o aviso
+      if (!ctl.ativo && diarioConcluido(jogo)) { abrirDiarioConcluido(jogo); return; }
       ctl.ativo = !ctl.ativo; ctl.refresh();
       try { sessionStorage.setItem("portal_livre_" + jogo, ctl.ativo ? "0" : "1"); } catch (e) { }
       onToggle(ctl.ativo);
@@ -268,6 +283,28 @@
     return ctl;
   }
 
+  function fecharAvisoDiario() { const o = $("pm-diario-ok"); if (o) o.remove(); }
+
+  // Aviso: desafio de hoje já concluído. Opções: próximo desafio do dia ou modo livre.
+  function abrirDiarioConcluido(jogo) {
+    fecharAvisoDiario();
+    const prox = JOGOS.find(j => j.id !== jogo && !diarioConcluido(j.id));
+    const o = document.createElement("div");
+    o.id = "pm-diario-ok"; o.className = "pm-overlay";
+    o.innerHTML = `<div class="pm-modal pm-win" role="dialog" aria-modal="true" aria-labelledby="pm-dok-t">` +
+      `<button type="button" class="pm-fechar" aria-label="Fechar">✕</button>` +
+      `<div class="pm-win-emoji" aria-hidden="true">✅</div><h2 id="pm-dok-t">Desafio de hoje concluído</h2>` +
+      `<p class="pm-win-detalhe">O desafio do dia deste jogo só rende XP uma vez por dia. O próximo libera amanhã.</p>` +
+      (prox ? `<a class="pm-next" href="${prox.url}?desafio=dia">📅 Próximo desafio do dia: ${esc(prox.nome)} →</a>`
+        : `<p class="pm-xp">🎉 Você concluiu todos os desafios de hoje!</p>`) +
+      `<button type="button" class="pm-win-nova" data-acao="livre">🎮 Jogar modo livre</button></div>`;
+    document.body.appendChild(o);
+    o.addEventListener("click", e => { if (e.target === o || e.target.closest(".pm-fechar") || e.target.closest("[data-acao='livre']")) fecharAvisoDiario(); });
+    const foco = o.querySelector(".pm-next") || o.querySelector(".pm-win-nova");
+    if (foco) foco.focus();
+  }
+
+  /* ---------- Filtros: categoria / dificuldade / desafio do dia ---------- */
   function toolbar(el, cfg) {
     const { jogo, categorias, dificuldades, onChange } = cfg;
     const prefs = ler().prefs[jogo] || {};
@@ -298,7 +335,9 @@
       }
     };
     const mudou = () => { atualizar(); onChange(ctl.estado()); };
-    const diario = criarBotaoDiario(jogo, ativo => { st.diario = ativo; mudou(); }, () => { st.diario = false; atualizar(); });
+    const diario = criarBotaoDiario(jogo, ativo => { st.diario = ativo; mudou(); });
+    // v1.0.13: precisa vir DEPOIS de criar o "diario" (antes causava ReferenceError e quebrava a toolbar)
+    diario.aoSincronizar = ativo => { st.diario = ativo; atualizar(); };
     el.insertBefore(diario.el, info);
     st.diario = diario.ativo;
     atualizar();
@@ -352,14 +391,14 @@
   function fecharVitoria() { const o = $("pm-vitoria"); if (o) o.remove(); }
 
   // Pop-up de vitória: mostra o resultado (o mesmo do quadro verde) com compartilhar e o próximo desafio em destaque
-  function abrirVitoria({ container, jogo, texto, msg, cta, proximo }) {
+  function abrirVitoria({ container, jogo, texto, msg, cta, proximo, diarioFeito }) {
     fecharVitoria();
     const t = container.querySelector("strong, h2, h3");
     const d = Array.from(container.querySelectorAll("span, p")).find(el => !el.closest(".pm-extra") && el.textContent.trim());
     const nova = Array.from(container.querySelectorAll("button")).find(b => !b.closest(".pm-extra"));
     const o = document.createElement("div");
     o.id = "pm-vitoria"; o.className = "pm-overlay";
-    o.innerHTML = montarVitoriaHTML({ titulo: t ? t.textContent : "Parabéns!", detalhe: d ? d.textContent : "", msg, cta, proximo, nova: nova ? nova.textContent : "" });
+    o.innerHTML = montarVitoriaHTML({ titulo: t ? t.textContent : "Parabéns!", detalhe: d ? d.textContent : "", msg, cta, proximo, nova: nova ? (diarioFeito ? "🎮 Jogar modo livre" : nova.textContent) : "" });
     document.body.appendChild(o);
     o.addEventListener("click", e => {
       if (e.target === o || e.target.closest(".pm-fechar")) fecharVitoria();
@@ -397,10 +436,13 @@
     div.innerHTML = (msg ? `<p class="pm-xp">${msg}</p>` : "") + cta + proximo + `<button type="button" class="pm-share">📤 Compartilhar</button>`;
     div.querySelector(".pm-share").addEventListener("click", e => compartilhar(jogo, texto, e.currentTarget));
     container.appendChild(div);
-    // concluiu o desafio do dia: o próximo "jogar novamente" já é jogo livre (derrota não conclui, então o desafio continua)
-    if (info && diariosAtivos[jogo]) diariosAtivos[jogo].sair();
     // vitória: pop-up logo após o último movimento (derrotas continuam só com o quadro)
-    if (info) setTimeout(() => abrirVitoria({ container, jogo, texto, msg, cta, proximo }), 350);
+    // v1.0.12: se concluiu o desafio do dia, o jogo sai do modo diário e o pop-up oferece modo livre ou próximo desafio
+    const diarioFeito = !!info && (info.bonus > 0 || info.repetido);
+    if (info) setTimeout(() => {
+      if (diarioFeito && controlesDiario[jogo]) controlesDiario[jogo].encerrar();
+      abrirVitoria({ container, jogo, texto, msg, cta, proximo, diarioFeito });
+    }, 350);
   }
 
   /* ---------- Cabeçalho (igual em todos os jogos) ---------- */
@@ -599,7 +641,7 @@
     if (e.key !== "Escape") return;
     const dd = document.querySelector(".pm-dd.aberto");
     if (dd) { const b = dd.querySelector(".pm-dd-btn"); fecharDropdowns(); if (b) b.focus(); }
-    fecharRanking(); fecharPerfil(); fecharVitoria(); fecharMenu();
+    fecharRanking(); fecharPerfil(); fecharVitoria(); fecharAvisoDiario(); fecharMenu();
   });
 
   // Depois do login, troca o convite do pop-up de vitória por uma confirmação
@@ -629,5 +671,5 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar); else iniciar();
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => { }));
 
-  window.Portal = { toolbar, criarBotaoDiario, concluir, anexarFim, compartilhar, rngDiario, diarioConcluido, hoje, toast, abrirRanking };
+  window.Portal = { toolbar, criarBotaoDiario, concluir, anexarFim, compartilhar, rngDiario, diarioConcluido, hoje, toast, abrirRanking, maxDicas: jogo => MAX_DICAS[jogo] || 0 };
 })();

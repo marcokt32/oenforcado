@@ -61,3 +61,92 @@ select { min-height: 43px; min-width: 155px; padding: 0 12px; border: 1px solid 
  .letra-celula { border-radius: 3px; font-size: clamp(.58rem, 3vw, .9rem); }
  .site-footer { flex-direction: column; text-align: center; }
 }
+
+/* ============================================================
+   Atualizado em 07/11/2026 (v1.1.0)
+   - Lista "Palavras para encontrar" vira referência (sem aparência de botão)
+   - Estilo da célula de dica (primeira letra piscando em amarelo)
+   ============================================================ */
+
+/* Lista como referência: sem relevo, sem fundo, sem cursor de clique.
+   Seletores mais específicos para vencer o candy.css (carregado depois). */
+.word-panel .lista-palavras { gap: 4px; }
+.word-panel .lista-palavras li,
+.word-panel .lista-palavras li.encontrada {
+  background: none;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 2px 4px 18px;
+  position: relative;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: #34445a;
+}
+.word-panel .lista-palavras li::before {
+  content: "•";
+  position: absolute;
+  left: 4px;
+  color: #9fb0c6;
+}
+.word-panel .lista-palavras li.encontrada { color: var(--green); }
+.word-panel .lista-palavras li.encontrada::before { content: "✓"; color: var(--green); left: 2px; }
+
+/* Dica: primeira letra da palavra pisca em amarelo */
+.letra-celula.dica {
+  background: #fde047;
+  border-color: #f59e0b;
+  color: #5b3a00;
+  animation: cp-dica 1s ease-in-out infinite;
+}
+@keyframes cp-dica {
+  0%, 100% { background: #fff; border-color: #f59e0b; box-shadow: 0 0 0 0 rgba(245, 158, 11, .55); }
+  50% { background: #fde047; border-color: #f59e0b; box-shadow: 0 0 0 5px rgba(245, 158, 11, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .letra-celula.dica { animation: none; background: #fde047; box-shadow: 0 0 0 3px #f59e0b; }
+}
+
+/* ============================================================
+   Atualizado em 07/11/2026 (v1.1.1)
+   No computador, a grade nunca passa da altura da tela
+   (descontado o cabeçalho fixo). No celular nada muda.
+   ============================================================ */
+.puzzle-layout {
+    --cp-header: 80px;
+}
+
+/* altura do cabeçalho + folga; ajuste se precisar */
+
+@media (min-width: 681px) {
+    .grade {
+        width: min(90%, max(280px, calc(100vh - var(--cp-header))));
+        width: min(90%, max(280px, calc(100dvh - var(--cp-header))));
+        justify-self: center;
+        /* se a grade encolher, fica centralizada na coluna */
+    }
+}
+
+/* ============================================================
+   Atualizado em 07/11/2026 (v1.1.1)
+   No computador, a grade nunca passa da altura da tela
+   (descontado o cabeçalho fixo). No celular nada muda.
+   ============================================================ */
+.puzzle-layout {
+    --cp-header: 80px;
+}
+
+/* altura do cabeçalho + folga; ajuste se precisar */
+
+@media (min-width: 681px) {
+    .grade {
+        width: min(90%, max(280px, calc(100vh - var(--cp-header))));
+        width: min(90%, max(280px, calc(100dvh - var(--cp-header))));
+        justify-self: center;
+        /* se a grade encolher, fica centralizada na coluna */
+    }
+}
