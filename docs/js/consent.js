@@ -69,6 +69,24 @@
     } catch (e) { return null; }
   }
 
+  /* ---------- Adiar scripts pesados (melhora o INP) ----------
+     v1.0.2 (12/11/2026): Clarity espera a primeira interação (ou 6 s); AdSense espera o navegador ficar ocioso (ou 2,5 s). */
+  function aoInteragir(fn, limiteMs) {
+    var feito = false;
+    var evs = ["pointerdown", "keydown", "scroll", "touchstart"];
+    function rodar() {
+      if (feito) { return; }
+      feito = true;
+      for (var i = 0; i < evs.length; i++) { w.removeEventListener(evs[i], rodar, true); }
+      fn();
+    }
+    for (var i = 0; i < evs.length; i++) { w.addEventListener(evs[i], rodar, { capture: true, passive: true, once: true }); }
+    setTimeout(rodar, limiteMs);
+  }
+  function aoOcioso(fn, limiteMs) {
+    if (w.requestIdleCallback) { w.requestIdleCallback(fn, { timeout: limiteMs }); } else { setTimeout(fn, limiteMs); }
+  }
+
   /* ---------- Carregamento condicional das tags ---------- */
   function injetarScript(src, cors) {
     var s = d.createElement("script");
@@ -81,7 +99,10 @@
   function carregarAdsense() {
     if (carregado.adsense) { return; }
     carregado.adsense = true;
-    injetarScript("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + CONFIG.ADSENSE_CLIENT, true);
+    var url = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + CONFIG.ADSENSE_CLIENT;
+    // os anúncios do HTML já estão na fila (adsbygoogle.push) e aparecem quando o script chegar
+    if (d.readyState === "complete") { aoOcioso(function () { injetarScript(url, true); }, 2500); }
+    else { w.addEventListener("load", function () { aoOcioso(function () { injetarScript(url, true); }, 2500); }, { once: true }); }
   }
 
   function carregarGtag(a, p) {
@@ -100,11 +121,12 @@
     if (!a || !CONFIG.CLARITY_ID) { return; }
     if (!carregado.clarity) {
       carregado.clarity = true;
-      (function (c, l, n, r, i) {
-        c[n] = c[n] || function () { (c[n].q = c[n].q || []).push(arguments); };
-        var t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-        var y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-      })(w, d, "clarity", "script", CONFIG.CLARITY_ID);
+      // o "stub" nasce já, então eventos e consentv2 entram na fila; o script pesado só baixa na primeira interação
+      w.clarity = w.clarity || function () { (w.clarity.q = w.clarity.q || []).push(arguments); };
+      aoInteragir(function () {
+        var t = d.createElement("script"); t.async = 1; t.src = "https://www.clarity.ms/tag/" + CONFIG.CLARITY_ID;
+        var y = d.getElementsByTagName("script")[0]; y.parentNode.insertBefore(t, y);
+      }, 6000);
     }
     w.clarity("consentv2", {
       ad_Storage: p ? "granted" : "denied",

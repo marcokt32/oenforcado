@@ -164,3 +164,25 @@ main{flex:1 0 auto}
 .pm-perfil-salvar:disabled{opacity:.6;cursor:default}
 .pm-perfil-cancelar{border:1px solid var(--pm-line);background:#fff;color:var(--pm-ink)}
 .pm-perfil-cancelar:hover{background:#f6f8fc}
+
+/* ===== Correções de CLS (12/11/2026) =====
+   Cole NO FINAL do css/portal-shell.css (ou salve como css/cls-fix.css e linke depois do menu.css). */
+
+/* Cabeçalho: altura fixa para não "pular" quando o portal.js monta os menus */
+.site-header,.portal-header{min-height:72px}
+.portal-header{min-height:76px}
+
+/* Área de login/avatar: reserva o lugar antes do Firebase Auth responder */
+.header-actions{min-height:42px;min-width:138px;justify-content:flex-end}
+.pm-ph{display:inline-block;width:92px;height:42px;flex:none}
+@media(max-width:700px){.header-actions{min-width:130px}.pm-ph{width:42px}}
+@media(max-width:420px){.pm-ph{width:62px}}
+
+/* Barra de ferramentas montada por JS (forca, deslizante...) */
+#toolbar{min-height:70px}
+@media(max-width:600px){#toolbar{min-height:150px}}
+
+/* Anúncio: reserva a altura típica para não empurrar o texto de SEO.
+   Se não houver anúncio, o :has() existente esconde o espaço. */
+.ad-slot{min-height:280px}
+@media(min-width:768px){.ad-slot{min-height:120px}}

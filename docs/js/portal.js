@@ -1,6 +1,8 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
-// Atualizado em 07/11/2026 (v1.0.13)
+// Atualizado em 12/11/2026 (v1.0.14)
+//  - v1.0.14: Damas adicionado ao menu (sem desafio do dia: fica fora das sugestões de desafio)
+//  - v1.0.14: desempenho (INP): firebase-messaging carregado sob demanda; analytics/Firebase adiados após a jogada; espaço reservado para login (CLS)
 //  - v1.0.11: limite de dicas por partida (MAX_DICAS / Portal.maxDicas)
 //  - v1.0.12: desafio do dia concluído não pode ser jogado de novo; pop-up com "modo livre" ou "próximo desafio"
 //  - v1.0.13: corrige ReferenceError na toolbar (diario usado antes de ser criado); remove código morto (diariosAtivos)
@@ -15,9 +17,11 @@
     { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html", cat: "palavras" },
     { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html", cat: "logica" },
     { id: "logicagrega", nome: "Lógica grega", url: "/logica-grega.html", cat: "logica" },
+    { id: "damas", nome: "Damas", url: "/damas.html", cat: "logica", diario: false }, // diario:false = não participa do desafio do dia
     { id: "memoria", nome: "Jogo da memória", url: "/memoria.html", cat: "puzzle" },
     { id: "deslizante", nome: "Quebra-cabeça deslizante", url: "/deslizante.html", cat: "puzzle" }
   ];
+  const JOGOS_DIARIO = JOGOS.filter(j => j.diario !== false); // jogos que têm desafio do dia
   const CATEGORIAS = [
     { id: "palavras", nome: "Palavras", icone: "🔤" },
     { id: "logica", nome: "Lógica", icone: "🧩" },
@@ -31,6 +35,22 @@
   const SITE = "https://oenforcado.com";
 
   const $ = id => document.getElementById(id);
+  // v1.0.14: roda depois que o navegador pintou a resposta da jogada (melhora o INP)
+  const adiar = fn => setTimeout(fn, 0);
+  // v1.0.14: o firebase-messaging (só usado nos avisos) é baixado sob demanda. Se o HTML ainda o carrega, usa o que já existe.
+  let msgPromessa = null;
+  function carregarMessaging() {
+    if (window.firebase && firebase.messaging) return Promise.resolve(firebase.messaging);
+    if (!msgPromessa) msgPromessa = new Promise((ok, erro) => {
+      const s = document.createElement("script");
+      s.src = "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js";
+      s.onload = () => ok(firebase.messaging);
+      s.onerror = () => { msgPromessa = null; erro(new Error("messaging indisponível")); };
+      document.head.appendChild(s);
+    });
+    return msgPromessa;
+  }
+  const mensagens = async () => { await carregarMessaging(); return firebase.messaging(); };
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Estado local (vale sem login) ---------- */
@@ -94,9 +114,10 @@
     // Ao sair, este aparelho deixa de receber os avisos da conta (o token é removido antes do signOut, que exige login)
     if (u && localStorage.getItem(FLAG_NOTIF) === "1" && "Notification" in window && Notification.permission === "granted") {
       try {
-        const token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready });
+        const m = await mensagens();
+        const token = await m.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready });
         if (token) await db.ref("tokens/" + u.uid + "/" + token).remove();
-        await firebase.messaging().deleteToken();
+        await m.deleteToken();
       } catch (e) { console.error("Erro ao remover o token ao sair:", e); }
     }
     localStorage.removeItem(FLAG_NOTIF);
@@ -141,7 +162,7 @@
     }
     if (Notification.permission !== "granted") return false;
     const registro = await navigator.serviceWorker.ready;
-    const token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registro });
+    const token = await (await mensagens()).getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registro });
     if (!token || /[.$#\[\]\/]/.test(token)) return false;
     // Um token por aparelho: tokens/{uid}/{token}, para que vários aparelhos da mesma conta recebam os avisos
     await db.ref("tokens/" + u.uid + "/" + token).set(Date.now());
@@ -155,8 +176,8 @@
     try {
       if (notifAtivas()) {
         let token = null;
-        try { token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready }); } catch (e) { }
-        try { await firebase.messaging().deleteToken(); } catch (e) { }
+        try { token = await (await mensagens()).getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: await navigator.serviceWorker.ready }); } catch (e) { }
+        try { await (await mensagens()).deleteToken(); } catch (e) { }
         if (token) await db.ref("tokens/" + u.uid + "/" + token).remove(); // só este aparelho
         localStorage.removeItem(FLAG_NOTIF);
         toast("Avisos desativados.");
@@ -172,13 +193,18 @@
 
   function iniciarNotificacoes() {
     try {
-      if (!("Notification" in window) || !("serviceWorker" in navigator) || !firebase.messaging) return;
-      Promise.resolve(firebase.messaging.isSupported()).then(ok => {
-        notifOk = !!ok;
-        if (!ok) return;
-        firebase.messaging().onMessage(m => { const n = (m && m.notification) || {}; toast((n.title ? n.title + ": " : "") + (n.body || "")); });
-        renderAcoes();
-      }).catch(() => { });
+      // v1.0.14: sem baixar o messaging agora. Só checa o suporte básico para mostrar o botão de avisos no menu.
+      if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+      notifOk = true;
+      renderAcoes();
+      // Quem já ativou os avisos recebe as mensagens com o site aberto: carrega o messaging quando o navegador estiver ocioso
+      if (notifAtivas()) {
+        const ligar = () => carregarMessaging().then(() => firebase.messaging.isSupported()).then(ok => {
+          if (!ok) return;
+          firebase.messaging().onMessage(m => { const n = (m && m.notification) || {}; toast((n.title ? n.title + ": " : "") + (n.body || "")); });
+        }).catch(() => { });
+        if (window.requestIdleCallback) requestIdleCallback(ligar, { timeout: 4000 }); else setTimeout(ligar, 3000);
+      }
     } catch (e) { }
   }
 
@@ -204,13 +230,17 @@
     const j = d.jogos[jogo] = d.jogos[jogo] || { xp: 0, partidas: 0 };
     j.xp += ganho; j.partidas++;
     salvar(d);
-    enviarXP(d.xp);
-    if (typeof gtag === "function") gtag("event", "level_end", { level_name: jogo, success: true, daily: !!diario });
-    if (typeof clarity === "function") {
-      clarity("set", "jogo", jogo);
-      clarity("set", "modo", diario ? "diario" : "livre");
-      clarity("event", "partida_concluida");
-    }
+    // v1.0.14: rede e medições saem da tarefa da última jogada, para a tela responder primeiro
+    const xpTotal = d.xp;
+    adiar(() => {
+      enviarXP(xpTotal);
+      if (typeof gtag === "function") gtag("event", "level_end", { level_name: jogo, success: true, daily: !!diario });
+      if (typeof clarity === "function") {
+        clarity("set", "jogo", jogo);
+        clarity("set", "modo", diario ? "diario" : "livre");
+        clarity("event", "partida_concluida");
+      }
+    });
     return { ganho, bonus, repetido, total: d.xp, streak: d.streak.atual };
   }
 
@@ -238,8 +268,8 @@
   }
   function irParaDiario() {
     const atual = jogoAtualId();
-    const alvo = (atual && !diarioConcluido(atual)) ? JOGOS.find(j => j.id === atual)
-      : JOGOS.find(j => j.id !== atual && !diarioConcluido(j.id));
+    const alvo = (atual && !diarioConcluido(atual)) ? JOGOS_DIARIO.find(j => j.id === atual)
+      : JOGOS_DIARIO.find(j => j.id !== atual && !diarioConcluido(j.id));
     if (!alvo) { toast("Você já concluiu todos os desafios de hoje! 🎉"); return; }
     try { sessionStorage.removeItem("portal_livre_" + alvo.id); } catch (e) { }
     if (alvo.id === atual) {
@@ -288,7 +318,7 @@
   // Aviso: desafio de hoje já concluído. Opções: próximo desafio do dia ou modo livre.
   function abrirDiarioConcluido(jogo) {
     fecharAvisoDiario();
-    const prox = JOGOS.find(j => j.id !== jogo && !diarioConcluido(j.id));
+    const prox = JOGOS_DIARIO.find(j => j.id !== jogo && !diarioConcluido(j.id));
     const o = document.createElement("div");
     o.id = "pm-diario-ok"; o.className = "pm-overlay";
     o.innerHTML = `<div class="pm-modal pm-win" role="dialog" aria-modal="true" aria-labelledby="pm-dok-t">` +
@@ -356,8 +386,10 @@
   async function compartilhar(jogoId, texto, btn) {
     const jogo = JOGOS.find(j => j.id === jogoId) || JOGOS[0];
     const url = SITE + jogo.url + "?utm_source=compartilhar";
-    if (typeof clarity === "function") clarity("event", "compartilhar");
-    if (typeof gtag === "function") gtag("event", "share", { method: navigator.share ? "nativo" : "copiar", content_type: "game_result", item_id: jogoId });
+    adiar(() => {
+      if (typeof clarity === "function") clarity("event", "compartilhar");
+      if (typeof gtag === "function") gtag("event", "share", { method: navigator.share ? "nativo" : "copiar", content_type: "game_result", item_id: jogoId });
+    });
     if (navigator.share) {
       try { await navigator.share({ title: "O Enforcado", text: texto, url }); return; }
       catch (e) { if (e && e.name === "AbortError") return; }
@@ -371,11 +403,11 @@
   function linkDiario(jogo, acabouDiario) {
     const link = rotulo => { const j = rotulo.jogo; return `<a class="pm-next" href="${j.url}?desafio=dia">${rotulo.texto} ${esc(j.nome)} →</a>`; };
     if (acabouDiario) {
-      const prox = JOGOS.find(j => j.id !== jogo && !diarioConcluido(j.id));
+      const prox = JOGOS_DIARIO.find(j => j.id !== jogo && !diarioConcluido(j.id));
       return prox ? link({ jogo: prox, texto: "📅 Próximo desafio do dia:" }) : `<p class="pm-xp">🎉 Você concluiu todos os desafios de hoje!</p>`;
     }
     // vitória no jogo livre: incentiva o desafio que ainda falta (pode ser o do próprio jogo)
-    const pend = JOGOS.find(j => !diarioConcluido(j.id));
+    const pend = JOGOS_DIARIO.find(j => !diarioConcluido(j.id));
     return pend ? link({ jogo: pend, texto: "📅 Desafio do dia pendente:" }) : "";
   }
 
@@ -473,7 +505,7 @@
     const u = auth.currentUser;
     let html = `<button type="button" class="pm-icon" data-pm="diario" aria-label="Desafio do dia" title="Desafio do dia">📅</button>` +
       `<button type="button" class="pm-icon" data-pm="ranking" aria-label="Ranking global" title="Ranking global">🏆</button>`;
-    if (!authPronto) { el.innerHTML = html; return; }
+    if (!authPronto) { el.innerHTML = html + `<span class="pm-ph" aria-hidden="true"></span>`; return; } // v1.0.14: reserva o lugar do login/avatar (CLS)
     if (u) {
       const perfil = perfilAtual(u);
       const foto = `<img src="${esc(perfil.avatar)}" alt="" referrerpolicy="no-referrer">`;
