@@ -174,6 +174,82 @@ function ovos() {
   document.body.appendChild(caixa);
 }
 
+/* Páscoa: coelho no canto inferior direito.
+   Sobe da borda, olha para o jogador, olha para o jogo, saca uma cenoura, morde e vai embora.
+   A animação dura 14 s (variável --t no CSS) e se repete a cada 2 a 3 minutos.
+   Prévia rápida (repete a cada 12 s):  ?tema=pascoa&coelho=teste */
+const COELHO_SVG =
+  '<svg viewBox="0 0 140 150" focusable="false" aria-hidden="true">' +
+  '<defs>' +
+  '<linearGradient id="cn-pelo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#eadcf7"/></linearGradient>' +
+  '<linearGradient id="cn-rosa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd3e6"/><stop offset="1" stop-color="#ff9fcb"/></linearGradient>' +
+  '<linearGradient id="cn-lar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb85e"/><stop offset="1" stop-color="#f26a10"/></linearGradient>' +
+  '</defs>' +
+  /* corpo e pata esquerda */
+  '<ellipse cx="62" cy="148" rx="40" ry="38" fill="url(#cn-pelo)" stroke="#cdb5e8" stroke-width="1.6"/>' +
+  '<ellipse cx="62" cy="152" rx="22" ry="22" fill="#fff" opacity=".8"/>' +
+  '<ellipse cx="38" cy="133" rx="9" ry="7.5" fill="url(#cn-pelo)" stroke="#cdb5e8" stroke-width="1.4"/>' +
+  /* cabeça */
+  '<g class="cn-cabeca"><g class="cn-mastiga">' +
+  '<g class="cn-orelha e"><ellipse cx="48" cy="42" rx="10.5" ry="29" transform="rotate(-8 48 42)" fill="url(#cn-pelo)" stroke="#cdb5e8" stroke-width="1.6"/><ellipse cx="48" cy="45" rx="5" ry="21" transform="rotate(-8 48 45)" fill="url(#cn-rosa)"/></g>' +
+  '<g class="cn-orelha d"><ellipse cx="76" cy="42" rx="10.5" ry="29" transform="rotate(8 76 42)" fill="url(#cn-pelo)" stroke="#cdb5e8" stroke-width="1.6"/><ellipse cx="76" cy="45" rx="5" ry="21" transform="rotate(8 76 45)" fill="url(#cn-rosa)"/></g>' +
+  '<ellipse cx="62" cy="92" rx="31" ry="26" fill="url(#cn-pelo)" stroke="#cdb5e8" stroke-width="1.6"/>' +
+  '<ellipse cx="53" cy="77" rx="13" ry="5.5" fill="#fff" opacity=".8"/>' +
+  '<circle class="cn-bochecha b1" cx="43" cy="99" r="5.5" fill="#ffb3d5" opacity=".7"/>' +
+  '<circle class="cn-bochecha b2" cx="81" cy="99" r="5.5" fill="#ffb3d5" opacity=".7"/>' +
+  '<g class="cn-olho o1"><circle cx="51" cy="90" r="6.6" fill="#fff" stroke="#cdb5e8" stroke-width=".8"/><g class="cn-pupila"><circle cx="51" cy="90.4" r="3.7" fill="#0a2540"/><circle cx="49.8" cy="89" r="1.2" fill="#fff"/></g></g>' +
+  '<g class="cn-olho o2"><circle cx="73" cy="90" r="6.6" fill="#fff" stroke="#cdb5e8" stroke-width=".8"/><g class="cn-pupila"><circle cx="73" cy="90.4" r="3.7" fill="#0a2540"/><circle cx="71.8" cy="89" r="1.2" fill="#fff"/></g></g>' +
+  '<path d="M40 98L28 95M40 101L28 103M84 98L96 95M84 101L96 103" stroke="#cdb5e8" stroke-width="1.2" stroke-linecap="round" fill="none"/>' +
+  '<ellipse cx="62" cy="98" rx="3.2" ry="2.4" fill="#ff7fb3"/>' +
+  '<g class="cn-boca"><path d="M62 100.4v2.6M62 103q-3.6 3.4-7 .2M62 103q3.6 3.4 7 .2" fill="none" stroke="#b5476f" stroke-width="1.6" stroke-linecap="round"/></g>' +
+  '</g></g>' +
+  /* migalhas */
+  '<g class="cn-migalhas" fill="#ff8a2a">' +
+  '<circle cx="54" cy="104" r="1.9" style="--dx:-12px;--dy:16px"/><circle cx="58" cy="106" r="1.5" style="--dx:-4px;--dy:22px"/>' +
+  '<circle cx="66" cy="106" r="1.7" style="--dx:8px;--dy:20px"/><circle cx="70" cy="103" r="1.4" style="--dx:15px;--dy:13px"/>' +
+  '</g>' +
+  /* cenoura + pata direita */
+  '<g class="cn-cenoura"><g transform="translate(85 114) rotate(28)">' +
+  '<path d="M33 0Q42-11 56-9Q50-1 33 0Z" fill="#3fc06b"/><path d="M33 0Q44 2 57 9Q44 11 33 0Z" fill="#22a559"/><path d="M33 0Q46-3 58 0Q46 4 33 0Z" fill="#56d884"/>' +
+  '<path class="cn-c0" fill="url(#cn-lar)" d="M-28 0L24-9Q34-9 34 0Q34 9 24 9Z"/>' +
+  '<path class="cn-c1" fill="url(#cn-lar)" d="M-12-2.8L24-9Q34-9 34 0Q34 9 24 9L-12 2.8Q-16 1.4-12 0Q-16-1.4-12-2.8Z"/>' +
+  '<path class="cn-c2" fill="url(#cn-lar)" d="M2-5.2L24-9Q34-9 34 0Q34 9 24 9L2 5.2Q-3 2.6 2 0Q-3-2.6 2-5.2Z"/>' +
+  '<path d="M8-3.5l3 1.2M20 3l3-1.2M13 5l3 1" stroke="#d9540a" stroke-width="1.2" stroke-linecap="round" opacity=".5" fill="none"/>' +
+  '<ellipse cx="17" cy="0" rx="8.5" ry="8" fill="url(#cn-pelo)" stroke="#cdb5e8" stroke-width="1.4"/>' +
+  '<path d="M13-4.5v3.5M17.5-5.5v4M22-4.5v3.5" stroke="#cdb5e8" stroke-width="1.1" stroke-linecap="round" fill="none"/>' +
+  '</g></g>' +
+  '</svg>';
+
+let timerCoelho = null, coelhoLigado = false;
+function coelho() {
+  if (reduzido()) return;
+  coelhoLigado = true;
+  let teste = false;
+  try { teste = new URLSearchParams(location.search).get("coelho") === "teste"; } catch (e) { /* sem prévia */ }
+  const agendar = ms => { clearTimeout(timerCoelho); timerCoelho = setTimeout(tentar, ms); };
+  const proximo = () => teste ? 12000 : 120000 + Math.random() * 60000;
+  function tentar() {
+    if (!coelhoLigado) return;
+    // espera a aba ficar visível e o aviso de cookies sumir (ele cobre o canto inferior)
+    if (document.hidden || document.querySelector("#cookie-banner:not([hidden])")) { agendar(3000); return; }
+    if (document.querySelector(".tema-coelho")) return;
+    const c = document.createElement("div");
+    c.className = "tema-coelho"; c.setAttribute("aria-hidden", "true");
+    c.innerHTML = COELHO_SVG;
+    c.addEventListener("animationend", e => {
+      if (e.target !== c) return;
+      c.remove();
+      if (coelhoLigado) agendar(proximo());
+    });
+    document.body.appendChild(c);
+  }
+  agendar(teste ? 800 : 4000);
+}
+function tirarCoelho() {
+  coelhoLigado = false; clearTimeout(timerCoelho);
+  document.querySelectorAll(".tema-coelho").forEach(e => e.remove());
+}
+
 /* Dia da Mulher: pétalas caindo */
 const PETALAS = [["#f3d9ff", "#c59bf0"], ["#ffd9ec", "#ff9fcb"], ["#ffffff", "#e6d4f7"], ["#d4f5e4", "#7fd6ad"], ["#e8d9ff", "#a97be8"]];
 function petalas() {
@@ -371,8 +447,8 @@ const DECORACOES = {
     desligar() { document.querySelectorAll(".tema-confete, .tema-chapeu").forEach(e => e.remove()); }
   },
   pascoa: {
-    ligar() { ovos(); chapeuHero(); },
-    desligar() { document.querySelectorAll(".tema-ovos, .tema-chapeu").forEach(e => e.remove()); }
+    ligar() { ovos(); coelho(); chapeuHero(); },
+    desligar() { tirarCoelho(); document.querySelectorAll(".tema-ovos, .tema-chapeu").forEach(e => e.remove()); }
   },
   mulheres: {
     ligar() { petalas(); chapeuHero(); },
