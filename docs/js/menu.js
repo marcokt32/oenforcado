@@ -14,7 +14,8 @@ const CATEGORIAS = [
   { id: "logica", nome: "Lógica", icone: "🧩", jogos: [
     { nome: "Kyudoku", url: "/kyudoku.html", id: "kyudoku" },
     { nome: "Lógica grega", url: "/logica-grega.html", id: "logicagrega" },
-    { nome: "Damas", url: "/damas.html", id: "damas" }
+    { nome: "Damas", url: "/damas.html", id: "damas" },
+    { nome: "Campo minado", url: "/campo-minado.html", id: "campominado" }
   ] },
   { id: "puzzle", nome: "Puzzle", icone: "🃏", jogos: [
     { nome: "Jogo da memória", url: "/memoria.html", id: "memoria" },

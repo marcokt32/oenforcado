@@ -1,6 +1,7 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
 // Atualizado em 12/11/2026 (v1.0.14)
+//  - v1.0.14: Campo minado adicionado ao menu
 //  - v1.0.14: Damas adicionado ao menu (sem desafio do dia: fica fora das sugestões de desafio)
 //  - v1.0.14: desempenho (INP): firebase-messaging carregado sob demanda; analytics/Firebase adiados após a jogada; espaço reservado para login (CLS)
 //  - v1.0.11: limite de dicas por partida (MAX_DICAS / Portal.maxDicas)
@@ -18,6 +19,7 @@
     { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html", cat: "logica" },
     { id: "logicagrega", nome: "Lógica grega", url: "/logica-grega.html", cat: "logica" },
     { id: "damas", nome: "Damas", url: "/damas.html", cat: "logica", diario: false }, // diario:false = não participa do desafio do dia
+    { id: "campominado", nome: "Campo minado", url: "/campo-minado.html", cat: "logica" },
     { id: "memoria", nome: "Jogo da memória", url: "/memoria.html", cat: "puzzle" },
     { id: "deslizante", nome: "Quebra-cabeça deslizante", url: "/deslizante.html", cat: "puzzle" }
   ];
