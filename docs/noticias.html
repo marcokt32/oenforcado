@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/js/tema.js?v=1.0.0"></script>
+  <meta name="theme-color" content="#0a2540">
+  <script src="/js/consent.js?v=1.0.1"></script>
+  <title>O Enforcado News: notícias rápidas com fontes | O Enforcado</title>
+  <meta name="description" content="Notícias do dia resumidas em poucas linhas, com análise própria e fontes citadas. Games, tecnologia e curiosidades no O Enforcado News.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="O Enforcado">
+  <meta property="og:title" content="O Enforcado News: notícias rápidas com fontes">
+  <meta property="og:description" content="Notícias do dia resumidas em poucas linhas, com análise própria e fontes citadas.">
+  <meta property="og:url" content="https://oenforcado.com/noticias">
+  <meta property="og:image" content="https://oenforcado.com/img/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://oenforcado.com/noticias">
+  <link rel="alternate" type="application/rss+xml" title="O Enforcado News" href="/noticias/feed.xml">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"O Enforcado News","url":"https://oenforcado.com/noticias","inLanguage":"pt-BR","description":"Notícias do dia resumidas, com análise própria e fontes citadas.","publisher":{"@type":"Organization","name":"O Enforcado","url":"https://oenforcado.com/"}}</script>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/img/hung.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site-theme.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/caca-palavras.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/portal-shell.css?v=1.0.8">
+  <link rel="stylesheet" href="/css/footer.css?v=1.0.3">
+  <link rel="stylesheet" href="/css/menu.css?v=1.0.1">
+  <link rel="stylesheet" href="/css/candy.css?v=1.1.0">
+  <link rel="stylesheet" href="/css/tema.css?v=1.0.0">
+  <link rel="stylesheet" href="/css/noticias.css?v=1.0.0">
+</head>
+<body data-jogo="noticias">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="/img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>
+    <nav aria-label="Navegação principal"></nav>
+  </header>
+  <main class="nw-main">
+    <section class="nw-top">
+      <div>
+        <h1>O Enforcado News</h1>
+        <p>O que aconteceu, por que importa e onde conferir. Resumos curtos com as fontes sempre citadas.</p>
+      </div>
+      <span class="nw-data" id="nw-data"></span>
+    </section>
+
+    <!-- RESUMO DO DIA: atualize todo dia. É o que cria o hábito. -->
+    <section class="nw-resumo" aria-labelledby="resumo-t">
+      <h2 id="resumo-t">Resumo do dia</h2>
+      <p>Cinco notícias em um minuto.</p>
+      <ol>
+        <li><a href="/noticias/exemplo-titulo-da-noticia.html">Título curto da notícia 1</a></li>
+        <li>Título curto da notícia 2</li>
+        <li>Título curto da notícia 3</li>
+        <li>Título curto da notícia 4</li>
+        <li>Título curto da notícia 5</li>
+      </ol>
+    </section>
+
+    <!-- LISTA: a 1ª com class "destaque". Copie o bloco <li> para cada matéria nova (mais recente primeiro). -->
+    <ul class="nw-lista">
+      <li>
+        <a class="nw-card destaque" href="/noticias/exemplo-titulo-da-noticia.html">
+          <span class="nw-cat">Games</span>
+          <h2>Título da matéria em destaque, com a palavra-chave principal</h2>
+          <p>Resumo de uma ou duas linhas que explica a notícia e dá motivo para clicar.</p>
+          <span class="nw-meta">Por Marco Quintela · 14 nov 2026 · 3 min de leitura</span>
+        </a>
+      </li>
+      <li>
+        <a class="nw-card" href="/noticias/exemplo-titulo-da-noticia.html">
+          <span class="nw-cat">Tecnologia</span>
+          <h3>Título da segunda matéria</h3>
+          <p>Resumo curto da matéria.</p>
+          <span class="nw-meta">Por Marco Quintela · 14 nov 2026 · 2 min de leitura</span>
+        </a>
+      </li>
+      <li>
+        <a class="nw-card" href="/noticias/exemplo-titulo-da-noticia.html">
+          <span class="nw-cat">Curiosidades</span>
+          <h3>Título da terceira matéria</h3>
+          <p>Resumo curto da matéria.</p>
+          <span class="nw-meta">Por Marco Quintela · 13 nov 2026 · 2 min de leitura</span>
+        </a>
+      </li>
+    </ul>
+
+    <section class="nw-canais" aria-label="Receba as notícias">
+      <div class="nw-box">
+        <h2>Receba o resumo no celular</h2>
+        <p>Entre com o Google e ative os avisos no menu da sua conta. Você é lembrado quando o resumo do dia sai.</p>
+        <button type="button" class="button button-primary" data-pm="login">Entrar com Google</button>
+      </div>
+      <div class="nw-box">
+        <h2>Faça uma pausa jogando</h2>
+        <p>Entre no desafio do dia e ganhe XP enquanto espera a próxima notícia.</p>
+        <a class="button button-secondary" href="/forca.html?desafio=dia">Jogar o desafio do dia</a>
+      </div>
+    </section>
+  </main>
+  <footer class="corp-footer">
+    <div class="corp-wrap">
+      <div class="corp-col corp-brand">
+        <a class="corp-logo" href="/">O Enforcado</a>
+        <p>Jogos de palavras e de lógica gratuitos, com desafio do dia e ranking, e o O Enforcado News, notícias rápidas com fontes citadas.</p>
+      </div>
+      <nav class="corp-col" aria-label="Jogos">
+        <h3>Jogos</h3>
+        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a href="/kyudoku.html">Kyudoku</a><a href="/logica-grega.html">Lógica grega</a><a href="/damas.html">Damas</a><a href="/memoria.html">Jogo da memória</a><a href="/deslizante.html">Quebra-cabeça deslizante</a>
+      </nav>
+      <nav class="corp-col" aria-label="Institucional">
+        <h3>Institucional</h3>
+        <a href="/noticias">Notícias</a><a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
+      </nav>
+    </div>
+    <div class="corp-bottom">
+      <span>© 2026 O Enforcado. Todos os direitos reservados.</span>
+      <span>Desenvolvido por <a href="https://marsdev.com.br" target="_blank" rel="noopener">MarsDev</a> - Marco Quintela</span>
+    </div>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+  <script src="/js/firebase-init.js"></script>
+  <script src="/js/portal.js?v=1.0.12"></script>
+  <script src="/js/ads-fix.js?v=1.0.0"></script>
+  <script src="/js/menu.js?v=1.0.3"></script>
+  <script>
+    (function(){var e=document.getElementById("nw-data");if(e)e.textContent=new Intl.DateTimeFormat("pt-BR",{weekday:"long",day:"numeric",month:"long",timeZone:"America/Sao_Paulo"}).format(new Date())})();
+  </script>
+</body>
+</html>

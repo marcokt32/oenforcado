@@ -148,6 +148,17 @@ function aberturaDiaria(rng) {
 
 // ===== Interface =====
 let est, nivel, b, turn, legais, prefix, ultimo, dica, dicas, jogadas, quiet, over, pensando, animando = false, token = 0;
+
+// Limite de dicas por partida (v1.0.1). O valor oficial vem de Portal.maxDicas("damas", nivel);
+// esta tabela é o reserva caso o portal.js em cache seja antigo.
+const LIMITE_DICAS = { facil: 3, medio: 3, dificil: 3 };
+const maxDicas = () => (window.Portal && Portal.maxDicas && Portal.maxDicas("damas", nivel)) || LIMITE_DICAS[nivel] || 3;
+let dicaChave = "", dicaLance = null; // posição da última dica comprada: pedir de novo nela não cobra outra
+function atualizarBotaoDica() {
+  const btn = $("dica-btn"), max = maxDicas();
+  btn.textContent = dicas >= max ? `💡 Dicas esgotadas (${dicas}/${max})` : `💡 Dica (−5 XP) · ${dicas}/${max}`;
+  btn.disabled = !!over || (dicas >= max && b.join(",") !== dicaChave);
+}
 const cells = [];
 
 function montar() {
@@ -191,6 +202,7 @@ function atualizar() {
   });
   $("pecas").textContent = `${np} × ${nc}`;
   $("jogadas").textContent = String(jogadas);
+  atualizarBotaoDica();
 }
 
 function msgVez() {
@@ -383,7 +395,7 @@ function novo() {
   est = tb.estado();
   nivel = est.diario ? "medio" : est.dificuldade;
   b = est.diario ? aberturaDiaria(Portal.rngDiario("damas")) : inicial();
-  turn = 1; prefix = []; ultimo = []; dica = null; dicas = 0; jogadas = 0; quiet = 0; over = false; pensando = false; animando = false;
+  turn = 1; prefix = []; ultimo = []; dica = null; dicas = 0; dicaChave = ""; dicaLance = null; jogadas = 0; quiet = 0; over = false; pensando = false; animando = false;
   legais = gerar(b, 1);
   const r = $("resultado");
   r.hidden = true; r.classList.remove("perdeu");
@@ -394,12 +406,19 @@ function novo() {
 
 $("dica-btn").addEventListener("click", () => {
   if (over || turn !== 1 || pensando || animando) return;
+  const chave = b.join(",");
+  if (chave === dicaChave && dicaLance) { // mesma posição: mostra de novo, sem cobrar
+    prefix = []; dica = dicaLance; atualizar();
+    $("mensagem").textContent = "Dica repetida: a peça e a casa em amarelo, sem custo.";
+    return;
+  }
+  if (dicas >= maxDicas()) { $("mensagem").textContent = `Você já usou as ${maxDicas()} dicas desta partida.`; return; }
   const m = melhor(b, 1, 4);
   if (!m) return;
   dicas++; prefix = [];
-  dica = m.path.slice(0, 2);
+  dica = dicaLance = m.path.slice(0, 2); dicaChave = chave;
   atualizar();
-  $("mensagem").textContent = "Dica: a peça e a casa destacadas em amarelo são um bom lance. Cada dica reduz 5 XP.";
+  $("mensagem").textContent = `Dica: a peça e a casa em amarelo são um bom lance (−5 XP). Dicas restantes: ${maxDicas() - dicas}.`;
 });
 $("desistir").addEventListener("click", () => {
   if (over || pensando || animando) return;

@@ -1,0 +1,52 @@
+/* O Enforcado News: usa as variáveis e a base do site (portal-shell, site-theme, candy) */
+.nw-main{width:min(100% - 32px,1000px);margin:0 auto;flex:1}
+.nw-top{margin:34px 0 22px;display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px 20px}
+.nw-top h1{margin:0;font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.1;letter-spacing:-.04em}
+.nw-top p{margin:6px 0 0;max-width:520px;color:#4c5b70;line-height:1.6}
+.nw-data{color:#526176;font-size:.9rem;font-weight:650}
+
+/* Resumo do dia: o elemento de hábito, vem primeiro */
+.nw-resumo{margin:0 0 28px;padding:clamp(18px,3vw,26px);border-radius:20px;background:#0a2540;color:#eaf1fa;box-shadow:0 5px 0 #04101e}
+.nw-resumo h2{margin:0 0 4px;color:#fff;font-size:1.3rem}
+.nw-resumo>p{margin:0 0 14px;color:#b9cbe2;font-size:.92rem}
+.nw-resumo ol{margin:0;padding-left:1.3rem;display:grid;gap:10px;line-height:1.5}
+.nw-resumo a{color:#fff;font-weight:700;text-decoration-color:#6b8fc0;text-underline-offset:3px}
+.nw-resumo a:hover{text-decoration-color:#fff}
+
+/* Lista de notícias */
+.nw-lista{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:0 0 30px;padding:0;list-style:none}
+.nw-card{display:flex;flex-direction:column;height:100%;padding:20px;border:1px solid var(--line,#dbe3ef);border-radius:18px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 4px 0 #dbe3ef}
+.nw-card:hover{border-color:#b9c9e2}
+.nw-card:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.nw-card.destaque{grid-column:1/-1;padding:clamp(22px,4vw,34px)}
+.nw-cat{align-self:flex-start;margin-bottom:10px;padding:4px 10px;border-radius:999px;background:#edf2ff;color:#2357a5;font-size:.78rem;font-weight:800}
+.nw-card h2,.nw-card h3{margin:0 0 8px;color:#0a2540;font-size:1.2rem;line-height:1.3;letter-spacing:-.02em}
+.nw-card.destaque h2{font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.2}
+.nw-card p{margin:0 0 14px;color:#34445a;line-height:1.6;font-size:.95rem}
+.nw-meta{margin-top:auto;color:#526176;font-size:.84rem}
+
+/* Avisos: push, WhatsApp, jogos */
+.nw-canais{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 40px}
+.nw-box{padding:20px;border:1px solid var(--line,#dbe3ef);border-radius:18px;background:#f8faff}
+.nw-box h2{margin:0 0 6px;font-size:1.1rem}
+.nw-box p{margin:0 0 14px;color:#4c5b70;line-height:1.55;font-size:.93rem}
+.nw-box .button{display:inline-flex;align-items:center;text-decoration:none}
+
+/* Matéria */
+.nw-art{max-width:700px;margin:0 auto;padding:30px 0 10px}
+.nw-art h1{margin:6px 0 12px;font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.15;letter-spacing:-.035em}
+.nw-art .nw-meta{margin:0 0 20px}
+.nw-30s{margin:0 0 24px;padding:16px 18px;border-left:5px solid #1f6feb;border-radius:0 12px 12px 0;background:#eef4ff;line-height:1.6}
+.nw-30s strong{display:block;margin-bottom:2px;color:#174b93}
+.nw-art h2{margin:28px 0 8px;font-size:1.3rem}
+.nw-art p,.nw-art li{font-size:1.06rem;line-height:1.75;color:#26364c}
+.nw-importa{margin:26px 0;padding:18px 20px;border:2px solid #f3d68a;border-radius:14px;background:#fff8e6}
+.nw-importa h2{margin:0 0 6px;color:#7a4b00}
+.nw-fontes{margin:26px 0;padding:16px 18px;border-radius:14px;background:#f1f5fb;font-size:.92rem}
+.nw-fontes h2{margin:0 0 8px;font-size:1rem}
+.nw-fontes li{font-size:.92rem;line-height:1.6}
+.nw-jogo{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:26px 0 40px;padding:18px 20px;border-radius:16px;background:#fff;border:1px solid var(--line,#dbe3ef);box-shadow:0 4px 0 #dbe3ef}
+.nw-jogo p{margin:0;font-weight:700}
+.nw-jogo a{text-decoration:none}
+
+@media(max-width:700px){.nw-lista,.nw-canais{grid-template-columns:1fr}.nw-top{margin-top:26px}}

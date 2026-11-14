@@ -16,6 +16,16 @@ const $ = id => document.getElementById(id);
 let est, puzzle, nivel, grade, sel, marc, fixas, dicas, venceu, t0, timer;
 const celulas = [], somaL = [], somaC = [];
 
+// Limite de dicas por partida (v1.0.1). O valor oficial vem de Portal.maxDicas("kyudoku", nivel);
+// esta tabela é o reserva caso o portal.js em cache seja antigo.
+const LIMITE_DICAS = { facil: 2, medio: 3, dificil: 4 };
+const maxDicas = () => (window.Portal && Portal.maxDicas && Portal.maxDicas("kyudoku", nivel)) || LIMITE_DICAS[nivel] || 3;
+function atualizarBotaoDica() {
+  const b = $("dica-btn"), max = maxDicas();
+  b.textContent = dicas >= max ? `💡 Dicas esgotadas (${dicas}/${max})` : `💡 Dica (−5 XP) · ${dicas}/${max}`;
+  b.disabled = !!venceu || dicas >= max;
+}
+
 function escolher() {
   if (est.diario) {
     const r = Portal.rngDiario("kyudoku"), pool = PUZZLES.medio;
@@ -85,6 +95,7 @@ function atualizar() {
   $("contagem").textContent = `${n} / 9`;
   $("contagem").classList.toggle("bad", n > 9);
 
+  atualizarBotaoDica();
   const todasUnicas = Object.values(usados).every(q => q === 1);
   const somasOk = rs.every(v => v <= LIMITE) && cs.every(v => v <= LIMITE);
   if (n === 9 && todasUnicas && somasOk) terminar();
@@ -98,6 +109,7 @@ function formatarTempo(seg) { return `${Math.floor(seg / 60)}:${String(seg % 60)
 
 function terminar() {
   venceu = true; clearInterval(timer);
+  atualizarBotaoDica();
   const seg = Math.round((Date.now() - t0) / 1000);
   $("tempo").textContent = formatarTempo(seg);
   $("mensagem").textContent = "Resolvido! Todas as regras foram cumpridas.";
@@ -130,13 +142,14 @@ function novo() {
 
 $("dica-btn").addEventListener("click", () => {
   if (venceu) return;
+  if (dicas >= maxDicas()) { $("mensagem").textContent = `Você já usou as ${maxDicas()} dicas desta partida.`; return; }
   const faltam = puzzle.s.filter(i => !fixas.has(i));
   if (!faltam.length) { $("mensagem").textContent = "Todas as células certas já estão marcadas."; return; }
   const i = faltam[Math.floor(Math.random() * faltam.length)];
   fixas.add(i); sel.add(i); marc.delete(i); dicas++;
   if (window.Sons) Sons.tocar("dica");
   atualizar();
-  if (!venceu) $("mensagem").textContent = "Uma célula correta foi marcada e travada. Cada célula revelada reduz 5 XP.";
+  if (!venceu) $("mensagem").textContent = `Uma célula correta foi marcada e travada (−5 XP). Dicas restantes: ${maxDicas() - dicas}.`;
 });
 $("limpar").addEventListener("click", () => {
   if (venceu) return;

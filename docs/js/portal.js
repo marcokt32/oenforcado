@@ -1,6 +1,9 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
-// Atualizado em 14/11/2026 (v1.0.17)
+// Atualizado em 14/11/2026 (v1.0.20)
+//  - v1.0.20: limite de dicas no Kyudoku (2/3/4 por dificuldade)
+//  - v1.0.19: limite de dicas no Damas (3 por partida)
+//  - v1.0.18: limite de dicas por dificuldade (MAX_DICAS aceita número ou {facil,medio,dificil}); Lógica grega: 2/3/4
 //  - v1.0.17: carrega reportar.js v1.0.1 (atalho no menu do celular)
 //  - v1.0.16: formulário "Reportar um problema" (js/reportar.js), carregado em segundo plano depois da página
 //  - v1.0.15: efeitos sonoros (js/sons.js, carregado aqui); fanfarra de vitória/derrota em anexarFim; Portal.anexarFim aceita som:false
@@ -36,7 +39,8 @@
   const BONUS_DIARIO = 50;
   // Atualizado em 07/11/2026 (v1.0.11): limite de dicas por partida, um valor por jogo.
   // Jogo que não está na tabela não tem dicas. A forca já limita a 1 dica por palavra no próprio jogo.
-  const MAX_DICAS = { caca: 3, forca: 1 };
+  // O valor pode ser um número (igual para todos os níveis) ou { facil, medio, dificil }.
+  const MAX_DICAS = { caca: 3, forca: 1, damas: 3, logicagrega: { facil: 2, medio: 3, dificil: 4 }, kyudoku: { facil: 2, medio: 3, dificil: 4 } };
   const SITE = "https://oenforcado.com";
 
   const $ = id => document.getElementById(id);
@@ -717,5 +721,5 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar); else iniciar();
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => { }));
 
-  window.Portal = { toolbar, criarBotaoDiario, concluir, anexarFim, compartilhar, rngDiario, diarioConcluido, hoje, toast, abrirRanking, maxDicas: jogo => MAX_DICAS[jogo] || 0 };
+  window.Portal = { toolbar, criarBotaoDiario, concluir, anexarFim, compartilhar, rngDiario, diarioConcluido, hoje, toast, abrirRanking, maxDicas: (jogo, nivel) => { const v = MAX_DICAS[jogo]; return v && typeof v === "object" ? (v[nivel] || 0) : (v || 0); } };
 })();
