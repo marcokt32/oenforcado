@@ -1,6 +1,9 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
-// Atualizado em 12/11/2026 (v1.0.14)
+// Atualizado em 14/11/2026 (v1.0.17)
+//  - v1.0.17: carrega reportar.js v1.0.1 (atalho no menu do celular)
+//  - v1.0.16: formulário "Reportar um problema" (js/reportar.js), carregado em segundo plano depois da página
+//  - v1.0.15: efeitos sonoros (js/sons.js, carregado aqui); fanfarra de vitória/derrota em anexarFim; Portal.anexarFim aceita som:false
 //  - v1.0.14: Campo minado adicionado ao menu
 //  - v1.0.14: Damas adicionado ao menu (sem desafio do dia: fica fora das sugestões de desafio)
 //  - v1.0.14: desempenho (INP): firebase-messaging carregado sob demanda; analytics/Firebase adiados após a jogada; espaço reservado para login (CLS)
@@ -53,6 +56,12 @@
     return msgPromessa;
   }
   const mensagens = async () => { await carregarMessaging(); return firebase.messaging(); };
+  // v1.0.15: efeitos sonoros. O sons.js é carregado aqui para valer em todas as páginas sem mexer nos HTMLs.
+  if (!window.Sons) { const sc = document.createElement("script"); sc.src = "/js/sons.js?v=1.0.0"; sc.async = true; document.head.appendChild(sc); }
+  // v1.0.16: "Reportar um problema" (js/reportar.js). Só é baixado depois que a página terminou de carregar, para não pesar no INP.
+  const carregarReportar = () => { if (window.Reportar) return; const sc = document.createElement("script"); sc.src = "/js/reportar.js?v=1.0.1"; sc.async = true; document.head.appendChild(sc); };
+  const agendarReportar = () => { if (window.requestIdleCallback) requestIdleCallback(carregarReportar, { timeout: 4000 }); else setTimeout(carregarReportar, 2000); };
+  if (document.readyState === "complete") agendarReportar(); else window.addEventListener("load", agendarReportar);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Estado local (vale sem login) ---------- */
@@ -453,7 +462,10 @@
       (nova ? `<button type="button" class="pm-win-nova">${esc(nova)}</button>` : "") + `</div>`;
   }
 
-  function anexarFim(container, { jogo, texto, info }) {
+  function anexarFim(container, { jogo, texto, info, som }) {
+    // v1.0.15: fanfarra de vitória (info presente) ou de derrota. Jogos que tocam o próprio som de fim passam som:false
+    if (window.Sons && som !== false) { if (info) setTimeout(() => Sons.tocar("vitoria"), 300); else Sons.tocar("derrota"); }
+    if (window.Sons && info && info.bonus > 0) setTimeout(() => Sons.tocar("moeda"), 1400);
     container.querySelectorAll(".pm-extra").forEach(e => e.remove());
     const div = document.createElement("div");
     div.className = "pm-extra";

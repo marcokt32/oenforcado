@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#0a2540">
+  <title>Relatos dos jogadores | Admin O Enforcado</title>
+  <link rel="icon" href="/img/hung.png">
+  <style>
+    *{box-sizing:border-box}
+    :root{--ink:#0a2540;--blue:#1f6feb;--line:#dbe3ef;--muted:#526176}
+    body{margin:0;background:#f6f7fb;color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+    header{position:sticky;top:0;z-index:5;display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:12px max(16px,calc((100% - 960px)/2));background:#fff;border-bottom:1px solid var(--line)}
+    header strong{font-size:1.1rem;margin-right:auto}
+    #quem{color:var(--muted);font-size:.88rem}
+    main{width:min(100% - 32px,960px);margin:20px auto 60px}
+    button,select,input{font:inherit;color:var(--ink)}
+    .btn{min-height:40px;padding:0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:700;cursor:pointer}
+    .btn:hover{background:#f1f5fb}
+    .btn.azul{border-color:var(--blue);background:var(--blue);color:#fff}
+    .btn.azul:hover{background:#1559c4}
+    .btn.peq{min-height:34px;padding:0 12px;font-size:.85rem}
+    .btn.perigo{color:#b42318;border-color:#f1c0bb}
+    .aviso{margin:0 0 16px;padding:14px 16px;border:1px solid #f3d68a;border-radius:12px;background:#fff8e6;color:#7a4b00}
+    .uid{margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:.88rem;color:var(--muted)}
+    .uid code{padding:2px 6px;border-radius:6px;background:#eef2f7;color:var(--ink);word-break:break-all}
+    .resumo{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+    .resumo span{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:.85rem;font-weight:700}
+    .filtros{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+    .filtros select,.filtros input{min-height:40px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
+    .filtros input{flex:1 1 200px}
+    .card{margin:0 0 14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 4px 14px #0a25400a}
+    .card.resolvido{opacity:.75}
+    .topo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px;font-size:.82rem;color:var(--muted)}
+    .tag{padding:3px 10px;border-radius:999px;background:#eaf1fc;color:#174b93;font-weight:800}
+    .tag.bug{background:#fde8e6;color:#b42318}
+    .tag.sugestao{background:#fff3d6;color:#7a4b00}
+    .tag.st{background:#eaf7ee;color:#14532d}
+    .tag.novo{background:#e8f0ff;color:#1559c4}
+    .tag.descartado{background:#eef2f7;color:var(--muted)}
+    .data{margin-left:auto}
+    .texto{margin:0 0 10px;white-space:pre-wrap;word-break:break-word;font-size:1rem}
+    .meta{margin:0 0 10px;font-size:.85rem;color:var(--muted)}
+    .meta a{color:var(--blue)}
+    details{margin:0 0 10px;font-size:.85rem;color:var(--muted)}
+    summary{cursor:pointer;font-weight:700}
+    pre{max-height:220px;overflow:auto;margin:8px 0 0;padding:10px;border-radius:10px;background:#f6f8fc;font-size:.74rem;white-space:pre-wrap;word-break:break-all}
+    .nota{width:100%;min-height:38px;margin:0 0 10px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px}
+    .acoes{display:flex;flex-wrap:wrap;gap:8px}
+    .vazio{padding:30px 10px;text-align:center;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>🐞 Relatos dos jogadores</strong>
+    <span id="quem"></span>
+    <button id="entrar" class="btn azul" type="button">Entrar com Google</button>
+    <button id="sair" class="btn" type="button" hidden>Sair</button>
+  </header>
+  <main>
+    <p id="aviso" class="aviso" role="status" hidden></p>
+    <p id="uid-box" class="uid" hidden>Seu UID: <code id="uid"></code> <button id="copiar-uid" class="btn peq" type="button">Copiar</button></p>
+    <section id="painel" hidden>
+      <div id="resumo" class="resumo"></div>
+      <div class="filtros">
+        <select id="f-status" aria-label="Filtrar por situação">
+          <option value="novo">Novos</option>
+          <option value="resolvido">Resolvidos</option>
+          <option value="descartado">Descartados</option>
+          <option value="todos">Todos</option>
+        </select>
+        <select id="f-tipo" aria-label="Filtrar por tipo">
+          <option value="todos">Todos os tipos</option>
+          <option value="bug">🐞 Bugs</option>
+          <option value="sugestao">💡 Sugestões</option>
+          <option value="outro">💬 Outros</option>
+        </select>
+        <select id="f-jogo" aria-label="Filtrar por jogo"><option value="todos">Todos os jogos</option></select>
+        <input id="f-busca" type="search" placeholder="Buscar no texto ou e-mail" aria-label="Buscar">
+      </div>
+      <div id="lista"></div>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script>
+  (() => {
+    "use strict";
+    // A segurança real está nas regras do Firebase (só quem está em "admins" lê e altera).
+    // Esta página só mostra e organiza o que as regras deixam passar.
+    const $ = id => document.getElementById(id);
+    const auth = firebase.auth();
+    auth.languageCode = "pt";
+    const LIMITE = 300;
+    const TIPOS = { bug: "🐞 Bug", sugestao: "💡 Sugestão", outro: "💬 Outro" };
+    const ROTULO_ST = { novo: "Novo", resolvido: "✅ Resolvido", descartado: "Descartado" };
+    const fmt = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short", timeZone: "America/Sao_Paulo" });
+
+    let dados = [], parar = null, adiado = false;
+
+    // Cria elementos sem usar innerHTML: o texto dos jogadores nunca é interpretado como HTML
+    function h(tag, props, ...filhos) {
+      const e = document.createElement(tag);
+      for (const k in (props || {})) {
+        if (k === "class") e.className = props[k];
+        else if (k === "text") e.textContent = props[k];
+        else if (k.startsWith("on")) e.addEventListener(k.slice(2), props[k]);
+        else e.setAttribute(k, props[k]);
+      }
+      filhos.flat().forEach(f => { if (f != null && f !== false) e.append(typeof f === "object" ? f : document.createTextNode(String(f))); });
+      return e;
+    }
+
+    function aviso(texto) { const a = $("aviso"); a.textContent = texto; a.hidden = !texto; }
+
+    function falha(e) { console.error(e); aviso("Não foi possível salvar (" + (e.code || e.message) + ")."); }
+
+    /* ---------- Login ---------- */
+    $("entrar").addEventListener("click", async () => {
+      try { await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+      catch (e) {
+        if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
+        aviso("Não foi possível entrar (" + (e.code || "erro") + "). Se o popup foi bloqueado, libere-o no navegador.");
+      }
+    });
+    $("sair").addEventListener("click", () => auth.signOut());
+    $("copiar-uid").addEventListener("click", async e => {
+      try { await navigator.clipboard.writeText($("uid").textContent); e.target.textContent = "Copiado!"; setTimeout(() => { e.target.textContent = "Copiar"; }, 1800); }
+      catch (_) { window.prompt("Copie o UID:", $("uid").textContent); }
+    });
+
+    auth.onAuthStateChanged(u => {
+      if (parar) { parar(); parar = null; }
+      $("entrar").hidden = !!u; $("sair").hidden = !u;
+      $("quem").textContent = u ? (u.displayName || u.email || "") : "";
+      $("painel").hidden = true;
+      $("uid-box").hidden = !u;
+      if (!u) { aviso("Entre com a conta Google de administrador para ver os relatos."); return; }
+      $("uid").textContent = u.uid;
+      aviso("");
+      carregar();
+    });
+
+    /* ---------- Leitura em tempo real ---------- */
+    function carregar() {
+      const q = firebase.database().ref("reportes").orderByChild("ts").limitToLast(LIMITE);
+      const ok = snap => {
+        if (document.activeElement && document.activeElement.classList.contains("nota")) { adiado = true; return; } // não atrapalha quem está digitando uma nota
+        dados = [];
+        snap.forEach(c => { dados.push(Object.assign({ id: c.key }, c.val())); });
+        dados.reverse(); // mais novos primeiro
+        $("painel").hidden = false; aviso("");
+        preencherJogos(); desenhar();
+      };
+      const erro = e => {
+        $("painel").hidden = true;
+        aviso(/permission|PERMISSION/.test(e.code + e.message)
+          ? "Esta conta não tem permissão para ler os relatos. Se você é o administrador, adicione o UID mostrado abaixo em \"admins\" no Realtime Database e confira as regras."
+          : "Erro ao carregar os relatos: " + (e.message || e));
+      };
+      q.on("value", ok, erro);
+      parar = () => q.off("value", ok);
+    }
+
+    /* ---------- Filtros ---------- */
+    function preencherJogos() {
+      const sel = $("f-jogo"), atual = sel.value;
+      const jogos = [...new Set(dados.map(r => r.jogo).filter(Boolean))].sort();
+      sel.replaceChildren(h("option", { value: "todos", text: "Todos os jogos" }), ...jogos.map(j => h("option", { value: j, text: j })));
+      sel.value = jogos.includes(atual) ? atual : "todos";
+    }
+    ["f-status", "f-tipo", "f-jogo"].forEach(id => $(id).addEventListener("change", desenhar));
+    $("f-busca").addEventListener("input", desenhar);
+    document.addEventListener("focusout", e => { if (adiado && e.target.classList && e.target.classList.contains("nota")) { adiado = false; setTimeout(desenhar, 0); } });
+
+    const situacao = r => r.status || "novo";
+
+    function desenhar() {
+      const fs = $("f-status").value, ft = $("f-tipo").value, fj = $("f-jogo").value, q = $("f-busca").value.trim().toLowerCase();
+      const novos = dados.filter(r => situacao(r) === "novo").length;
+      $("resumo").replaceChildren(
+        h("span", { text: novos + " novos" }),
+        h("span", { text: dados.filter(r => situacao(r) === "resolvido").length + " resolvidos" }),
+        h("span", { text: dados.length + " no total (últimos " + LIMITE + ")" }));
+      document.title = (novos ? "(" + novos + ") " : "") + "Relatos dos jogadores | Admin O Enforcado";
+      const lista = dados.filter(r =>
+        (fs === "todos" || situacao(r) === fs) && (ft === "todos" || r.tipo === ft) && (fj === "todos" || r.jogo === fj) &&
+        (!q || ((r.texto || "") + " " + (r.email || "")).toLowerCase().includes(q)));
+      $("lista").replaceChildren(...(lista.length ? lista.map(card) : [h("p", { class: "vazio", text: "Nenhum relato com esses filtros." })]));
+    }
+
+    /* ---------- Cartão de um relato ---------- */
+    function card(r) {
+      const st = situacao(r);
+      const ref = firebase.database().ref("reportes/" + r.id);
+      let ctx = null; try { ctx = JSON.parse(r.ctx); } catch (e) { /* ctx inválido */ }
+      const nErros = ctx && Array.isArray(ctx.erros) ? ctx.erros.length : 0;
+      const mudar = novo => ref.child("status").set(novo).catch(falha);
+
+      const nota = h("input", { class: "nota", type: "text", maxlength: "500", placeholder: "Nota interna (opcional)", "aria-label": "Nota interna", value: r.nota || "" });
+      nota.addEventListener("change", () => ref.child("nota").set(nota.value.trim() || null).catch(falha));
+
+      const acoes = [];
+      if (st !== "resolvido") acoes.push(h("button", { class: "btn peq azul", type: "button", text: "✅ Resolver", onclick: () => mudar("resolvido") }));
+      if (st !== "descartado") acoes.push(h("button", { class: "btn peq", type: "button", text: "Descartar", onclick: () => mudar("descartado") }));
+      if (st !== "novo") acoes.push(h("button", { class: "btn peq", type: "button", text: "↩ Reabrir", onclick: () => mudar("novo") }));
+      acoes.push(h("button", { class: "btn peq perigo", type: "button", text: "🗑️ Excluir", onclick: () => { if (confirm("Excluir este relato de vez?")) ref.remove().catch(falha); } }));
+
+      const email = r.email ? h("a", { href: "mailto:" + String(r.email).replace(/[^\w.@+\-]/g, ""), text: r.email }) : null;
+      const meta = [email ? ["E-mail: ", email] : "Sem e-mail", r.uid ? " · conta logada" : " · anônimo", ctx && ctx.tela ? " · tela " + ctx.tela : "", ctx && ctx.url ? " · " + ctx.url : ""];
+
+      return h("article", { class: "card " + st },
+        h("div", { class: "topo" },
+          h("span", { class: "tag " + (r.tipo || "") , text: TIPOS[r.tipo] || r.tipo || "?" }),
+          h("span", { class: "tag", text: r.jogo || "?" }),
+          h("span", { class: "tag st " + st, text: ROTULO_ST[st] || st }),
+          nErros ? h("span", { class: "tag bug", text: "⚠️ " + nErros + (nErros === 1 ? " erro de JS" : " erros de JS") }) : null,
+          h("span", { class: "data", text: r.ts ? fmt.format(new Date(r.ts)) : "" })),
+        h("p", { class: "texto", text: r.texto || "" }),
+        h("p", { class: "meta" }, ...meta),
+        h("details", null, h("summary", { text: "Dados técnicos" }), h("pre", { text: ctx ? JSON.stringify(ctx, null, 1) : String(r.ctx || "") })),
+        nota,
+        h("div", { class: "acoes" }, ...acoes));
+    }
+  })();
+  </script>
+</body>
+</html>

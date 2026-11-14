@@ -102,6 +102,7 @@ function tentar(pos) {
     timer = setInterval(() => { if (!venceu) $("tempo").textContent = formatarTempo(Math.round((Date.now() - t0) / 1000)); }, 1000);
   }
   movimentos += andou;
+  if (window.Sons) Sons.tocar("arrasto");
   const certas = atualizar();
   if (resolvido(estado)) terminar();
   else $("mensagem").textContent = `${certas} de ${n * n - 1} peças no lugar.`;

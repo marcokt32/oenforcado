@@ -65,6 +65,7 @@ function montarTabuleiro() {
 function colocar(i, k) {
   if (venceu || dado.has(i)) return;
   grade[i] = k;
+  somLance(i);
   atualizar();
 }
 
@@ -109,7 +110,7 @@ function iniciarArraste(e, k, chip) {
   window.addEventListener("pointercancel", fim);
 }
 
-function escolherLetra(k) { ativa = ativa === k ? -1 : k; atualizar(); }
+function escolherLetra(k) { ativa = ativa === k ? -1 : k; if (window.Sons) Sons.tocar("clique"); atualizar(); }
 
 function clicar(i) {
   if (venceu || dado.has(i)) return;
@@ -117,6 +118,7 @@ function clicar(i) {
   if (atual >= 0 && (ativa < 0 || ativa === atual)) grade[i] = -1;       // remove a letra colocada
   else if (ativa >= 0) grade[i] = ativa;                                  // coloca (ou troca) pela letra escolhida
   else { $("mensagem").textContent = "Escolha uma letra na barra acima e toque numa casa vazia, ou arraste a letra até ela."; return; }
+  if (window.Sons) { if (grade[i] < 0) Sons.tocar("clique"); else somLance(i); }
   atualizar();
 }
 
@@ -133,6 +135,11 @@ function conflitos() {
     Object.values(vistas).forEach(l => { if (l.length > 1) l.forEach(i => erro.add(i)); });
   }
   return erro;
+}
+
+// Som ao posicionar uma letra: "toc" normal, ou erro curto se ela repete numa linha, coluna ou diagonal
+function somLance(i) {
+  if (window.Sons) Sons.tocar(conflitos().has(i) ? "erro" : "peca");
 }
 
 function atualizar() {
@@ -209,6 +216,7 @@ $("dica-btn").addEventListener("click", () => {
   if (!alvos.length) { $("mensagem").textContent = "Todas as casas já estão corretas."; return; }
   const i = alvos[Math.floor(Math.random() * alvos.length)];
   grade[i] = solucao[i]; dado.add(i); dicas++;
+  if (window.Sons) Sons.tocar("dica");
   atualizar();
   if (!venceu) $("mensagem").textContent = "Uma casa correta foi posicionada e travada. Cada casa revelada reduz 5 XP.";
 });

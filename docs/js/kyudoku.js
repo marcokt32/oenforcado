@@ -54,6 +54,7 @@ function alternar(i) {
   if (sel.has(i)) sel.delete(i);
   else if (marc.has(i)) { marc.delete(i); sel.add(i); }
   else marc.add(i);
+  if (window.Sons) Sons.tocar("flip");
   atualizar();
 }
 
@@ -133,6 +134,7 @@ $("dica-btn").addEventListener("click", () => {
   if (!faltam.length) { $("mensagem").textContent = "Todas as células certas já estão marcadas."; return; }
   const i = faltam[Math.floor(Math.random() * faltam.length)];
   fixas.add(i); sel.add(i); marc.delete(i); dicas++;
+  if (window.Sons) Sons.tocar("dica");
   atualizar();
   if (!venceu) $("mensagem").textContent = "Uma célula correta foi marcada e travada. Cada célula revelada reduz 5 XP.";
 });

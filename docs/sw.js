@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 🔥 IMPORTANTE: altere a versão quando fizer deploy
-const CACHE_NAME = "enforcado-49";
+const CACHE_NAME = "enforcado-50";
 
 const arquivos = [
   "/",
@@ -59,6 +59,7 @@ const arquivos = [
   "css/damas.css",
   "css/campo-minado.css",
   "js/portal.js",
+  "js/sons.js",
   "js/menu.js",
   "js/consent.js",
   "js/banco-palavras.js",

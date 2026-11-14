@@ -71,6 +71,7 @@ function clicar(i) {
     timer = setInterval(() => { if (!venceu) $("tempo").textContent = formatarTempo(Math.round((Date.now() - t0) / 1000)); }, 1000);
   }
   estado[i] = 1; abertas.push(i);
+  if (window.Sons) Sons.tocar("flip");
   if (abertas.length < 2) { atualizar(); $("mensagem").textContent = "Agora escolha a segunda carta."; return; }
 
   jogadas++;
@@ -79,12 +80,13 @@ function clicar(i) {
     estado[a] = estado[b] = 2; abertas = []; achados++;
     atualizar();
     if (achados === pares) terminar();
-    else $("mensagem").textContent = `Par encontrado: ${cartas[a].n}!`;
+    else { $("mensagem").textContent = `Par encontrado: ${cartas[a].n}!`; if (window.Sons) setTimeout(() => Sons.tocar("acerto"), 250); }
   } else {
     bloqueio = true; atualizar();
     $("mensagem").textContent = "Não foi dessa vez. Memorize as posições.";
     espera = setTimeout(() => {
       estado[a] = estado[b] = 0; abertas = []; bloqueio = false;
+      if (window.Sons) Sons.tocar("flip");
       atualizar();
     }, ESPERA);
   }

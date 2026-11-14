@@ -123,6 +123,7 @@ function revelar(i) {
     colocarMinas(new Set([i, ...vizinhos(i)]), Math.random);
   }
   iniciarTempo();
+  if (window.Sons && !mina[i]) Sons.tocar("clique");
   depoisDaJogada(abrirCelula(i));
 }
 
@@ -140,6 +141,7 @@ function alternarBandeira(i) {
   if (fim || aberta[i]) return;
   if (bandeira[i]) { bandeira[i] = 0; bandeiras--; } else { bandeira[i] = 1; bandeiras++; }
   pintar(i); contadores();
+  if (window.Sons) Sons.tocar("bandeira");
 }
 
 function acao(i, soBandeira) {
@@ -152,6 +154,7 @@ function acao(i, soBandeira) {
 
 function terminar(ganhou) {
   fim = true; venceu = ganhou; clearInterval(timer);
+  if (window.Sons && !ganhou) { Sons.tocar("explosao"); setTimeout(() => Sons.tocar("derrota"), 1000); }
   tab.classList.add("fim");
   const seg = iniciado ? Math.round((Date.now() - t0) / 1000) : 0;
   $("tempo").textContent = formatarTempo(seg);
@@ -185,7 +188,7 @@ function terminar(ganhou) {
   const [, m, d] = Portal.hoje().split("-");
   const titulo = diarioAtivo ? `💣 Campo minado · Desafio do dia ${d}/${m}` : `💣 Campo minado · ${NOME_NIVEL[nivel]} ${n}×${n}`;
   const linha = ganhou ? `✅ Limpei o campo em ${formatarTempo(seg)}` : "💥 Pisei numa mina";
-  Portal.anexarFim(r, { jogo: "campominado", texto: `${titulo}\n${linha}\nConsegue mais rápido?`, info });
+  Portal.anexarFim(r, { jogo: "campominado", texto: `${titulo}\n${linha}\nConsegue mais rápido?`, info, som: ganhou });
 }
 
 function atualizarModo() {

@@ -99,6 +99,7 @@ function tentar(l) {
   const todasLetras = new Set(alvo.palavra.replace(/[^A-Z]/g, ""));
   if ([...todasLetras].every(c => certas.has(c))) terminar(true);
   else if (erradas.size >= MAX_ERROS) terminar(false);
+  else if (window.Sons) Sons.tocar(acertou ? "acerto" : "erro"); // no fim da rodada quem toca é a fanfarra
 }
 
 function terminar(ganhou) {

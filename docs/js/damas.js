@@ -278,8 +278,9 @@ function jogar(m) {
 
 function concluirJogada(m) {
   const eraDama = Math.abs(b[m.path[0]]) === 2;
+  if (window.Sons) { for (let k = 0; k < Math.max(1, Math.min(m.caps.length, 4)); k++) setTimeout(() => Sons.tocar("peca"), k * 110); }
   b = aplicar(b, m);
-  if (!eraDama && Math.abs(b[m.path[m.path.length - 1]]) === 2) setTimeout(() => pop(m.path[m.path.length - 1]), 0);
+  if (!eraDama && Math.abs(b[m.path[m.path.length - 1]]) === 2) { setTimeout(() => pop(m.path[m.path.length - 1]), 0); if (window.Sons) setTimeout(() => Sons.tocar("moeda"), 160); }
   ultimo = [m.path[0], m.path[m.path.length - 1]];
   quiet = (m.caps.length || !eraDama) ? 0 : quiet + 1;
   if (turn === 1) jogadas++;
@@ -328,6 +329,7 @@ function fim(res) {
     const linha = `✅ Venci em ${jogadas} lances` + (dicas ? ` com ${dicas} ${dicas === 1 ? "dica" : "dicas"}` : " sem dicas");
     Portal.anexarFim(r, { jogo: "damas", texto: `${titulo}\n${linha}\nConsegue me vencer?`, info });
   } else if (res === "lose") {
+    if (window.Sons) setTimeout(() => Sons.tocar("derrota"), 250);
     $("resultado-titulo").textContent = "O computador venceu";
     $("resultado-detalhe").textContent = "Você ficou sem lances. Tente de novo ou escolha um nível mais fácil.";
     $("mensagem").textContent = "Fim de jogo.";
