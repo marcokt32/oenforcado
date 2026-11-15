@@ -59,3 +59,6 @@
 .nw-fig figcaption{margin-top:6px;color:#526176;font-size:.8rem}
 .nw-vazio{margin:0 0 30px;padding:24px;border:1px dashed #b9c9e2;border-radius:16px;color:#34445a}
 .nw-art ul{padding-left:1.3rem}
+
+/* Nota de correção (campo "correcao" no .md) */
+.nw-correcao{margin:22px 0;padding:14px 16px;border-left:5px solid #c2410c;border-radius:0 12px 12px 0;background:#fff1e8;color:#7c2d12;line-height:1.55;font-size:.95rem}

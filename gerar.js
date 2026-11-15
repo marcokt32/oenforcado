@@ -79,12 +79,12 @@ const CSS = `<link rel="manifest" href="/manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site-theme.css?v=1.0.0">
   <link rel="stylesheet" href="/css/termo.css?v=1.0.2">
-  <link rel="stylesheet" href="/css/portal-shell.css?v=1.0.9">
+  <link rel="stylesheet" href="/css/portal-shell.css?v=1.1.0">
   <link rel="stylesheet" href="/css/footer.css?v=1.0.3">
   <link rel="stylesheet" href="/css/menu.css?v=1.0.2">
   <link rel="stylesheet" href="/css/candy.css?v=1.1.0">
   <link rel="stylesheet" href="/css/tema.css?v=1.0.1">
-  <link rel="stylesheet" href="/css/noticias.css?v=1.0.1">`;
+  <link rel="stylesheet" href="/css/noticias.css?v=1.0.2">`;
 const HEADER = `<header class="site-header">
     <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="/img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>
     <nav aria-label="Navegação principal"></nav>
@@ -101,7 +101,7 @@ const FOOTER = `<footer class="corp-footer">
       </nav>
       <nav class="corp-col" aria-label="Institucional">
         <h3>Institucional</h3>
-        <a href="/noticias/">Notícias</a><a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
+        <a href="/noticias/">Notícias</a><a href="/politica-editorial.html">Política editorial</a><a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
       </nav>
     </div>
     <div class="corp-bottom">
@@ -114,7 +114,7 @@ const SCRIPTS = `<script src="https://www.gstatic.com/firebasejs/10.12.2/firebas
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="/js/firebase-init.js"></script>
   <script src="/js/portal.js?v=1.0.21"></script>
-  <script src="/js/menu.js?v=1.0.5"></script>`;
+  <script src="/js/menu.js?v=1.0.6"></script>`;
 
 const urlMateria = n => SITE + "/noticias/" + n.slug + ".html";
 const imagemMateria = n => n.imagem ? SITE + "/img/noticias/" + n.imagem : SITE + "/img/og-image.png";
@@ -124,7 +124,8 @@ function paginaMateria(n) {
   const url = urlMateria(n), img = imagemMateria(n);
   const desc = n.resumo.length > 155 ? n.resumo.slice(0, 152) + "..." : n.resumo;
   const fontes = n.fontes.length
-    ? `<div class="nw-fontes"><h2>Fontes</h2><ul>${n.fontes.map(f => `<li><a href="${esc(f.url)}" rel="noopener nofollow" target="_blank">${esc(f.nome)}</a></li>`).join("")}</ul><p>Encontrou um erro? Escreva para <a href="mailto:contato@marsdev.com.br">contato@marsdev.com.br</a> e corrigimos.</p></div>` : "";
+    ? `<div class="nw-fontes"><h2>Fontes</h2><ul>${n.fontes.map(f => `<li><a href="${esc(f.url)}" rel="noopener nofollow" target="_blank">${esc(f.nome)}</a></li>`).join("")}</ul><p>Encontrou um erro? Escreva para <a href="mailto:contato@marsdev.com.br">contato@marsdev.com.br</a> e corrigimos. Veja como funciona na <a href="/politica-editorial.html#correcoes">política editorial</a>.</p></div>` : "";
+  const correcao = n.correcao ? `<div class="nw-correcao"><strong>Correção${n.atualizado ? " em " + dataBR(n.atualizado) : ""}:</strong> ${esc(n.correcao)}</div>` : "";
   const figura = n.imagem ? `<figure class="nw-fig"><img class="nw-img" src="/img/noticias/${esc(n.imagem)}" alt="${esc(n.imagem_alt || n.titulo)}" width="1200" height="630">${n.credito ? `<figcaption>${esc(n.credito)}</figcaption>` : ""}</figure>` : "";
   const ld = [{
     "@context": "https://schema.org", "@type": "NewsArticle", headline: n.titulo, description: desc, image: [img],
@@ -167,6 +168,7 @@ function paginaMateria(n) {
       ${figura}
       <div class="nw-30s"><strong>Em 30 segundos</strong>${esc(n.resumo)}</div>
       ${corpoHTML(n.corpo)}
+      ${correcao}
       ${fontes}
       <div class="nw-jogo"><p>Dê uma pausa: o desafio do dia está esperando.</p><a class="button button-primary" href="/forca.html?desafio=dia">Jogar agora</a></div>
     </article>
