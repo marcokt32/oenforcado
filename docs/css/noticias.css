@@ -1,6 +1,6 @@
 /* O Enforcado News: usa as variáveis e a base do site (portal-shell, site-theme, candy) */
 .nw-main{width:min(100% - 32px,1000px);margin:0 auto;flex:1}
-.nw-top{margin:34px 0 22px;display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px 20px}
+.nw-top{margin:50px 0 22px;display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:10px 20px}
 .nw-top h1{margin:0;font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.1;letter-spacing:-.04em}
 .nw-top p{margin:6px 0 0;max-width:520px;color:#4c5b70;line-height:1.6}
 .nw-data{color:#526176;font-size:.9rem;font-weight:650}
@@ -49,4 +49,13 @@
 .nw-jogo p{margin:0;font-weight:700}
 .nw-jogo a{text-decoration:none}
 
-@media(max-width:700px){.nw-lista,.nw-canais{grid-template-columns:1fr}.nw-top{margin-top:26px}}
+@media(max-width:700px){.nw-lista,.nw-canais{grid-template-columns:1fr}.nw-top{margin-top:50px}}
+
+/* Gerador: imagem, trilha e estado vazio */
+.nw-trilha{margin:0;color:#526176;font-size:.88rem}
+.nw-trilha a{color:#174b93}
+.nw-fig{margin:0 0 22px}
+.nw-img{display:block;width:100%;height:auto;border-radius:16px}
+.nw-fig figcaption{margin-top:6px;color:#526176;font-size:.8rem}
+.nw-vazio{margin:0 0 30px;padding:24px;border:1px dashed #b9c9e2;border-radius:16px;color:#34445a}
+.nw-art ul{padding-left:1.3rem}

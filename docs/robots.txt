@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://oenforcado.com/sitemap.xml
+Sitemap: https://oenforcado.com/noticias/sitemap-noticias.xml

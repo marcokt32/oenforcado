@@ -35,7 +35,7 @@ function jogoAtualUrl(path, dataJogo) {
 }
 
 // HTML do menu (função pura, fácil de testar)
-function montarDrawerHTML(atualUrl, temPortal) {
+function montarDrawerHTML(atualUrl, temPortal, naNoticias) {
   const atual = CATEGORIAS.find(c => c.jogos.some(j => j.url === atualUrl));
   const cats = CATEGORIAS.map(c => {
     const aberta = atual && atual.id === c.id;
@@ -49,12 +49,13 @@ function montarDrawerHTML(atualUrl, temPortal) {
     ? `<div class="pm-drawer-rapido"><button type="button" class="pm-drawer-diario" data-pm="diario">📅 Desafio do dia</button><button type="button" class="pm-drawer-rank" data-pm="ranking">🏆 Ranking</button></div>`
     : "";
   return `<div class="pm-drawer-head"><strong>Menu</strong><button type="button" class="pm-drawer-x" aria-label="Fechar menu">✕</button></div>` +
-    `<div class="pm-drawer-body">${rapido}<a class="pm-drawer-link" href="/">🏠 Início</a>${cats}<a class="pm-drawer-link" href="/sobre.html">ℹ️ Sobre o projeto</a></div>`;
+    `<div class="pm-drawer-body">${rapido}<a class="pm-drawer-link" href="/">🏠 Início</a><a class="pm-drawer-link" href="/noticias/"${naNoticias ? ' aria-current="page"' : ""}>📰 Notícias</a>${cats}<a class="pm-drawer-link" href="/sobre.html">ℹ️ Sobre o projeto</a></div>`;
 }
 
 if (typeof document === "undefined") { module.exports = { montarDrawerHTML, jogoAtualUrl, CATEGORIAS }; return; }
 
 const $ = id => document.getElementById(id);
+const naNoticias = () => /^\/noticias(\/|$)/.test(location.pathname);
 let ultimoFoco = null;
 
 function garantirBotao() {
@@ -70,11 +71,11 @@ function garantirBotao() {
 
 function criarDrawer() {
   let d = $("pm-drawer");
-  if (d) { d.innerHTML = montarDrawerHTML(jogoAtualUrl(location.pathname, document.body.dataset.jogo), !!window.Portal); return d; }
+  if (d) { d.innerHTML = montarDrawerHTML(jogoAtualUrl(location.pathname, document.body.dataset.jogo), !!window.Portal, naNoticias()); return d; }
   const ov = document.createElement("div"); ov.id = "pm-drawer-overlay"; ov.className = "pm-drawer-overlay";
   d = document.createElement("aside"); d.id = "pm-drawer"; d.className = "pm-drawer";
   d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true"); d.setAttribute("aria-label", "Menu principal");
-  d.innerHTML = montarDrawerHTML(jogoAtualUrl(location.pathname, document.body.dataset.jogo), !!window.Portal);
+  d.innerHTML = montarDrawerHTML(jogoAtualUrl(location.pathname, document.body.dataset.jogo), !!window.Portal, naNoticias());
   document.body.appendChild(ov); document.body.appendChild(d);
   ov.addEventListener("click", fechar);
   return d;

@@ -9,3 +9,10 @@ main{flex:1 0 auto}
 .portal-header .brand{order:0}
 .portal-header .header-cta{margin-left:auto}
 .portal-header .header-actions{order:0;margin-left:0}
+/* Botões do cabeçalho da home: "Escolher jogo" e "Notícias" lado a lado */
+.portal-header .header-links{display:flex;align-items:center;gap:10px;margin-left:auto}
+.portal-header .header-links .header-cta{margin-left:0}
+.header-cta-news{background:#fff3d6;color:#7a4b00}
+.header-cta-news:hover{background:#ffe9b3}
+.header-cta-news:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+@media(max-width:700px){.header-cta-news{display:none}}

@@ -175,7 +175,7 @@ main{flex:1 0 auto}
 /* Área de login/avatar: reserva o lugar antes do Firebase Auth responder */
 .header-actions{min-height:42px;min-width:138px;justify-content:flex-end}
 .pm-ph{display:inline-block;width:92px;height:42px;flex:none}
-@media(max-width:700px){.header-actions{min-width:130px}.pm-ph{width:42px}}
+@media(max-width:700px){.header-actions{min-width:100px}.pm-ph{width:42px}}
 @media(max-width:420px){.pm-ph{width:62px}}
 
 /* Barra de ferramentas montada por JS (forca, deslizante...) */

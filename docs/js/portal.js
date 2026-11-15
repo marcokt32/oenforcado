@@ -1,6 +1,7 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
-// Atualizado em 14/11/2026 (v1.0.20)
+// Atualizado em 15/11/2026 (v1.0.21)
+//  - v1.0.21: link "Notícias" no cabeçalho; imagens do cabeçalho/avatares com caminho absoluto (funcionam em /noticias/)
 //  - v1.0.20: limite de dicas no Kyudoku (2/3/4 por dificuldade)
 //  - v1.0.19: limite de dicas no Damas (3 por partida)
 //  - v1.0.18: limite de dicas por dificuldade (MAX_DICAS aceita número ou {facil,medio,dificil}); Lógica grega: 2/3/4
@@ -66,6 +67,8 @@
   const carregarReportar = () => { if (window.Reportar) return; const sc = document.createElement("script"); sc.src = "/js/reportar.js?v=1.0.1"; sc.async = true; document.head.appendChild(sc); };
   const agendarReportar = () => { if (window.requestIdleCallback) requestIdleCallback(carregarReportar, { timeout: 4000 }); else setTimeout(carregarReportar, 2000); };
   if (document.readyState === "complete") agendarReportar(); else window.addEventListener("load", agendarReportar);
+  // v1.0.21: avatar guardado como "img/..." (relativo) precisa de "/" para funcionar em subpastas como /noticias/
+  const srcImg = s => /^(https?:|\/)/.test(s || "") ? s : "/" + (s || "");
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------- Estado local (vale sem login) ---------- */
@@ -510,9 +513,12 @@
         jogos.map(j => `<li><a href="${j.url}"${ehAtual(j) ? ' aria-current="page"' : ""}>${esc(j.nome)}</a></li>`).join("") +
         `</ul></div>`;
     }).join("");
+    // v1.0.21: "Notícias" é um link direto (não é jogo), com o mesmo visual dos botões de categoria
+    const naNoticias = atual === "/noticias" || atual.startsWith("/noticias/");
+    const noticias = `<a class="pm-nav-link${naNoticias ? " atual" : ""}" href="/noticias/"${naNoticias ? ' aria-current="page"' : ""}>📰 Notícias</a>`;
     h.innerHTML =
-      `<a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>` +
-      `<nav aria-label="Navegação principal">${links}</nav><div class="header-actions" id="pm-acoes"></div>` +
+      `<a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="/img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>` +
+      `<nav aria-label="Navegação principal">${links}${noticias}</nav><div class="header-actions" id="pm-acoes"></div>` +
       `<button type="button" class="pm-burger" id="pm-burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="pm-drawer"><span></span><span></span><span></span></button>`;
     renderAcoes();
   }
@@ -526,7 +532,7 @@
     if (!authPronto) { el.innerHTML = html + `<span class="pm-ph" aria-hidden="true"></span>`; return; } // v1.0.14: reserva o lugar do login/avatar (CLS)
     if (u) {
       const perfil = perfilAtual(u);
-      const foto = `<img src="${esc(perfil.avatar)}" alt="" referrerpolicy="no-referrer">`;
+      const foto = `<img src="${esc(srcImg(perfil.avatar))}" alt="" referrerpolicy="no-referrer">`;
       const d = ler();
       html += `<button type="button" class="pm-avatar" data-pm="menu" aria-label="Minha conta" aria-haspopup="true">${foto}</button>` +
         `<div class="pm-menu" id="pm-menu" hidden><strong>${esc(perfil.nome)}</strong>` +
@@ -563,7 +569,7 @@
       snap.forEach(c => { lista.push({ id: c.key, ...c.val() }); });
       lista.sort((a, b) => (b.xp || 0) - (a.xp || 0));
       $("pm-top").innerHTML = lista.length ? lista.map((p, i) =>
-        `<div class="pm-linha${u && p.id === u.uid ? " eu" : ""}"><span>${i + 1}º</span><img src="${esc(p.avatar)}" alt="" referrerpolicy="no-referrer"><span>${esc(p.nome)}</span><b>${Number(p.xp) || 0}</b></div>`).join("")
+        `<div class="pm-linha${u && p.id === u.uid ? " eu" : ""}"><span>${i + 1}º</span><img src="${esc(srcImg(p.avatar))}" alt="" referrerpolicy="no-referrer"><span>${esc(p.nome)}</span><b>${Number(p.xp) || 0}</b></div>`).join("")
         : `<p class="pm-vazio">Ninguém no ranking ainda. Seja o primeiro!</p>`;
     }).catch(() => { $("pm-top").innerHTML = `<p class="pm-vazio">Não foi possível carregar o ranking agora.</p>`; });
 
@@ -572,7 +578,7 @@
         const eu = s.val(); if (!eu) return;
         return db.ref("ranking").orderByChild("xp").startAt((eu.xp || 0) + 1).limitToFirst(101).once("value").then(acima => {
           const n = acima.numChildren();
-          $("pm-eu").innerHTML = `<p class="pm-sub">SUA POSIÇÃO</p><div class="pm-linha eu"><span>${n > 100 ? "100+" : n + 1}º</span><img src="${esc(eu.avatar)}" alt="" referrerpolicy="no-referrer"><span>${esc(eu.nome)}</span><b>${Number(eu.xp) || 0}</b></div>`;
+          $("pm-eu").innerHTML = `<p class="pm-sub">SUA POSIÇÃO</p><div class="pm-linha eu"><span>${n > 100 ? "100+" : n + 1}º</span><img src="${esc(srcImg(eu.avatar))}" alt="" referrerpolicy="no-referrer"><span>${esc(eu.nome)}</span><b>${Number(eu.xp) || 0}</b></div>`;
         });
       }).catch(() => { });
     }
@@ -598,7 +604,7 @@
     const atual = perfilAtual(u);
     avatarEscolhido = atual.avatar;
     const fotoGoogle = u.photoURL && FOTO_GOOGLE_OK.test(u.photoURL) ? u.photoURL : "";
-    const opcoes = AVATARES.map((src, i) => `<button type="button" class="pm-av" data-av="${esc(src)}" aria-label="Avatar ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("") +
+    const opcoes = AVATARES.map((src, i) => `<button type="button" class="pm-av" data-av="${esc(src)}" aria-label="Avatar ${i + 1}"><img src="${esc(srcImg(src))}" alt=""></button>`).join("") +
       (fotoGoogle ? `<button type="button" class="pm-av" data-av="${esc(fotoGoogle)}" aria-label="Minha foto do Google"><img src="${esc(fotoGoogle)}" alt="" referrerpolicy="no-referrer"></button>` : "");
     const o = document.createElement("div");
     o.id = "pm-perfil"; o.className = "pm-overlay";

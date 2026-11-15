@@ -84,3 +84,26 @@ html.pm-menu-aberto{overflow:hidden}
 .site-header nav .pm-dd-menu a[aria-current="page"]{background:#eef3fb;color:#1f6feb;font-weight:800}
 
 @media(prefers-reduced-motion:reduce){.pm-dd-btn,.pm-dd-seta{transition:none}}
+
+/* ===== Link direto "Notícias" no cabeçalho do computador (v1.0.2) ===== */
+.site-header nav .pm-nav-link{
+  display:inline-flex;align-items:center;min-height:40px;padding:0 14px;
+  border-radius:999px;text-decoration:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.42) 0,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,#fff 0,#f1f5fb 55%,#e0e8f3 100%);
+  color:#0a2540;font-size:.95rem;font-weight:700;
+  box-shadow:0 3px 0 #c3d0e2,0 7px 12px rgba(10,37,64,.10),inset 0 2px 1px rgba(255,255,255,.7),inset 0 -3px 5px rgba(10,37,64,.08);
+  transition:transform .12s ease,box-shadow .12s ease
+}
+.site-header nav .pm-nav-link:hover{transform:translateY(-1px)}
+.site-header nav .pm-nav-link:active{transform:translateY(2px);box-shadow:0 1px 0 #c3d0e2,inset 0 2px 3px rgba(10,37,64,.16)}
+.site-header nav .pm-nav-link:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.site-header nav .pm-nav-link.atual{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.5) 0,rgba(255,255,255,.16) 48%,rgba(255,255,255,0) 50%),
+    linear-gradient(180deg,#f2f7ff 0,#dfeaff 55%,#c9dcfa 100%);
+  color:#1559c4;
+  box-shadow:0 3px 0 #a9c3ea,0 7px 12px rgba(31,111,235,.18),inset 0 2px 1px rgba(255,255,255,.8),inset 0 -3px 5px rgba(31,111,235,.10)
+}
+@media(prefers-reduced-motion:reduce){.site-header nav .pm-nav-link{transition:none}}
