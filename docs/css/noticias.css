@@ -15,10 +15,10 @@
 
 /* Lista de notícias */
 .nw-lista{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:0 0 30px;padding:0;list-style:none}
-.nw-card{display:flex;flex-direction:column;height:100%;padding:20px;border:1px solid var(--line,#dbe3ef);border-radius:18px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 4px 0 #dbe3ef}
+.nw-card{display:flex;flex-direction:column;height:100%;--p:20px;padding:var(--p);border:1px solid var(--line,#dbe3ef);border-radius:18px;background:#fff;color:inherit;text-decoration:none;box-shadow:0 4px 0 #dbe3ef}
 .nw-card:hover{border-color:#b9c9e2}
 .nw-card:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
-.nw-card.destaque{grid-column:1/-1;padding:clamp(22px,4vw,34px)}
+.nw-card.destaque{grid-column:1/-1;--p:clamp(22px,4vw,34px)}
 .nw-cat{align-self:flex-start;margin-bottom:10px;padding:4px 10px;border-radius:999px;background:#edf2ff;color:#2357a5;font-size:.78rem;font-weight:800}
 .nw-card h2,.nw-card h3{margin:0 0 8px;color:#0a2540;font-size:1.2rem;line-height:1.3;letter-spacing:-.02em}
 .nw-card.destaque h2{font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.2}
@@ -62,3 +62,19 @@
 
 /* Nota de correção (campo "correcao" no .md) */
 .nw-correcao{margin:22px 0;padding:14px 16px;border-left:5px solid #c2410c;border-radius:0 12px 12px 0;background:#fff1e8;color:#7c2d12;line-height:1.55;font-size:.95rem}
+
+/* Imagem no card da lista (campo "imagem" no .md) */
+.nw-card.com-img{overflow:hidden}
+.nw-card-img{display:block;margin:calc(var(--p) * -1) calc(var(--p) * -1) 16px;aspect-ratio:16/9;background:#edf3ff}
+.nw-card.destaque .nw-card-img{aspect-ratio:21/9}
+.nw-card-img img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* Tipografia de jornal: Playfair Display (títulos) + Source Serif 4 (texto). Metadados e botões ficam em Inter. */
+.nw-main{--f-titulo:"Playfair Display",Georgia,"Times New Roman",serif;--f-texto:"Source Serif 4",Georgia,"Times New Roman",serif}
+.nw-top h1,.nw-art h1,.nw-card h2,.nw-card h3,.nw-resumo h2,.nw-art h2,.nw-fontes h2{font-family:var(--f-titulo);letter-spacing:-.01em}
+.nw-top h1,.nw-art h1,.nw-card.destaque h2{font-weight:800}
+.nw-card h2,.nw-card h3,.nw-resumo h2,.nw-art h2,.nw-fontes h2{font-weight:700}
+.nw-top p,.nw-card p,.nw-resumo ol,.nw-30s,.nw-art p,.nw-art li,.nw-correcao,.nw-vazio{font-family:var(--f-texto)}
+.nw-art p,.nw-art li{font-size:1.1rem;line-height:1.7}
+.nw-card p{font-size:1rem;line-height:1.55}
+.nw-resumo a{font-weight:600}

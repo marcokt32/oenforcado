@@ -1,6 +1,8 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
-// Atualizado em 15/11/2026 (v1.0.21)
+// Atualizado em 15/11/2026 (v1.0.24)
+//  - v1.0.24: banner da loja parceira (Closet Real) acima do rodapé, em todas as páginas (função montarBanner)
+//  - v1.0.22: bloco "Também no celular" com os apps Android (js/apps-android.js, carregado aqui)
 //  - v1.0.21: link "Notícias" no cabeçalho; imagens do cabeçalho/avatares com caminho absoluto (funcionam em /noticias/)
 //  - v1.0.20: limite de dicas no Kyudoku (2/3/4 por dificuldade)
 //  - v1.0.19: limite de dicas no Damas (3 por partida)
@@ -63,6 +65,8 @@
   const mensagens = async () => { await carregarMessaging(); return firebase.messaging(); };
   // v1.0.15: efeitos sonoros. O sons.js é carregado aqui para valer em todas as páginas sem mexer nos HTMLs.
   if (!window.Sons) { const sc = document.createElement("script"); sc.src = "/js/sons.js?v=1.0.0"; sc.async = true; document.head.appendChild(sc); }
+  // v1.0.22: bloco "Também no celular" (js/apps-android.js). Para trocar os apps, edite a lista APPS naquele arquivo.
+  if (!window.AppsAndroid) { const ap = document.createElement("script"); ap.src = "/js/apps-android.js?v=1.0.1"; ap.async = true; document.head.appendChild(ap); }
   // v1.0.16: "Reportar um problema" (js/reportar.js). Só é baixado depois que a página terminou de carregar, para não pesar no INP.
   const carregarReportar = () => { if (window.Reportar) return; const sc = document.createElement("script"); sc.src = "/js/reportar.js?v=1.0.1"; sc.async = true; document.head.appendChild(sc); };
   const agendarReportar = () => { if (window.requestIdleCallback) requestIdleCallback(carregarReportar, { timeout: 4000 }); else setTimeout(carregarReportar, 2000); };
@@ -723,7 +727,56 @@
   });
 
   /* ---------- Início e service worker (o aviso de cookies fica em js/consent.js) ---------- */
-  function iniciar() { montarHeader(); iniciarNotificacoes(); }
+  /* ---------- Banner da loja parceira, acima do rodapé (v1.0.24) ---------- */
+  // Para trocar ou tirar: edite BANNER (ou apague esta parte e a chamada em iniciar()).
+  // Sem imagens, mostra um banner feito em CSS. Para usar arte própria, preencha "desktop" e "mobile"
+  // com arquivos de docs/img/parceiros/ (ex.: "/img/parceiros/closetreal-desktop.jpg").
+  const BANNER = {
+    nome: "Closet Real", url: "https://closetreal.com.br/",
+    linha: "Moda feminina com envio para todo o Brasil", dominio: "closetreal.com.br",
+    desktop: "", mobile: ""
+  };
+  const BANNER_CSS = ".pm-banner{width:min(100% - 32px,1000px);margin:0 auto 36px}" +
+    ".pm-banner-a{position:relative;display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:112px;padding:20px clamp(18px,4vw,36px);padding-right:clamp(80px,16vw,150px);border:1px solid #f1c9d2;border-radius:18px;background:linear-gradient(110deg,#fff7f8 0%,#fde6eb 55%,#f9d3dc 100%);color:#5b1a2b;text-decoration:none;overflow:hidden;box-shadow:0 4px 0 #f1c9d2;transition:transform .15s}" +
+    ".pm-banner-a::after{content:\"👗\" / \"\";position:absolute;right:clamp(16px,5vw,48px);top:50%;transform:translateY(-50%);font-size:clamp(2.6rem,8vw,4rem);line-height:1}" +
+    ".pm-banner-a:hover{transform:translateY(-2px)}.pm-banner-a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}" +
+    ".pm-banner-tag{position:absolute;top:8px;left:clamp(18px,4vw,36px);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7d4b59}" +
+    ".pm-banner-marca{margin-top:8px;font-family:Poppins,Inter,system-ui,sans-serif;font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}" +
+    ".pm-banner-linha{font-size:.95rem;color:#7a3a4b;line-height:1.4}" +
+    ".pm-banner-dom{margin-top:4px;font-size:.78rem;font-weight:700;letter-spacing:.04em;color:#8a3a50}" +
+    ".pm-banner-img{position:relative;display:block;border-radius:18px;overflow:hidden;box-shadow:0 4px 0 #dbe3ef;transition:transform .15s}.pm-banner-img:hover{transform:translateY(-2px)}" +
+    ".pm-banner-img:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}.pm-banner-img img{display:block;width:100%;height:auto}" +
+    ".pm-banner-img .pm-banner-tag{top:8px;right:8px;left:auto;padding:2px 7px;border-radius:6px;background:#000a;color:#fff}" +
+    "@media(prefers-reduced-motion:reduce){.pm-banner-a,.pm-banner-img{transition:none}.pm-banner-a:hover,.pm-banner-img:hover{transform:none}}@media print{.pm-banner{display:none}}";
+
+  function montarBanner() {
+    const rodape = document.querySelector(".corp-footer");
+    if (!rodape || !rodape.parentNode || $("pm-banner")) return;
+    if (!$("pm-banner-css")) {
+      const st = document.createElement("style");
+      st.id = "pm-banner-css"; st.textContent = BANNER_CSS;
+      document.head.appendChild(st);
+    }
+    const pag = (location.pathname.replace(/\.html$/, "").replace(/^\/+|\/+$/g, "").replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "home").slice(0, 40);
+    const href = BANNER.url + "?utm_source=oenforcado&utm_medium=banner&utm_campaign=" + encodeURIComponent(pag);
+    const tag = '<span class="pm-banner-tag">Publicidade</span>';
+    const conteudo = BANNER.desktop
+      ? '<a class="pm-banner-img" href="' + esc(href) + '" target="_blank" rel="sponsored noopener" aria-label="' + esc(BANNER.nome + ": " + BANNER.linha) + '"><picture>' +
+        (BANNER.mobile ? '<source media="(max-width:600px)" srcset="' + esc(BANNER.mobile) + '">' : "") +
+        '<img src="' + esc(BANNER.desktop) + '" alt="" width="1000" height="150" loading="lazy" decoding="async"></picture>' + tag + '</a>'
+      : '<a class="pm-banner-a" href="' + esc(href) + '" target="_blank" rel="sponsored noopener">' + tag +
+        '<span class="pm-banner-marca">' + esc(BANNER.nome) + '</span><span class="pm-banner-linha">' + esc(BANNER.linha) + '</span>' +
+        '<span class="pm-banner-dom">' + esc(BANNER.dominio) + '</span></a>';
+    const el = document.createElement("aside");
+    el.id = "pm-banner"; el.className = "pm-banner"; el.setAttribute("aria-label", "Publicidade");
+    el.innerHTML = conteudo;
+    el.addEventListener("click", e => {
+      if (e.target.closest("a") && typeof gtag === "function") gtag("event", "click_banner_parceiro", { parceiro: BANNER.nome, pagina: pag });
+    });
+    rodape.parentNode.insertBefore(el, rodape);
+  }
+
+  function iniciar() { montarHeader(); iniciarNotificacoes(); montarBanner(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar); else iniciar();
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => { }));
 

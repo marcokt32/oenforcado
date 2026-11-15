@@ -3515,3 +3515,8 @@ html[data-tema="republica"] .mem-costas::after{content:"🏛️";font-size:calc(
     display: none
   }
 }
+
+/* Escala global do site: equivale a abrir o navegador com zoom de 85% */
+:root{--escala:.85}
+html{zoom:var(--escala)}
+body{min-height:calc(100vh / var(--escala));min-height:calc(100dvh / var(--escala))}

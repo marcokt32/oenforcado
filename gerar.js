@@ -1,4 +1,4 @@
-// O Enforcado News: gera o HTML das matérias a partir de conteudo/*.md
+// Jornal O Enforcado: gera o HTML das matérias a partir de conteudo/*.md
 // Uso (na pasta oenforcado, ao lado da pasta docs):  node gerar.js
 // Sem dependências: só o Node.js.
 const fs = require("fs"), path = require("path");
@@ -102,14 +102,15 @@ const CSS = `<link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site-theme.css?v=1.0.0">
   <link rel="stylesheet" href="/css/termo.css?v=1.0.2">
   <link rel="stylesheet" href="/css/portal-shell.css?v=1.1.0">
   <link rel="stylesheet" href="/css/footer.css?v=1.0.3">
   <link rel="stylesheet" href="/css/menu.css?v=1.0.2">
   <link rel="stylesheet" href="/css/candy.css?v=1.1.0">
-  <link rel="stylesheet" href="/css/tema.css?v=1.0.1">
-  <link rel="stylesheet" href="/css/noticias.css?v=1.0.2">`;
+  <link rel="stylesheet" href="/css/tema.css?v=1.0.2">
+  <link rel="stylesheet" href="/css/noticias.css?v=1.0.4">`;
 const HEADER = `<header class="site-header">
     <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="/img/hung.png" alt="" width="42" height="42"><span>O Enforcado</span></a>
     <nav aria-label="Navegação principal"></nav>
@@ -118,7 +119,7 @@ const FOOTER = `<footer class="corp-footer">
     <div class="corp-wrap">
       <div class="corp-col corp-brand">
         <a class="corp-logo" href="/">O Enforcado</a>
-        <p>Jogos de palavras e de lógica gratuitos, com desafio do dia e ranking, e o O Enforcado News, notícias rápidas com fontes citadas.</p>
+        <p>Jogos de palavras e de lógica gratuitos, com desafio do dia e ranking, e o Jornal O Enforcado, notícias rápidas com fontes citadas.</p>
       </div>
       <nav class="corp-col" aria-label="Jogos">
         <h3>Jogos</h3>
@@ -138,7 +139,7 @@ const SCRIPTS = `<script src="https://www.gstatic.com/firebasejs/10.12.2/firebas
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="/js/firebase-init.js"></script>
-  <script src="/js/portal.js?v=1.0.21"></script>
+  <script src="/js/portal.js?v=1.0.24"></script>
   <script src="/js/menu.js?v=1.0.6"></script>`;
 
 const urlMateria = n => SITE + "/noticias/" + n.slug + ".html";
@@ -167,7 +168,7 @@ function paginaMateria(n) {
 <html lang="pt-BR">
 <head>
   ${HEAD}
-  <title>${esc(n.titulo)} | O Enforcado News</title>
+  <title>${esc(n.titulo)} | Jornal O Enforcado</title>
   <meta name="description" content="${esc(desc)}">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="article">
@@ -215,33 +216,40 @@ function paginaLista(notas) {
       <p>${resumo.length} ${resumo.length === 1 ? "notícia" : "notícias"} em um minuto. Atualizado em ${dataBR(diaNovo)}.</p>
       <ol>${resumo.map(n => `<li><a href="/noticias/${n.slug}.html">${esc(n.titulo)}</a></li>`).join("")}</ol>
     </section>` : "";
-  const cards = notas.map((n, i) => `<li>
-        <a class="nw-card${i === 0 ? " destaque" : ""}" href="/noticias/${n.slug}.html">
+  const cards = notas.map((n, i) => {
+    const tag = i === 0 ? "h2" : "h3";
+    const foto = n.imagem
+      ? `<span class="nw-card-img"><img src="/img/noticias/${esc(n.imagem)}" alt="" width="1200" height="630"${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></span>`
+      : "";
+    return `<li>
+        <a class="nw-card${i === 0 ? " destaque" : ""}${n.imagem ? " com-img" : ""}" href="/noticias/${n.slug}.html">
+          ${foto}
           <span class="nw-cat">${esc(n.categoria)}</span>
-          <${i === 0 ? "h2" : "h3"}>${esc(n.titulo)}</${i === 0 ? "h2" : "h3"}>
+          <${tag}>${esc(n.titulo)}</${tag}>
           <p>${esc(n.resumo)}</p>
           <span class="nw-meta">Por ${AUTOR} · ${dataBR(n.data)} · ${minutos(n.corpo)} min de leitura</span>
         </a>
-      </li>`).join("\n      ");
+      </li>`;
+  }).join("\n      ");
   const vazio = `<p class="nw-vazio">As primeiras notícias chegam em breve. Enquanto isso, que tal um desafio do dia?</p>`;
-  const ld = { "@context": "https://schema.org", "@type": "CollectionPage", name: "O Enforcado News", url, inLanguage: "pt-BR", description: "Notícias do dia resumidas, com análise própria e fontes citadas.", publisher: { "@type": "Organization", name: "O Enforcado", url: SITE + "/" } };
+  const ld = { "@context": "https://schema.org", "@type": "CollectionPage", name: "Jornal O Enforcado", url, inLanguage: "pt-BR", description: "Notícias do dia resumidas, com análise própria e fontes citadas.", publisher: { "@type": "Organization", name: "O Enforcado", url: SITE + "/" } };
   return `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   ${HEAD}
-  <title>O Enforcado News: notícias rápidas com fontes | O Enforcado</title>
-  <meta name="description" content="Notícias do dia resumidas em poucas linhas, com análise própria e fontes citadas. Games, tecnologia e curiosidades no O Enforcado News.">
+  <title>Jornal O Enforcado: notícias rápidas com fontes</title>
+  <meta name="description" content="Notícias do dia resumidas em poucas linhas, com análise própria e fontes citadas. Games, tecnologia e curiosidades no Jornal O Enforcado.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="O Enforcado">
-  <meta property="og:title" content="O Enforcado News: notícias rápidas com fontes">
+  <meta property="og:title" content="Jornal O Enforcado: notícias rápidas com fontes">
   <meta property="og:description" content="Notícias do dia resumidas em poucas linhas, com análise própria e fontes citadas.">
   <meta property="og:url" content="${url}">
   <meta property="og:image" content="${SITE}/img/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="${url}">
-  <link rel="alternate" type="application/rss+xml" title="O Enforcado News" href="/noticias/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Jornal O Enforcado" href="/noticias/feed.xml">
   <script type="application/ld+json">${jsonLd(ld)}</script>
   ${CSS}
 </head>
@@ -250,7 +258,7 @@ function paginaLista(notas) {
   <main class="nw-main">
     <section class="nw-top">
       <div>
-        <h1>O Enforcado News</h1>
+        <h1>Jornal O Enforcado</h1>
         <p>O que aconteceu, por que importa e onde conferir. Resumos curtos com as fontes sempre citadas.</p>
       </div>
       <span class="nw-data" id="nw-data"></span>
@@ -295,7 +303,7 @@ function feed(notas) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>O Enforcado News</title>
+    <title>Jornal O Enforcado</title>
     <link>${SITE}/noticias/</link>
     <description>Notícias do dia resumidas, com análise própria e fontes citadas.</description>
     <language>pt-BR</language>
