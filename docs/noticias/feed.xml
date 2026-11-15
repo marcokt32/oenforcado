@@ -5,13 +5,6 @@
     <link>https://oenforcado.com/noticias/</link>
     <description>Notícias do dia resumidas, com análise própria e fontes citadas.</description>
     <language>pt-BR</language>
-    <item>
-      <title>Título da matéria com a palavra-chave principal</title>
-      <link>https://oenforcado.com/noticias/exemplo-de-materia.html</link>
-      <guid isPermaLink="true">https://oenforcado.com/noticias/exemplo-de-materia.html</guid>
-      <pubDate>Sun, 15 Nov 2026 12:00:00 GMT</pubDate>
-      <category>Games</category>
-      <description>Duas linhas com o essencial da notícia, escritas com as suas palavras.</description>
-    </item>
+
   </channel>
 </rss>

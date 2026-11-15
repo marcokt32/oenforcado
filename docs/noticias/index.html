@@ -27,12 +27,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site-theme.css?v=1.0.0">
   <link rel="stylesheet" href="/css/termo.css?v=1.0.2">
-  <link rel="stylesheet" href="/css/portal-shell.css?v=1.1.0">
+  <link rel="stylesheet" href="/css/portal-shell.css?v=1.0.9">
   <link rel="stylesheet" href="/css/footer.css?v=1.0.3">
   <link rel="stylesheet" href="/css/menu.css?v=1.0.2">
   <link rel="stylesheet" href="/css/candy.css?v=1.1.0">
   <link rel="stylesheet" href="/css/tema.css?v=1.0.1">
-  <link rel="stylesheet" href="/css/noticias.css?v=1.0.2">
+  <link rel="stylesheet" href="/css/noticias.css?v=1.0.1">
 </head>
 <body>
   <header class="site-header">
@@ -47,21 +47,8 @@
       </div>
       <span class="nw-data" id="nw-data"></span>
     </section>
-    <section class="nw-resumo" aria-labelledby="resumo-t">
-      <h2 id="resumo-t">Resumo do dia</h2>
-      <p>1 notícia em um minuto. Atualizado em 15 de nov de 2026.</p>
-      <ol><li><a href="/noticias/exemplo-de-materia.html">Título da matéria com a palavra-chave principal</a></li></ol>
-    </section>
-    <ul class="nw-lista">
-      <li>
-        <a class="nw-card destaque" href="/noticias/exemplo-de-materia.html">
-          <span class="nw-cat">Games</span>
-          <h2>Título da matéria com a palavra-chave principal</h2>
-          <p>Duas linhas com o essencial da notícia, escritas com as suas palavras.</p>
-          <span class="nw-meta">Por Marco Quintela · 15 de nov de 2026 · 1 min de leitura</span>
-        </a>
-      </li>
-    </ul>
+    
+    <p class="nw-vazio">As primeiras notícias chegam em breve. Enquanto isso, que tal um desafio do dia?</p>
     <section class="nw-canais" aria-label="Receba as notícias">
       <div class="nw-box">
         <h2>Receba o resumo no celular</h2>
@@ -99,8 +86,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="/js/firebase-init.js"></script>
-  <script src="/js/portal.js?v=1.1.0"></script>
-  <script src="/js/menu.js?v=1.0.6"></script>
+  <script src="/js/portal.js?v=1.0.21"></script>
+  <script src="/js/menu.js?v=1.0.5"></script>
   <script>
     (function(){var e=document.getElementById("nw-data");if(e)e.textContent=new Intl.DateTimeFormat("pt-BR",{weekday:"long",day:"numeric",month:"long",timeZone:"America/Sao_Paulo"}).format(new Date())})();
   </script>
