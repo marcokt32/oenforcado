@@ -53,14 +53,39 @@ function blocos(texto) {
   }).filter(Boolean);
 }
 function corpoHTML(texto) {
-  let html = "", caixa = false;
-  const fechar = () => { if (caixa) { html += "</div>"; caixa = false; } };
+  let html = "", caixa = false, esperandoTitulo = false;
+  const fechar = () => {
+    if (caixa) {
+      html += "</div>";
+      caixa = false;
+      esperandoTitulo = false;
+    }
+  };
+
   for (const b of blocos(texto)) {
-    if (typeof b === "string") { html += b; continue; }
+    if (typeof b === "string") {
+      if (esperandoTitulo) {
+        // Remove as tags <p> ou <ul> geradas pela função blocos() e usa o texto como <h2>
+        const tituloLimpo = b.replace(/^<(?:p|ul|li)>|<\/(?:p|ul|li)>$/g, "");
+        html += "<h2>" + tituloLimpo + "</h2>";
+        esperandoTitulo = false;
+      } else {
+        html += b;
+      }
+      continue;
+    }
+
     fechar();
-    if (/^por que importa$/i.test(b.h2.trim())) { html += '<div class="nw-importa"><h2>' + esc(b.h2) + "</h2>"; caixa = true; }
-    else html += "<h2>" + esc(b.h2) + "</h2>";
+
+    if (/^por que importa$/i.test(b.h2.trim())) {
+      html += '<div class="nw-importa">';
+      caixa = true;
+      esperandoTitulo = true;
+    } else {
+      html += "<h2>" + esc(b.h2) + "</h2>";
+    }
   }
+
   fechar();
   return html;
 }

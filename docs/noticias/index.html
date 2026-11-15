@@ -27,12 +27,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site-theme.css?v=1.0.0">
   <link rel="stylesheet" href="/css/termo.css?v=1.0.2">
-  <link rel="stylesheet" href="/css/portal-shell.css?v=1.0.9">
+  <link rel="stylesheet" href="/css/portal-shell.css?v=1.1.0">
   <link rel="stylesheet" href="/css/footer.css?v=1.0.3">
   <link rel="stylesheet" href="/css/menu.css?v=1.0.2">
   <link rel="stylesheet" href="/css/candy.css?v=1.1.0">
   <link rel="stylesheet" href="/css/tema.css?v=1.0.1">
-  <link rel="stylesheet" href="/css/noticias.css?v=1.0.1">
+  <link rel="stylesheet" href="/css/noticias.css?v=1.0.2">
 </head>
 <body>
   <header class="site-header">
@@ -42,13 +42,26 @@
   <main class="nw-main">
     <section class="nw-top">
       <div>
-        <h1>O Enforcado News</h1>
+        <h1>Jornal O Enforcado</h1>
         <p>O que aconteceu, por que importa e onde conferir. Resumos curtos com as fontes sempre citadas.</p>
       </div>
       <span class="nw-data" id="nw-data"></span>
     </section>
-    
-    <p class="nw-vazio">As primeiras notícias chegam em breve. Enquanto isso, que tal um desafio do dia?</p>
+    <section class="nw-resumo" aria-labelledby="resumo-t">
+      <h2 id="resumo-t">Resumo do dia</h2>
+      <p>1 notícia em um minuto. Atualizado em 15 de nov de 2026.</p>
+      <ol><li><a href="/noticias/take-two-critica-openai.html">GTA 6: CEO da Take-Two critica Anthropic e OpenAI por clones de jogos criados com IA</a></li></ol>
+    </section>
+    <ul class="nw-lista">
+      <li>
+        <a class="nw-card destaque" href="/noticias/take-two-critica-openai.html">
+          <span class="nw-cat">Games e Tecnologia</span>
+          <h2>GTA 6: CEO da Take-Two critica Anthropic e OpenAI por clones de jogos criados com IA</h2>
+          <p>O CEO da Take-Two, Strauss Zelnick, criticou a Anthropic e a OpenAI por permitirem que suas ferramentas de IA sejam usadas para copiar jogos existentes, classificando a prática como uma contradição em relação à proteção da propriedade intelectual.</p>
+          <span class="nw-meta">Por Marco Quintela · 15 de nov de 2026 · 1 min de leitura</span>
+        </a>
+      </li>
+    </ul>
     <section class="nw-canais" aria-label="Receba as notícias">
       <div class="nw-box">
         <h2>Receba o resumo no celular</h2>
@@ -74,7 +87,7 @@
       </nav>
       <nav class="corp-col" aria-label="Institucional">
         <h3>Institucional</h3>
-        <a href="/noticias/">Notícias</a><a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
+        <a href="/noticias/">Notícias</a><a href="/politica-editorial.html">Política editorial</a><a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a href="/termos.html">Termos de Uso</a>
       </nav>
     </div>
     <div class="corp-bottom">
@@ -87,7 +100,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="/js/firebase-init.js"></script>
   <script src="/js/portal.js?v=1.0.21"></script>
-  <script src="/js/menu.js?v=1.0.5"></script>
+  <script src="/js/menu.js?v=1.0.6"></script>
   <script>
     (function(){var e=document.getElementById("nw-data");if(e)e.textContent=new Intl.DateTimeFormat("pt-BR",{weekday:"long",day:"numeric",month:"long",timeZone:"America/Sao_Paulo"}).format(new Date())})();
   </script>
