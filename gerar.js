@@ -259,7 +259,7 @@ function paginaLista(notas) {
     <section class="nw-top">
       <div>
         <h1>Jornal O Enforcado</h1>
-        <p>O que aconteceu, por que importa e onde conferir. Resumos curtos com as fontes sempre citadas.</p>
+        <p>Onde o entretenimento encontra o conhecimento: novidades, análises e tendências sobre tecnologia, educação e o universo geek.</p>
       </div>
       <span class="nw-data" id="nw-data"></span>
     </section>

@@ -6,12 +6,28 @@
     <description>Notícias do dia resumidas, com análise própria e fontes citadas.</description>
     <language>pt-BR</language>
     <item>
+      <title>MinC e UFRJ oferecem curso gratuito sobre inteligência artificial e cultura digital; inscrições vão até 18 de novembro</title>
+      <link>https://oenforcado.com/noticias/ufrj-oferece-curso.html</link>
+      <guid isPermaLink="true">https://oenforcado.com/noticias/ufrj-oferece-curso.html</guid>
+      <pubDate>Sun, 15 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Tecnologia e Educação</category>
+      <description>Formação on-line será realizada entre os dias 19 e 22 de novembro, terá participação aberta a pessoas de todo o Brasil e poderá emitir certificado de extensão da UFRJ.</description>
+    </item>
+    <item>
       <title>GTA 6: CEO da Take-Two critica Anthropic e OpenAI por clones de jogos criados com IA</title>
       <link>https://oenforcado.com/noticias/take-two-critica-openai.html</link>
       <guid isPermaLink="true">https://oenforcado.com/noticias/take-two-critica-openai.html</guid>
       <pubDate>Sun, 15 Nov 2026 12:00:00 GMT</pubDate>
       <category>Games e Tecnologia</category>
       <description>O CEO da Take-Two, Strauss Zelnick, criticou a Anthropic e a OpenAI por permitirem que suas ferramentas de IA sejam usadas para copiar jogos existentes, classificando a prática como uma contradição em relação à proteção da propriedade intelectual.</description>
+    </item>
+    <item>
+      <title>CEO da Epic Games critica Steam por exigir identificação de jogos feitos com inteligência artificial</title>
+      <link>https://oenforcado.com/noticias/ceo-da-epic-critica-steam.html</link>
+      <guid isPermaLink="true">https://oenforcado.com/noticias/ceo-da-epic-critica-steam.html</guid>
+      <pubDate>Sun, 15 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Games e Tecnologia</category>
+      <description>Tim Sweeney, CEO da Epic Games, voltou a criticar a política da Steam que exige que desenvolvedores informem quando utilizam inteligência artificial generativa na criação de conteúdos para seus jogos. Para o executivo, a identificação pode prejudicar a reputação de estúdios que utilizam a tecnologia de maneira legítima, associando seu uso à baixa qualidade dos jogos.</description>
     </item>
   </channel>
 </rss>
