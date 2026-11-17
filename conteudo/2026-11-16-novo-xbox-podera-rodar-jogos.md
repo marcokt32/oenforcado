@@ -7,7 +7,6 @@ data: 2026-11-16
 rascunho: nao
 imagem: project-helix.webp
 credito: Crédito: Divulgação / Microsoft Xbox.
-Imagem: Divulgação / Microsoft Xbox.
 fontes:
   - Xbox Wire: Anúncio do Projeto Helix | https://news.xbox.com/en-us/2026/11/15/xbox-25th-anniversary-the-magazine/?utm_source=chatgpt.com
   - Video Games Chronicle (VGC): Entrevista e posicionamento do executivo. | https://www.videogameschronicle.com/news/xbox-says-project-helix-is-a-console-that-can-play-pc-games-not-a-pc-that-can-play-console-games/?utm_source=chatgpt.com
