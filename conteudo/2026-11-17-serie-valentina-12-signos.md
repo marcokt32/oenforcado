@@ -6,7 +6,7 @@ resumo: Nova série brasileira da Netflix acompanha uma jovem que, após descobr
 data: 2026-11-18
 rascunho: nao
 imagem: valentina.jpg
-credito: Crédito: Divulgação / Microsoft Netflix.
+credito: Crédito: Divulgação / Netflix.
 fontes:
 
 Netflix Tudum: sinopse oficial, primeiros minutos e informações sobre a produção | https://www.netflix.com/tudum/pt-br/artigos/os-12-signos-de-valentina-primeiros-minutos
