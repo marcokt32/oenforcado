@@ -8,12 +8,9 @@ rascunho: nao
 imagem: valentina.jpg
 credito: Crédito: Divulgação / Netflix.
 fontes:
-
-Netflix Tudum: sinopse oficial, primeiros minutos e informações sobre a produção | https://www.netflix.com/tudum/pt-br/artigos/os-12-signos-de-valentina-primeiros-minutos
-
-Tangerina (UOL): detalhes da história, elenco e formato da série | https://tangerina.uol.com.br/filmes-series/netflix-aposta-em-romance-brasileiro-sobre-signos-para-conquistar-publico/
-
-Tela Viva: informações sobre produção, direção e adaptação | https://telaviva.com.br/23/10/2026/12-signos-de-valentina-nova-serie-nacional-da-netflix-estreia-na-plataforma-em-18-de-novembro/
+ - Netflix Tudum: sinopse oficial, primeiros minutos e informações sobre a produção | https://www.netflix.com/tudum/pt-br/artigos/os-12-signos-de-valentina-primeiros-minutos
+ - Tangerina (UOL): detalhes da história, elenco e formato da série | https://tangerina.uol.com.br/filmes-series/netflix-aposta-em-romance-brasileiro-sobre-signos-para-conquistar-publico/
+ - Tela Viva: informações sobre produção, direção e adaptação | https://telaviva.com.br/23/10/2026/12-signos-de-valentina-nova-serie-nacional-da-netflix-estreia-na-plataforma-em-18-de-novembro/
 
 ---
 
