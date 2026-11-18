@@ -1,6 +1,6 @@
 ---
 
-titulo: Os 12 Signos de Valentina estreia na Netflix: Giovanna Grigio vive romance guiado pelo zodíaco
+titulo: Os 12 Signos de Valentina estreia na Netflix | O Enforcado
 categoria: Filmes e Séries
 resumo: Nova série brasileira da Netflix acompanha uma jovem que, após descobrir uma traição, decide se relacionar com homens dos 12 signos do zodíaco. Protagonizada por Giovanna Grigio, a produção mistura romance, humor, astrologia e autodescoberta em oito episódios.
 data: 2026-11-18
