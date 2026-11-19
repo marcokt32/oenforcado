@@ -6,6 +6,30 @@
     <description>Notícias do dia resumidas, com análise própria e fontes citadas.</description>
     <language>pt-BR</language>
     <item>
+      <title>NVIDIA lança mini PCs RTX Spark que rodam inteligência artificial localmente e dispensam a nuvem</title>
+      <link>https://oenforcado.com/noticias/nvidia-lanca-spark.html</link>
+      <guid isPermaLink="true">https://oenforcado.com/noticias/nvidia-lanca-spark.html</guid>
+      <pubDate>Thu, 19 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Tecnologia</category>
+      <description>A NVIDIA anunciou a chegada dos novos computadores compactos RTX Spark, desenvolvidos para executar modelos de inteligência artificial diretamente no PC. Com até 128 GB de memória unificada e capacidade para trabalhar com modelos de até 120 bilhões de parâmetros, os equipamentos chegam inicialmente por fabricantes como ASUS, Dell e MSI.</description>
+    </item>
+    <item>
+      <title>Marvel divulga 11 pôsteres de Vingadores: Doutor Destino e surpreende com encontros entre X-Men e heróis do MCU</title>
+      <link>https://oenforcado.com/noticias/marvel-divulga.html</link>
+      <guid isPermaLink="true">https://oenforcado.com/noticias/marvel-divulga.html</guid>
+      <pubDate>Thu, 19 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Cultura geek</category>
+      <description>A Marvel Studios divulgou 11 novos pôsteres de Avengers: Doomsday, destacando encontros entre Vingadores, X-Men e Quarteto Fantástico. O material também apresenta o primeiro visual oficial de Alan Cumming como Noturno e reforça a expectativa para a estreia do filme em dezembro.</description>
+    </item>
+    <item>
+      <title>Falhas em Microsoft, Apple e bancos acendem alerta sobre a segurança da infraestrutura digital na era da IA</title>
+      <link>https://oenforcado.com/noticias/falha-microsoft.html</link>
+      <guid isPermaLink="true">https://oenforcado.com/noticias/falha-microsoft.html</guid>
+      <pubDate>Thu, 19 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Tecnologia</category>
+      <description>Uma sequência de falhas técnicas atingiu serviços da Microsoft, Apple, JPMorgan Chase, companhias aéreas e sistemas governamentais nos Estados Unidos. Embora não exista evidência de ataques coordenados, especialistas alertam que a inteligência artificial está acelerando a descoberta de vulnerabilidades e aumentando a pressão por atualizações de segurança.</description>
+    </item>
+    <item>
       <title>Educação inclusiva: universidades de Minas Gerais abrem 11.632 vagas em cursos gratuitos EaD</title>
       <link>https://oenforcado.com/noticias/ufu-educacao.html</link>
       <guid isPermaLink="true">https://oenforcado.com/noticias/ufu-educacao.html</guid>
@@ -76,6 +100,14 @@
       <pubDate>Sun, 15 Nov 2026 12:00:00 GMT</pubDate>
       <category>Games e Tecnologia</category>
       <description>Tim Sweeney, CEO da Epic Games, voltou a criticar a política da Steam que exige que desenvolvedores informem quando utilizam inteligência artificial generativa na criação de conteúdos para seus jogos. Para o executivo, a identificação pode prejudicar a reputação de estúdios que utilizam a tecnologia de maneira legítima, associando seu uso à baixa qualidade dos jogos.</description>
+    </item>
+    <item>
+      <title>MEC estabelece novas regras para inteligência artificial nas escolas e restringe uso por crianças</title>
+      <link>https://oenforcado.com/noticias/mec-estabelece.html</link>
+      <guid isPermaLink="true">https://oenforcado.com/noticias/mec-estabelece.html</guid>
+      <pubDate>Thu, 12 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Educação e tecnologia</category>
+      <description>O Ministério da Educação homologou novas diretrizes nacionais para o uso da inteligência artificial em escolas e universidades públicas e privadas. A resolução estabelece restrições para crianças, exige supervisão humana em decisões educacionais e determina prazo de 12 meses para adaptação das instituições.</description>
     </item>
   </channel>
 </rss>
