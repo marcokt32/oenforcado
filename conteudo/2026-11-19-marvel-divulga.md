@@ -36,7 +36,7 @@ As imagens também chamaram atenção por apresentarem fundos que parecem formar
 
 O longa é dirigido por Anthony e Joe Russo e tem estreia mundial prevista para 18 de dezembro de 2026.
 
-## Porque importa
+## Por que importa
 
 **A Marvel está preparando um dos maiores encontros de personagens da história do MCU**
 

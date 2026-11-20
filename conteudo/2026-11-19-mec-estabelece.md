@@ -27,7 +27,7 @@ A resolução também determina que decisões importantes, como aprovação, rep
 
 As instituições de ensino terão 12 meses para adaptar suas políticas e práticas às novas regras. As proibições previstas na resolução, entretanto, têm aplicação imediata.
 
-## Porque importa
+## Por que importa
 
 **A inteligência artificial poderá fazer parte da educação, mas não substituir o papel dos professores**
 

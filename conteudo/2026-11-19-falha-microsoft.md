@@ -41,7 +41,7 @@ O problema é que corrigir vulnerabilidades rapidamente também exige cuidados. 
 
 Ao mesmo tempo, especialistas alertam que criminosos também podem utilizar inteligência artificial para encontrar e explorar brechas com maior velocidade.
 
-## Porque importa
+## Por que importa
 
 **Quanto mais o mundo depende da tecnologia, maior é o impacto de uma simples falha de sistema**
 
