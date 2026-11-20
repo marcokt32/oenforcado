@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta http-equiv="content-language" content="pt-BR">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/js/tema.js?v=1.2.1"></script>
+  <meta name="theme-color" content="#0a2540">
+  <script src="/js/consent.js?v=1.2.1"></script>
+  <title>Quiz Online Grátis: Perguntas e Respostas | O Enforcado</title>
+  <meta name="keywords" content="quiz online, quiz de perguntas e respostas, quiz de conhecimentos gerais, jogo de perguntas, jogo grátis, o enforcado">
+  <meta name="author" content="O Enforcado">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="description"
+    content="Jogue o Quiz online grátis: 16 categorias, 3 níveis, 3 dicas, 3 pulos e desafio do dia. Acumule XP e suba no ranking. Funciona no celular e no computador.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="O Enforcado">
+  <meta property="og:title" content="Quiz Online Grátis: Perguntas e Respostas | O Enforcado">
+  <meta property="og:description"
+    content="Jogue o Quiz online grátis: 16 categorias, 3 níveis, 3 dicas, 3 pulos e desafio do dia. Acumule XP e suba no ranking. Funciona no celular e no computador.">
+  <meta property="og:url" content="https://oenforcado.com/quiz.html">
+  <meta property="og:image" content="https://oenforcado.com/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Quiz Online Grátis: Perguntas e Respostas | O Enforcado">
+  <meta name="twitter:description"
+    content="Jogue o Quiz online grátis: 16 categorias, 3 níveis, 3 dicas, 3 pulos e desafio do dia. Acumule XP e suba no ranking. Funciona no celular e no computador.">
+  <meta name="twitter:image" content="https://oenforcado.com/img/og-image.png">
+  <script
+    type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Quiz Online","url":"https://oenforcado.com/quiz.html","description":"Jogue o Quiz online grátis: 16 categorias, 3 níveis, 3 dicas, 3 pulos e desafio do dia. Acumule XP e suba no ranking. Funciona no celular e no computador.","applicationCategory":"GameApplication","genre":"Jogo de perguntas e respostas","operatingSystem":"Any","browserRequirements":"Requer JavaScript","inLanguage":"pt-BR","isAccessibleForFree":true,"image":"https://oenforcado.com/img/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"},"publisher":{"@type":"Organization","name":"O Enforcado","url":"https://oenforcado.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://oenforcado.com/"},{"@type":"ListItem","position":2,"name":"Quiz Online","item":"https://oenforcado.com/quiz.html"}]}]}</script>
+  <link rel="canonical" href="https://oenforcado.com/quiz.html">
+  <link rel="icon" href="/img/hung.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/site-theme.css?v=1.2.1">
+  <link rel="stylesheet" href="css/termo.css?v=1.2.1">
+  <link rel="stylesheet" href="css/forca.css?v=1.2.1">
+  <link rel="stylesheet" href="css/quiz.css?v=1.2.1">
+  <link rel="stylesheet" href="css/portal-shell.css?v=1.2.1">
+  <link rel="stylesheet" href="css/footer.css?v=1.2.1">
+  <link rel="stylesheet" href="css/menu.css?v=1.2.1">
+  <link rel="stylesheet" href="css/candy.css?v=1.2.1">
+  <link rel="stylesheet" href="css/tema.css?v=1.2.1">
+</head>
+
+<body data-jogo="quiz">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="O Enforcado - página inicial"><img src="img/hung.png" alt="" width="42"
+        height="42"><span>O Enforcado</span></a>
+    <nav aria-label="Navegação principal">
+      <a href="/forca.html">Jogo da forca</a><a href="/quiz.html" aria-current="page">Quiz</a><a
+        href="/termo.html">Termo</a><a href="/caca-palavras.html">Caça-palavras</a><a
+        href="/anagrama.html">Anagrama</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">JOGOS DE PERGUNTAS</p>
+      <h1>Quiz online grátis de perguntas e respostas</h1>
+      <p>Responda perguntas de 16 categorias, com 4 alternativas cada. Você tem 3 erros, 3 dicas e 3 pulos para chegar
+        ao fim. Quanto mais avança, mais XP cada acerto vale.</p>
+    </section>
+    <section class="forca-card quiz-card" aria-label="Quiz">
+      <div id="toolbar"></div>
+      <div class="quiz-topo">
+        <span>Pergunta <strong id="q-pos">1 / 5</strong></span>
+        <span id="q-vidas" class="quiz-vidas" role="img" aria-label="3 vidas restantes">❤️❤️❤️</span>
+        <span>⭐ <strong id="q-xp">0</strong> XP</span>
+      </div>
+      <div id="q-trilha" class="quiz-trilha" aria-hidden="true"></div>
+      <div class="quiz-pergunta">
+        <div class="quiz-meta"><span id="q-cat" class="quiz-cat"></span><span id="q-valor" class="quiz-valor"></span></div>
+        <p id="q-texto" class="quiz-texto"></p>
+      </div>
+      <div id="q-opcoes" class="quiz-opcoes" role="group" aria-label="Alternativas"></div>
+      <p id="mensagem" class="mensagem" role="status" aria-live="polite">Escolha a alternativa correta.</p>
+      <div class="quiz-ajudas">
+        <button id="q-dica" class="button button-secondary" type="button">💡 Eliminar 2 (3)</button>
+        <button id="q-pular" class="button button-secondary" type="button">⏭ Pular (3)</button>
+        <button id="q-prox" class="button button-primary" type="button" hidden>Próxima pergunta →</button>
+      </div>
+      <div class="forca-acoes"><button id="novo-jogo" class="button button-secondary" type="button">Nova
+          partida</button></div>
+      <div id="resultado" class="resultado" hidden>
+        <strong id="resultado-titulo"></strong><span id="resultado-detalhe"></span>
+        <button id="jogar-novamente" class="button button-primary" type="button">Jogar de novo</button>
+      </div>
+    </section>
+    <!-- ANÚNCIO: crie um bloco novo no AdSense para esta página, cole o ID em data-ad-slot e tire o comentário.
+    <aside class="ad-slot" aria-label="Publicidade"><ins class="adsbygoogle" style="display:block"
+        data-ad-client="ca-pub-8119130352737496" data-ad-slot="COLE_AQUI_O_ID_DO_BLOCO" data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </aside>
+    -->
+    <section class="seo-content">
+      <h2>Como jogar o quiz?</h2>
+      <ol>
+        <li>Escolha a categoria e o nível, ou toque em Desafio do dia.</li>
+        <li>Leia a pergunta e toque na alternativa que você acha correta (ou use as teclas 1 a 4, ou A a D).</li>
+        <li>Cada acerto soma XP, e as últimas perguntas valem mais que as primeiras.</li>
+        <li>Você pode errar até 2 vezes. No terceiro erro a partida termina.</li>
+        <li>Use as 3 dicas para eliminar 2 alternativas erradas e os 3 pulos para trocar uma pergunta difícil.</li>
+      </ol>
+      <h2>Níveis e XP</h2>
+      <ul>
+        <li><strong>Fácil:</strong> 5 perguntas, até 50 XP.</li>
+        <li><strong>Médio:</strong> 10 perguntas, até 100 XP.</li>
+        <li><strong>Difícil:</strong> 15 perguntas, até 150 XP.</li>
+      </ul>
+      <p>O XP máximo só vem acertando todas as perguntas. Se a partida terminar por 3 erros no modo livre, você ainda
+        leva 60% do XP acumulado.</p>
+      <h2>Desafio do dia e ranking global</h2>
+      <p>Todo dia há um quiz novo de 5 perguntas, igual para todos os jogadores. Concluí-lo vale 50 XP de bônus e
+        mantém sua sequência de dias seguidos. O XP de todos os jogos do O Enforcado se soma, e quem entra com a conta
+        Google aparece no ranking global (o troféu no topo da página). Jogar continua livre, sem precisar de
+        login.</p>
+      <p>Quer outro desafio? Experimente também o <a href="/forca.html">jogo da forca</a>, o <a
+          href="/termo.html">Termo</a> e o <a href="/anagrama.html">Anagrama</a>.</p>
+    </section>
+  </main>
+  <footer class="corp-footer">
+    <div class="corp-wrap">
+      <div class="corp-col corp-brand">
+        <a class="corp-logo" href="/">O Enforcado</a>
+        <p>Jogos de palavras e de lógica gratuitos para jogar online: forca, Quiz, Termo, caça-palavras, anagrama,
+          Kyudoku, Lógica grega, Damas, Campo minado, Jogo da memória e Quebra-cabeça deslizante, com desafio do dia e
+          ranking.</p>
+      </div>
+      <nav class="corp-col" aria-label="Jogos">
+        <h3>Jogos</h3>
+        <a href="/forca.html">Jogo da forca</a><a href="/quiz.html">Quiz</a><a href="/termo.html">Termo</a><a
+          href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a
+          href="/kyudoku.html">Kyudoku</a><a href="/logica-grega.html">Lógica grega</a><a href="/damas.html">Damas</a><a
+          href="/campo-minado.html">Campo minado</a><a href="/memoria.html">Jogo da memória</a><a
+          href="/deslizante.html">Quebra-cabeça deslizante</a>
+      </nav>
+      <nav class="corp-col" aria-label="Institucional">
+        <h3>Institucional</h3>
+        <a href="/sobre.html">Sobre o projeto</a><a href="/sobre.html#quem-criou">Quem criou o site</a><a
+          href="mailto:contato@marsdev.com.br">Contato</a><a href="/politica.html">Política de Privacidade</a><a
+          href="/termos.html">Termos de Uso</a>
+      </nav>
+    </div>
+    <div class="corp-bottom">
+      <span>© 2026 O Enforcado. Todos os direitos reservados.</span>
+      <span>Desenvolvido por <a href="https://marsdev.com.br" target="_blank" rel="noopener">MarsDev</a> - Marco
+        Quintela</span>
+    </div>
+  </footer>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/portal.js?v=1.2.1"></script>
+  <script src="js/banco-palavras.js?v=1.2.1"></script>
+  <script src="js/quiz-jogo.js?v=1.2.1"></script>
+
+  <script src="js/menu.js?v=1.2.1"></script>
+</body>
+
+</html>

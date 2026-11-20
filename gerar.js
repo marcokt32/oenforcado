@@ -139,7 +139,7 @@ const SCRIPTS = `<script src="https://www.gstatic.com/firebasejs/10.12.2/firebas
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="/js/firebase-init.js"></script>
-  <script src="/js/portal.js?v=1.0.24"></script>
+  <script src="/js/portal.js?v=1.2.0"></script>
   <script src="/js/menu.js?v=1.0.6"></script>`;
 
 const urlMateria = n => SITE + "/noticias/" + n.slug + ".html";

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="/js/tema.js?v=1.0.1"></script>
+  <script src="/js/tema.js?v=1.2.1"></script>
   <meta name="theme-color" content="#0a2540">
   <title>O Enforcado — Jogos de Palavras Online Grátis</title>
   <meta name="description"
@@ -35,13 +35,13 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="css/portal.css?v=1.0.3">
-  <link rel="stylesheet" href="css/portal-shell.css?v=1.1.0">
-  <script src="/js/consent.js?v=1.0.3"></script>
-  <link rel="stylesheet" href="css/footer.css?v=1.0.3">
-  <link rel="stylesheet" href="css/menu.css?v=1.0.2">
-  <link rel="stylesheet" href="css/candy.css?v=1.1.0">
-  <link rel="stylesheet" href="css/tema.css?v=1.0.1">
+  <link rel="stylesheet" href="css/portal.css?v=1.2.1">
+  <link rel="stylesheet" href="css/portal-shell.css?v=1.2.1">
+  <script src="/js/consent.js?v=1.2.1"></script>
+  <link rel="stylesheet" href="css/footer.css?v=1.2.1">
+  <link rel="stylesheet" href="css/menu.css?v=1.2.1">
+  <link rel="stylesheet" href="css/candy.css?v=1.2.1">
+  <link rel="stylesheet" href="css/tema.css?v=1.2.1">
 </head>
 
 <body>
@@ -108,6 +108,15 @@
             <h3>Anagrama</h3>
             <p>Combine letras embaralhadas e descubra quantas palavras consegue formar.</p><span class="play-link">Jogar
               agora <b aria-hidden="true">→</b></span>
+          </div>
+        </a>
+        <a class="game-card" href="/quiz.html">
+          <div class="thumb"><img src="img/thumb-quiz.svg" alt="Pergunta com quatro alternativas do Quiz"
+              loading="lazy"></div>
+          <div class="game-card-copy"><span class="game-tag">Perguntas e respostas</span>
+            <h3>Quiz</h3>
+            <p>Responda perguntas de 16 categorias com 3 erros, 3 dicas e 3 pulos. Quanto mais avança, mais XP.</p><span
+              class="play-link">Jogar agora <b aria-hidden="true">→</b></span>
           </div>
         </a>
         <a class="game-card" href="/kyudoku.html">
@@ -177,13 +186,13 @@
     <div class="corp-wrap">
       <div class="corp-col corp-brand">
         <a class="corp-logo" href="/">O Enforcado</a>
-        <p>Jogos de palavras e de lógica gratuitos para jogar online: forca, Termo, caça-palavras, anagrama, Kyudoku,
+        <p>Jogos de palavras e de lógica gratuitos para jogar online: forca, Quiz, Termo, caça-palavras, anagrama, Kyudoku,
           Lógica grega, Damas, Campo minado, Jogo da memória e Quebra-cabeça deslizante, com desafio do dia e ranking.
         </p>
       </div>
       <nav class="corp-col" aria-label="Jogos">
         <h3>Jogos</h3>
-        <a href="/forca.html">Jogo da forca</a><a href="/termo.html">Termo</a><a
+        <a href="/forca.html">Jogo da forca</a><a href="/quiz.html">Quiz</a><a href="/termo.html">Termo</a><a
           href="/caca-palavras.html">Caça-palavras</a><a href="/anagrama.html">Anagrama</a><a
           href="/kyudoku.html">Kyudoku</a><a href="/logica-grega.html">Lógica grega</a><a href="/damas.html">Damas</a><a
           href="/campo-minado.html">Campo minado</a><a href="/memoria.html">Jogo da memória</a><a
@@ -206,9 +215,9 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script defer src="js/firebase-init.js"></script>
-  <script defer src="js/portal.js?v=1.1.1"></script>
+  <script defer src="js/portal.js?v=1.2.1"></script>
 
-  <script src="js/menu.js?v=1.0.6"></script>
+  <script src="js/menu.js?v=1.2.1"></script>
   <script>
     (function () { var n = document.querySelectorAll("#jogos .game-card").length, el = document.getElementById("game-count"); if (el && n) el.textContent = (n < 10 ? "0" : "") + n + (n === 1 ? " jogo disponível" : " jogos disponíveis") })();
   </script>

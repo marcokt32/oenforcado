@@ -1,6 +1,7 @@
 // Núcleo compartilhado dos jogos: cabeçalho, login (Google), XP único, desafio do dia,
 // filtros (categoria/dificuldade), ranking e compartilhamento.
-// Atualizado em 15/11/2026 (v1.0.24)
+// Atualizado em 19/11/2026 (v1.0.25)
+//  - v1.0.25: Quiz adicionado ao menu (3 dicas por partida)
 //  - v1.0.24: banner da loja parceira (Closet Real) acima do rodapé, em todas as páginas (função montarBanner)
 //  - v1.0.22: bloco "Também no celular" com os apps Android (js/apps-android.js, carregado aqui)
 //  - v1.0.21: link "Notícias" no cabeçalho; imagens do cabeçalho/avatares com caminho absoluto (funcionam em /noticias/)
@@ -25,6 +26,7 @@
     { id: "anagrama", nome: "Anagrama", url: "/anagrama.html", cat: "palavras" },
     { id: "termo", nome: "Termo", url: "/termo.html", cat: "palavras" },
     { id: "caca", nome: "Caça-palavras", url: "/caca-palavras.html", cat: "palavras" },
+    { id: "quiz", nome: "Quiz", url: "/quiz.html", cat: "palavras" },
     { id: "kyudoku", nome: "Kyudoku", url: "/kyudoku.html", cat: "logica" },
     { id: "logicagrega", nome: "Lógica grega", url: "/logica-grega.html", cat: "logica" },
     { id: "damas", nome: "Damas", url: "/damas.html", cat: "logica", diario: false }, // diario:false = não participa do desafio do dia
@@ -43,7 +45,7 @@
   // Atualizado em 07/11/2026 (v1.0.11): limite de dicas por partida, um valor por jogo.
   // Jogo que não está na tabela não tem dicas. A forca já limita a 1 dica por palavra no próprio jogo.
   // O valor pode ser um número (igual para todos os níveis) ou { facil, medio, dificil }.
-  const MAX_DICAS = { caca: 3, forca: 1, damas: 3, logicagrega: { facil: 2, medio: 3, dificil: 4 }, kyudoku: { facil: 2, medio: 3, dificil: 4 } };
+  const MAX_DICAS = { caca: 3, quiz: 3, forca: 1, damas: 3, logicagrega: { facil: 2, medio: 3, dificil: 4 }, kyudoku: { facil: 2, medio: 3, dificil: 4 } };
   const SITE = "https://oenforcado.com";
 
   const $ = id => document.getElementById(id);

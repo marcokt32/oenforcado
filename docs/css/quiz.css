@@ -1,0 +1,44 @@
+/* Quiz: só o que é novo. O restante (card, botões, resultado, intro, seo-content) vem de termo.css, forca.css e portal-shell.css */
+.quiz-topo{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;margin-bottom:10px;color:#34445a;font-size:.95rem;font-weight:650}
+.quiz-topo strong{color:#0a2540;font-variant-numeric:tabular-nums}
+.quiz-vidas{letter-spacing:.12em;font-size:1.05rem}
+
+/* Progresso: um traço por pergunta */
+.quiz-trilha{display:flex;gap:4px;margin:0 0 14px}
+.quiz-trilha span{flex:1;height:8px;border-radius:999px;background:#e5ebf5}
+.quiz-trilha .ok{background:#16a34a}
+.quiz-trilha .err{background:#dc2626}
+.quiz-trilha .cur{background:#1f6feb}
+
+/* Pergunta */
+.quiz-pergunta{margin-bottom:14px;padding:16px;border:1px solid #d9e4f5;border-radius:14px;background:#f1f6ff}
+.quiz-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.quiz-cat{padding:5px 10px;border-radius:999px;background:#fff;color:#2357a5;font-size:.75rem;font-weight:800;letter-spacing:.025em}
+.quiz-valor{color:#14532d;font-size:.85rem;font-weight:800}
+.quiz-texto{margin:0;color:#0a2540;font-family:var(--heading-font,Poppins,sans-serif);font-size:clamp(1.05rem,3.6vw,1.3rem);font-weight:700;line-height:1.45}
+
+/* Alternativas */
+.quiz-opcoes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opcao{display:flex;align-items:center;gap:10px;min-height:58px;padding:10px 14px;border:2px solid #cbd5e1;border-radius:12px;background:#fff;color:#0a2540;font:inherit;font-weight:750;line-height:1.3;text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.quiz-opcao:hover:not(:disabled){border-color:#1f6feb;background:#f1f6ff}
+.quiz-opcao:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.quiz-opcao:disabled{cursor:default}
+.quiz-letra{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#edf2ff;color:#1f4fa3;font-size:.9rem;font-weight:850}
+.quiz-opcao-txt{min-width:0;overflow-wrap:anywhere}
+.quiz-opcao.certa{border-color:#16a34a;background:#eaf7ee}
+.quiz-opcao.certa .quiz-letra{background:#16a34a;color:#fff}
+.quiz-opcao.errada{border-color:#dc2626;background:#fdf0ee}
+.quiz-opcao.errada .quiz-letra{background:#dc2626;color:#fff}
+.quiz-opcao.eliminada{opacity:.35;text-decoration:line-through}
+.quiz-opcao:disabled:not(.certa):not(.errada):not(.eliminada){opacity:.6}
+
+/* Dicas, pulos e próxima */
+.quiz-ajudas{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:6px}
+.quiz-ajudas .button{margin:0;min-width:140px}
+.quiz-ajudas .button[hidden]{display:none}
+.quiz-ajudas .button:disabled{opacity:.5;cursor:default}
+
+@media(max-width:560px){
+  .quiz-opcoes{grid-template-columns:1fr}
+  .quiz-ajudas .button{flex:1 1 140px}
+}
